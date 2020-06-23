@@ -1,0 +1,39 @@
+{
+  "name": "DVNTStoreKitManager",
+  "version": "1.0.0",
+  "summary": "An amazing StoreKit wrapper.",
+  "description": "A wrapper to use StokeKit easily.",
+  "homepage": "https://www.devinet.es",
+  "license": {
+    "type": "Copyright (c) 2020 Devinet 2013, S.L.U.",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "Raúl Vidal Muiños": "contacto@devinet.es"
+  },
+  "social_media_url": "https://twitter.com/devinet_es",
+  "platforms": {
+    "ios": "10.0",
+    "tvos": "10.0"
+  },
+  "swift_versions": [
+    "3.0",
+    "4.0",
+    "4.1",
+    "4.2",
+    "5.0",
+    "5.1",
+    "5.2"
+  ],
+  "source": {
+    "git": "https://bitbucket.org/Devinet_Team/ios-library-dvntstokekitmanager.git",
+    "tag": "1.0.0"
+  },
+  "frameworks": [
+    "UIKit",
+    "StoreKit"
+  ],
+  "source_files": "Sources/DVNTStoreKitManager/Classes/**/*",
+  "exclude_files": "Sources/DVNTStoreKitManager/**/*.plist",
+  "swift_version": "5.2"
+}

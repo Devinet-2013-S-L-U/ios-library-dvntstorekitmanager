@@ -1,0 +1,16 @@
+PODS:
+  - DVNTStoreKitManager (1.0.0)
+
+DEPENDENCIES:
+  - DVNTStoreKitManager (from `../`)
+
+EXTERNAL SOURCES:
+  DVNTStoreKitManager:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  DVNTStoreKitManager: c8068a4a5b42bb77cab78ea00ae86d89499a698b
+
+PODFILE CHECKSUM: 74c88b61290fc1bf38e1a79a8ee49afc4411d3c5
+
+COCOAPODS: 1.9.3

@@ -1,0 +1,6 @@
+framework module DVNTStoreKitManager {
+  umbrella header "DVNTStoreKitManager-umbrella.h"
+
+  export *
+  module * { export * }
+}
