@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'DVNTStoreKitManager_Example' do
+  pod 'DVNTStoreKitManager', :path => '../'
+
+  target 'DVNTStoreKitManager_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
