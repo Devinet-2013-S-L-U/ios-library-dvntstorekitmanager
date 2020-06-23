@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
     s.tvos.deployment_target  = "10.0"
     
     s.swift_versions   = ['3.0', '4.0', '4.1', '4.2', '5.0', '5.1', '5.2']
-    s.source           = { :git => 'https://bitbucket.org/Devinet_Team/ios-library-dvntstokekitmanager.git', :tag => s.version.to_s }
+    s.source           = { :git => 'https://bitbucket.org/Devinet_Team/ios-library-dvntstorekitmanager.git', :tag => s.version.to_s }
     s.frameworks       = 'UIKit', 'StoreKit'
     s.source_files     = 'Sources/DVNTStoreKitManager/Classes/**/*'
     s.exclude_files    = 'Sources/DVNTStoreKitManager/**/*.plist'
