@@ -150,7 +150,6 @@ extension DVNTStoreKitManager: SKProductsRequestDelegate, SKRequestDelegate
 
 extension DVNTStoreKitManager: SKPaymentTransactionObserver
 {
-    
     public func paymentQueue(_ queue: SKPaymentQueue, shouldAddStorePayment payment: SKPayment, for product: SKProduct) -> Bool
     {
         return self.shouldAddStorePayment
