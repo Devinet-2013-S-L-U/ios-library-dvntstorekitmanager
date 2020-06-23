@@ -16,10 +16,12 @@ let package = Package(
             name: "DVNTStoreKitManager",
             targets: ["DVNTStoreKitManager"]),
     ],
-    dependencies: [],
+    dependencies: [
+        .package(url: "https://bitbucket.org/Devinet_Team/ios-library-dvntalertmanager", from: "1.1.2"),
+    ],
     targets: [
         .target(
             name: "DVNTStoreKitManager",
-            dependencies: [])
+            dependencies: ["DVNTAlertManager"])
     ]
 )

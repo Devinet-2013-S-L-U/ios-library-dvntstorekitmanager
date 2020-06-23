@@ -18,4 +18,5 @@ Pod::Spec.new do |s|
     s.source_files     = 'Sources/DVNTStoreKitManager/Classes/**/*'
     s.exclude_files    = 'Sources/DVNTStoreKitManager/**/*.plist'
     
+    s.dependency 'DVNTAlertManager', '~>1.1.1'
 end

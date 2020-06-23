@@ -2,6 +2,9 @@ platform :ios, '13.5'
 use_frameworks!
 inhibit_all_warnings!
 
+source 'https://github.com/CocoaPods/Specs.git'
+source 'https://bitbucket.org/Devinet_Team/ios-pod-repo.git'
+
 target 'DVNTStoreKitManager_Example' do
   pod 'DVNTStoreKitManager', :path => '../'
 end

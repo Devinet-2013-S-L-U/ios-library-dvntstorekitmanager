@@ -13,6 +13,8 @@
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		97CE28308EF0F72CCD4685A0 /* Pods_DVNTStoreKitManager_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 742C12680FAFF8F87734C0AD /* Pods_DVNTStoreKitManager_Example.framework */; };
+		9B3A547A24A24DE800ECAB39 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B3A547924A24DE800ECAB39 /* StoreKit.framework */; };
+		9B3A547D24A24F2C00ECAB39 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B3A547C24A24F2C00ECAB39 /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +30,8 @@
 		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		742C12680FAFF8F87734C0AD /* Pods_DVNTStoreKitManager_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DVNTStoreKitManager_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8655C11C9400B87091122FBB /* Pods-DVNTStoreKitManager_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DVNTStoreKitManager_Example.debug.xcconfig"; path = "Target Support Files/Pods-DVNTStoreKitManager_Example/Pods-DVNTStoreKitManager_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		9B3A547924A24DE800ECAB39 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		9B3A547C24A24F2C00ECAB39 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		9B776BAE080B8562DFD7D239 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		9F98CA6D0B7B1B6630D33EEA /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		ACC206A5690A8C26196A567A /* DVNTStoreKitManager.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = DVNTStoreKitManager.podspec; path = ../DVNTStoreKitManager.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
@@ -40,6 +44,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				97CE28308EF0F72CCD4685A0 /* Pods_DVNTStoreKitManager_Example.framework in Frameworks */,
+				9B3A547A24A24DE800ECAB39 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -68,6 +73,7 @@
 		607FACD21AFB9204008FA782 /* Example for DVNTStoreKitManager */ = {
 			isa = PBXGroup;
 			children = (
+				9B3A547B24A24F2300ECAB39 /* Helpers */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
@@ -97,6 +103,14 @@
 			name = "Podspec Metadata";
 			sourceTree = "<group>";
 		};
+		9B3A547B24A24F2300ECAB39 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				9B3A547C24A24F2C00ECAB39 /* Constants.swift */,
+			);
+			name = Helpers;
+			sourceTree = "<group>";
+		};
 		B3797C75AC67C2D507C1BB1C /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -111,6 +125,7 @@
 		EF50F7731E8EBC90DB052ACC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9B3A547924A24DE800ECAB39 /* StoreKit.framework */,
 				742C12680FAFF8F87734C0AD /* Pods_DVNTStoreKitManager_Example.framework */,
 				000A098E2629F6BDF506CB08 /* Pods_DVNTStoreKitManager_Tests.framework */,
 			);
@@ -195,11 +210,27 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-DVNTStoreKitManager_Example/Pods-DVNTStoreKitManager_Example-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/DVNTAlertManager/DVNTAlertManager.framework",
 				"${BUILT_PRODUCTS_DIR}/DVNTStoreKitManager/DVNTStoreKitManager.framework",
+				"${BUILT_PRODUCTS_DIR}/DVNTStringExtension/DVNTStringExtension.framework",
+				"${BUILT_PRODUCTS_DIR}/DVNTUIWindowExtension/DVNTUIWindowExtension.framework",
+				"${BUILT_PRODUCTS_DIR}/MDFInternationalization/MDFInternationalization.framework",
+				"${BUILT_PRODUCTS_DIR}/MDFTextAccessibility/MDFTextAccessibility.framework",
+				"${BUILT_PRODUCTS_DIR}/MaterialComponents/MaterialComponents.framework",
+				"${BUILT_PRODUCTS_DIR}/MotionAnimator/MotionAnimator.framework",
+				"${BUILT_PRODUCTS_DIR}/MotionInterchange/MotionInterchange.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DVNTAlertManager.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DVNTStoreKitManager.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DVNTStringExtension.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DVNTUIWindowExtension.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MDFInternationalization.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MDFTextAccessibility.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MaterialComponents.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MotionAnimator.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MotionInterchange.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -237,6 +268,7 @@
 			files = (
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
+				9B3A547D24A24F2C00ECAB39 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -372,11 +404,13 @@
 			baseConfigurationReference = 8655C11C9400B87091122FBB /* Pods-DVNTStoreKitManager_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CURRENT_PROJECT_VERSION = 1.0.0;
 				DEVELOPMENT_TEAM = BM7GLKW999;
 				INFOPLIST_FILE = DVNTStoreKitManager/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.0.0;
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = es.devinet.es.DVNTStoreKitManager;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
@@ -388,11 +422,13 @@
 			baseConfigurationReference = 1C5E8C90355904D125343627 /* Pods-DVNTStoreKitManager_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CURRENT_PROJECT_VERSION = 1.0.0;
 				DEVELOPMENT_TEAM = BM7GLKW999;
 				INFOPLIST_FILE = DVNTStoreKitManager/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.0.0;
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = es.devinet.es.DVNTStoreKitManager;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;

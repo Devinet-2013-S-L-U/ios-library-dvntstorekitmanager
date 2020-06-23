@@ -1,0 +1,6 @@
+framework module DVNTStringExtension {
+  umbrella header "DVNTStringExtension-umbrella.h"
+
+  export *
+  module * { export * }
+}

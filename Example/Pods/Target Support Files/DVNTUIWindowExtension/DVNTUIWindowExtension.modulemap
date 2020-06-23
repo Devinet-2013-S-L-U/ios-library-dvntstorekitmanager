@@ -1,0 +1,6 @@
+framework module DVNTUIWindowExtension {
+  umbrella header "DVNTUIWindowExtension-umbrella.h"
+
+  export *
+  module * { export * }
+}
