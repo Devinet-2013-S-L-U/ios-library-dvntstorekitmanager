@@ -1,0 +1,6 @@
+framework module SwiftyReceiptValidator {
+  umbrella header "SwiftyReceiptValidator-umbrella.h"
+
+  export *
+  module * { export * }
+}

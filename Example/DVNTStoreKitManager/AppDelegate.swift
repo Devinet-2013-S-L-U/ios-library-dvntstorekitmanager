@@ -18,7 +18,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool
     {
-        self.storeKitManager.setInAppPurchaseIdentifiers(Constants.InAppPurchase.ITEM_IDENTIFIERS)
+        self.initializeStoreKitManager()
         return true
+    }
+    
+    // MARK: - Other methods
+    
+    private final func initializeStoreKitManager()
+    {
+        self.storeKitManager.setSecret(Constants.InAppPurchase.SECRET)
+        self.storeKitManager.setInAppPurchaseIdentifiers(Constants.InAppPurchase.ITEM_IDENTIFIERS)
+        self.storeKitManager.setSpinnerAppearance(baseColor: .white, inkColor: .darkText, backgroundColor: .black)
     }
 }

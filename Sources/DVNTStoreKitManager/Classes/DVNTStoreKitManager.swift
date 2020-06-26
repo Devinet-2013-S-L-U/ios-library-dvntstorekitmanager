@@ -9,24 +9,35 @@
 import UIKit
 import StoreKit
 import DVNTAlertManager
+import SwiftyReceiptValidator
 
 public protocol DVNTStoreKitManagerDelegate
 {
-    func storeKitManagerPurchaseDidFail(error: Error?)
     func storekitManagerPurchaseUserUnableToMakePayments()
+    func storeKitManagerInitialSubscriptionCheckDidFinish()
+    func storeKitManagerActiveSubscriptionDetected(productId: String)
+    func storeKitManagerPurchaseDidFail(productIdentifier: String, error: Error?)
     func storeKitManagerProductsListDidChange(storeKitManager: DVNTStoreKitManager)
+    func storeKitManagerPurchaseDidSucced(productIdentifier: String, transactionIdentifier: String?)
+    func storeKitManagerPurchaseRestoredSuccesfully(productIdentifier: String, transactionIdentifier: String?)
 }
 
 public class DVNTStoreKitManager: NSObject
 {
     public static let shared = DVNTStoreKitManager()
     
-    public final var delegate: DVNTStoreKitManagerDelegate?
-    
     private final let alertManager = DVNTAlertManager.shared
     
+    public final var delegate: DVNTStoreKitManagerDelegate?
+    public final var isAuthorizedForPayments: Bool { return SKPaymentQueue.canMakePayments() }
+
+    private final var secret: String?
     private final var userApplicationId: String?
     private final var shouldAddStorePayment = true
+    private final var storedPayments: [SKPayment] = []
+    private final var purchasedProductIdentifiers: [String] = []
+    private final var isInitialSubscriptionVerificationCompleted = false
+    private final let receiptValidator = SwiftyReceiptValidator(configuration: .standard, isLoggingEnabled: false)
     
     private final var products: [SKProduct] = [] {
         didSet {
@@ -36,7 +47,7 @@ public class DVNTStoreKitManager: NSObject
     private final var inAppPurchaseIdentifiers: [String] = [] {
         didSet {
             let newProductIdentifiers = Set(self.inAppPurchaseIdentifiers).symmetricDifference(Set(oldValue))
-            self.performRequestForProductIdentifiers(newProductIdentifiers)
+            self.fetchProducts(newProductIdentifiers)
         }
     }
     
@@ -46,12 +57,12 @@ public class DVNTStoreKitManager: NSObject
         
         self.products.removeAll()
         self.inAppPurchaseIdentifiers.removeAll()
-        
-        SKPaymentQueue.default().add(self)
+        self.isInitialSubscriptionVerificationCompleted = false
     }
     
     // MARK: - Public setters
     
+    public final func setSecret(_ value: String) { self.secret = value }
     public final func setUserApplicationId(_ value: String?) { self.userApplicationId = value }
     public final func setShouldAddStorePayment(_ value: Bool) { self.shouldAddStorePayment = value }
     public final func setInAppPurchaseIdentifier(_ value: String) { self.setInAppPurchaseIdentifiers([value]) }
@@ -63,6 +74,14 @@ public class DVNTStoreKitManager: NSObject
     
     // MARK: - Advanced public setters
     
+    public final func setSpinnerAppearance(style: AlertStyleType = .iOS, baseColor: UIColor, inkColor: UIColor, backgroundColor: UIColor)
+    {
+        self.alertManager.setAlertStyle(style)
+        self.alertManager.setInkColor(inkColor)
+        self.alertManager.setBaseColor(baseColor)
+        self.alertManager.setLoadingViewBackgroundColor(backgroundColor)
+    }
+    
     public final func setInAppPurchaseIdentifiers(_ value: [String])
     {
         if self.inAppPurchaseIdentifiers.isEmpty {
@@ -70,16 +89,6 @@ public class DVNTStoreKitManager: NSObject
         }else{
             print("💰 ⛔️ DVNTStoreKitManager: The array of purchase identifiers has already been initialized. Use 'appendInAppPurchaseIdentifier' instead.")
         }
-    }
-    
-    // MARK: - Advanced public getters
-    
-    public final func getLocalizedPrice(_ product: SKProduct) -> String
-    {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.locale = product.priceLocale
-        return formatter.string(from: product.price) ?? "-"
     }
     
     // MARK: - Other methods
@@ -101,22 +110,31 @@ public class DVNTStoreKitManager: NSObject
         }
     }
     
-    private final func performRequestForProductIdentifiers(_ productIdentifiers: Set<String>)
+    private final func fetchProducts(_ productIdentifiers: Set<String>)
     {
-        print("💰 ⚠️ DVNTStoreKitManager: Initializing some IAPs -> \(productIdentifiers)...")
+        print("💰 ⚠️ DVNTStoreKitManager: Fetching some products -> \(productIdentifiers)...")
         let request = SKProductsRequest(productIdentifiers: productIdentifiers)
         request.delegate = self
         request.start()
     }
     
-    public final func purchaseProduct(_ product: SKProduct)
+    public final func buy(_ product: SKProduct, shouldShowSpinner: Bool = false)
     {
-        self.purchaseProduct(product.productIdentifier)
+        self.buy(product.productIdentifier, shouldShowSpinner: shouldShowSpinner)
     }
     
-    public final func purchaseProduct(_ productIdentifier: String)
+    public final func buy(_ productIdentifier: String, shouldShowSpinner: Bool = false)
     {
-        if SKPaymentQueue.canMakePayments() {
+        #if targetEnvironment(simulator)
+        self.alertManager.showBasicAlert(title: "Error", message: "A real device must be used to perform this action.")
+        print("💰 ⛔️ DVNTStoreKitManager: Purchases cannot be made using a simultor. Please, connect a real device and try again")
+        #else
+        guard SKPaymentQueue.default().transactions.last?.transactionState != .purchasing else {
+            print("💰 ⛔️ DVNTStoreKitManager: There is another purchase in progress, please wait.")
+            return
+        }
+        if shouldShowSpinner { self.alertManager.showLoadingView(isUserinteractionEnabled: false) }
+        if self.isAuthorizedForPayments {
             let paymentRequest = SKMutablePayment()
             paymentRequest.productIdentifier = productIdentifier
             paymentRequest.applicationUsername = self.userApplicationId
@@ -124,7 +142,92 @@ public class DVNTStoreKitManager: NSObject
         }else{
             print("💰 ⛔️ DVNTStoreKitManager: This user cannot make a payment.")
             self.delegate?.storekitManagerPurchaseUserUnableToMakePayments()
+            DispatchQueue.main.async { self.alertManager.hideLoadingView() }
         }
+        #endif
+    }
+    
+    public final func restore(shouldShowSpinner: Bool = false)
+    {
+        print("💰 ⚠️ DVNTStoreKitManager: Restoring purchases...")
+        if shouldShowSpinner { self.alertManager.showLoadingView(isUserinteractionEnabled: false) }
+        SKPaymentQueue.default().restoreCompletedTransactions(withApplicationUsername: self.userApplicationId)
+    }
+    
+    public final func isSubscription(_ productId: String) -> Bool
+    {
+        if let product = self.products.first(where: { $0.productIdentifier == productId }) {
+            return self.isSubscription(product)
+        }
+        return false
+    }
+    
+    public final func isSubscription(_ product: SKProduct) -> Bool
+    {
+        return product.subscriptionGroupIdentifier != nil
+    }
+    
+    private final func validatePurchase(queue: SKPaymentQueue, transaction: SKPaymentTransaction, productId: String, sharedSecret: String?, success: @escaping () -> Void, failure: @escaping (Error?) -> Void)
+    {
+        print("💰 ⚠️ DVNTStoreKitManager: Validating purchase...")
+        let validationRequest = SRVPurchaseValidationRequest(productId: productId, sharedSecret: self.secret)
+        self.receiptValidator.validate(validationRequest) { result in
+            switch result {
+            case .success(let response):
+                defer {
+                    queue.finishTransaction(transaction)
+                }
+                UserDefaults.standard.set(true, forKey: productId)
+                DispatchQueue.main.async { self.alertManager.hideLoadingView() }
+                self.delegate?.storeKitManagerPurchaseRestoredSuccesfully(productIdentifier: transaction.payment.productIdentifier, transactionIdentifier: transaction.transactionIdentifier)
+                print("💰 ✅ DVNTStoreKitManager: Purchase '\(productId)' validated successfully")
+                success()
+            case .failure(let error):
+                DispatchQueue.main.async { self.alertManager.hideLoadingView() }
+                print("💰 ⛔️ DVNTStoreKitManager: Validation of product '\(productId)' did finish with error \(error.localizedDescription)")
+                failure(error)
+            }
+        }
+    }
+    
+    public final func processStoredPayments(shouldShowSpinner: Bool = false)
+    {
+        if shouldShowSpinner { self.alertManager.showLoadingView(isUserinteractionEnabled: false) }
+        for payment in self.storedPayments {
+            SKPaymentQueue.default().add(payment)
+        }
+    }
+    
+    public final func validateSubscriptions()
+    {
+        print("💰 ⚠️ DVNTStoreKitManager: Verifying subscriptions...")
+        let validationRequest = SRVSubscriptionValidationRequest( sharedSecret: self.secret, refreshLocalReceiptIfNeeded: false, excludeOldTransactions: false, now: Date())
+        self.receiptValidator.validate(validationRequest) { result in
+            self.isInitialSubscriptionVerificationCompleted = true
+            switch result {
+            case .success(let response):
+                for receipt in response.validSubscriptionReceipts {
+                    if !self.purchasedProductIdentifiers.contains(receipt.productId) {
+                        self.purchasedProductIdentifiers.append(receipt.productId)
+                        self.delegate?.storeKitManagerActiveSubscriptionDetected(productId: receipt.productId)
+                    }
+                }
+                self.delegate?.storeKitManagerInitialSubscriptionCheckDidFinish()
+                print("💰 ✅ DVNTStoreKitManager: The validation of the subscriptions did finish successfully")
+            case .failure(let error):
+                DispatchQueue.main.async { self.alertManager.hideLoadingView() }
+                self.delegate?.storeKitManagerInitialSubscriptionCheckDidFinish()
+                print("💰 ⛔️ DVNTStoreKitManager: The validation of the subscriptions did finish with error \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    public final func checkIsPurchased(productId: String, isNonConsumable: Bool) -> Bool?
+    {
+        if self.isInitialSubscriptionVerificationCompleted {
+            return isNonConsumable ? UserDefaults.standard.bool(forKey: productId) : self.purchasedProductIdentifiers.contains(productId)
+        }
+        return nil
     }
 }
 
@@ -138,11 +241,19 @@ extension DVNTStoreKitManager: SKProductsRequestDelegate, SKRequestDelegate
             self.products.append(product)
             print("💰 ✅ DVNTStoreKitManager: '\(product.productIdentifier)' has been initialized successfully")
         }
+        self.validateSubscriptions()
     }
     
     public func request(_ request: SKRequest, didFailWithError error: Error)
     {
         print("💰 ⛔️ DVNTStoreKitManager: \(error.localizedDescription)")
+    }
+    
+    public func requestDidFinish(_ request: SKRequest)
+    {
+        if request is SKProductsRequest {
+            SKPaymentQueue.default().add(self)
+        }
     }
 }
 
@@ -152,30 +263,65 @@ extension DVNTStoreKitManager: SKPaymentTransactionObserver
 {
     public func paymentQueue(_ queue: SKPaymentQueue, shouldAddStorePayment payment: SKPayment, for product: SKProduct) -> Bool
     {
+        if self.shouldAddStorePayment {
+            self.alertManager.showLoadingView(isUserinteractionEnabled: false)
+        }else{
+            self.storedPayments.append(payment)
+        }
+        
         return self.shouldAddStorePayment
+    }
+    
+    public func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue)
+    {
+        DispatchQueue.main.async { self.alertManager.hideLoadingView() }
+        self.validateSubscriptions()
+        print("💰 ✅ DVNTStoreKitManager: Purchases restored successfully")
+    }
+    
+    public func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error)
+    {
+        DispatchQueue.main.async { self.alertManager.hideLoadingView() }
+        self.validateSubscriptions()
+        print("💰 ⛔️ DVNTStoreKitManager: Error while restoring purchases '\(error.localizedDescription)'")
     }
     
     public func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction])
     {
         for transaction in transactions {
-            switch transaction.transactionState {
-            case .purchased:
-                break
-            case .purchasing:
-                break
-            case .deferred:
-                break
-            case .failed:
-                if let error = transaction.error {
-                    print("💰 ⛔️ DVNTStoreKitManager: Transaction did fail with error '\(error.localizedDescription)'")
-                }else{
-                    print("💰 ⛔️ DVNTStoreKitManager: Transaction did fail with an unknown error.")
+            if transaction.transactionState != .purchasing, transaction.transactionState != .deferred {
+                switch transaction.transactionState {
+                case .purchased:
+                    let productId = transaction.payment.productIdentifier
+                    self.validatePurchase(queue: queue, transaction: transaction, productId: productId, sharedSecret: self.secret, success: { () in
+                        self.purchasedProductIdentifiers.append(productId)
+                    }, failure: { _ in })
+                    break
+                case .restored:
+                    guard let productId = transaction.original?.payment.productIdentifier else {
+                        queue.finishTransaction(transaction)
+                        return
+                    }
+                    self.validatePurchase(queue: queue, transaction: transaction, productId: productId, sharedSecret: self.secret, success: { () in
+                        if !self.isSubscription(productId) {
+                            self.purchasedProductIdentifiers.append(productId)
+                        }
+                    }, failure: { _ in })
+                    break
+                case .failed:
+                    if let error = transaction.error as? SKError, error.code != .paymentCancelled, error.code != .unknown {
+                        self.alertManager.showBasicAlert(title: "Error", message: transaction.error?.localizedDescription ?? "Transaction did fail with an unknown error.")
+                        print(transaction.error != nil ? "💰 ⛔️ DVNTStoreKitManager: Transaction did fail with error '\(transaction.error!.localizedDescription)'" : "💰 ⛔️ DVNTStoreKitManager: Transaction did fail with an unknown error.")
+                        self.delegate?.storeKitManagerPurchaseDidFail(productIdentifier: transaction.payment.productIdentifier, error: transaction.error)
+                    }
+                    queue.finishTransaction(transaction)
+                    DispatchQueue.main.async { self.alertManager.hideLoadingView() }
+                    return
+                default:
+                    queue.finishTransaction(transaction)
+                    DispatchQueue.main.async { self.alertManager.hideLoadingView() }
+                    break
                 }
-                
-                self.delegate?.storeKitManagerPurchaseDidFail(error: transaction.error)
-                self.alertManager.showBasicAlert(title: "Error", message: transaction.error?.localizedDescription ?? "Transaction did fail with an unknown error.")
-            case .restored:
-                break
             }
         }
     }

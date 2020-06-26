@@ -9,8 +9,8 @@ Pod::Spec.new do |s|
     s.author           = { 'Raúl Vidal Muiños' => 'contacto@devinet.es' }
     s.social_media_url = 'https://twitter.com/devinet_es'
     
-    s.ios.deployment_target = "10.0"
-    s.tvos.deployment_target  = "10.0"
+    s.ios.deployment_target = "12.0"
+    s.tvos.deployment_target  = "12.0"
     
     s.swift_versions   = ['3.0', '4.0', '4.1', '4.2', '5.0', '5.1', '5.2']
     s.source           = { :git => 'https://bitbucket.org/Devinet_Team/ios-library-dvntstorekitmanager.git', :tag => s.version.to_s }
@@ -18,5 +18,6 @@ Pod::Spec.new do |s|
     s.source_files     = 'Sources/DVNTStoreKitManager/Classes/**/*'
     s.exclude_files    = 'Sources/DVNTStoreKitManager/**/*.plist'
     
-    s.dependency 'DVNTAlertManager', '~>1.1.1'
+    s.dependency 'DVNTAlertManager', '~>1.1.2'
+    s.dependency 'SwiftyReceiptValidator', '~>6.1.0'
 end

@@ -4,7 +4,8 @@ PODS:
     - DVNTUIWindowExtension (~> 1.0.6)
     - MaterialComponents (~> 109.2.0)
   - DVNTStoreKitManager (1.0.0):
-    - DVNTAlertManager (~> 1.1.1)
+    - DVNTAlertManager (~> 1.1.2)
+    - SwiftyReceiptValidator (~> 6.1.0)
   - DVNTStringExtension (1.0.6)
   - DVNTUIWindowExtension (1.0.6)
   - MaterialComponents (109.2.0):
@@ -614,6 +615,7 @@ PODS:
   - MotionAnimator (2.8.1):
     - MotionInterchange (~> 1.6)
   - MotionInterchange (1.6.0)
+  - SwiftyReceiptValidator (6.1.4)
 
 DEPENDENCIES:
   - DVNTStoreKitManager (from `../`)
@@ -629,6 +631,7 @@ SPEC REPOS:
     - MDFTextAccessibility
     - MotionAnimator
     - MotionInterchange
+    - SwiftyReceiptValidator
 
 EXTERNAL SOURCES:
   DVNTStoreKitManager:
@@ -636,7 +639,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   DVNTAlertManager: 1774d1b1934c47e83d0428353aa09d3bbb035f16
-  DVNTStoreKitManager: 4b2f7cb5b29704bc33c61d5f2023cb7ef2f80f8f
+  DVNTStoreKitManager: a105f87ac6badc1cb3398faa372809cdec5e69a1
   DVNTStringExtension: 55d7b68da9bd0b1aa00d80fc91a1d0c0ecb890e3
   DVNTUIWindowExtension: 9feb16327d7311a01998bb1e4aee7cfee6e8e8f0
   MaterialComponents: 59bfbfe08fc1ac204b21ba69100beabb932e3699
@@ -644,6 +647,7 @@ SPEC CHECKSUMS:
   MDFTextAccessibility: 85c09a1bd9c321f494348e632a25063bcda35a53
   MotionAnimator: ee16aa30567c5bae0fb2750c132915829cfaaf8a
   MotionInterchange: ead0e3ae1f3a5fb539e289debbc7ae036160a10d
+  SwiftyReceiptValidator: 4328e048964d273322c1d1a3c648cac415cb45a8
 
 PODFILE CHECKSUM: 52e0003bae36619930c189ca25bcd325bbdf333d
 

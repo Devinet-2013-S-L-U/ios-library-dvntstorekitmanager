@@ -20,6 +20,13 @@ class ViewController: UIViewController
         super.viewDidLoad()
         self.storeKitManager.delegate = self
     }
+    
+    // MARK: - IBActions
+    
+    @IBAction func restoreButtonAction(_ sender: Any)
+    {
+        self.storeKitManager.restore(shouldShowSpinner: true)
+    }
 }
 
 // MARK: - UITableView extension
@@ -42,7 +49,18 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource
         let currentProduct = self.storeKitManager.getProducts()[indexPath.row]
         
         cell.textLabel?.text = currentProduct.localizedTitle
-        cell.detailTextLabel?.text = self.storeKitManager.getLocalizedPrice(currentProduct)
+        
+        if let isPurchased = self.storeKitManager.checkIsPurchased(productId: currentProduct.productIdentifier, isNonConsumable: false) {
+            if isPurchased {
+                cell.detailTextLabel?.text = "purchased"
+                cell.detailTextLabel?.textColor = .green
+            }else{
+                cell.detailTextLabel?.textColor = .lightGray
+                cell.detailTextLabel?.text = currentProduct.localizedPrice
+            }
+        }else{
+            cell.detailTextLabel?.text = nil
+        }
         
         return cell
     }
@@ -52,7 +70,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource
         tableView.deselectRow(at: indexPath, animated: true)
         
         let currentProduct = self.storeKitManager.getProducts()[indexPath.row]
-        self.storeKitManager.purchaseProduct(currentProduct)
+        self.storeKitManager.buy(currentProduct, shouldShowSpinner: true)
     }
 }
 
@@ -60,20 +78,32 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource
 
 extension ViewController: DVNTStoreKitManagerDelegate
 {
-    func storeKitManagerPurchaseDidFail(error: Error?)
+    func storeKitManagerInitialSubscriptionCheckDidFinish()
     {
-        print("Purchase did fail")
+        DispatchQueue.main.async { self.tableView.reloadData() }
     }
+    
+    func storeKitManagerActiveSubscriptionDetected(productId: String)
+    {
+        DispatchQueue.main.async { self.tableView.reloadData() }
+    }
+    
+    func storeKitManagerPurchaseRestoredSuccesfully(productIdentifier: String, transactionIdentifier: String?)
+    {
+        DispatchQueue.main.async { self.tableView.reloadData() }
+    }
+    
+    func storeKitManagerPurchaseDidSucced(productIdentifier: String, transactionIdentifier: String?)
+    {
+        DispatchQueue.main.async { self.tableView.reloadData() }
+    }
+    
+    func storeKitManagerPurchaseDidFail(productIdentifier: String, error: Error?)
+    { }
     
     func storekitManagerPurchaseUserUnableToMakePayments()
-    {
-        print("User is unable to make payments")
-    }
+    { }
     
     func storeKitManagerProductsListDidChange(storeKitManager: DVNTStoreKitManager)
-    {
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }
-    }
+    { }
 }

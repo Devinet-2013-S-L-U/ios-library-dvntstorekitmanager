@@ -6,15 +6,13 @@
 //  Copyright © 2018 Devinet 2013, S.L.U. All rights reserved.
 //
 
-import UIKit
-
-class Constants: NSObject
+class Constants
 {
     // MARK: - In-App purchases
     
     struct InAppPurchase
     {
-        static let SECRET = "818211ed74784158b6de3b33ed18d0ad"
-        static let ITEM_IDENTIFIERS: [String] = ["test_subs_1"]
+        static let SECRET = "ca165f9511914418b0e673c5f1981a55"
+        static let ITEM_IDENTIFIERS: [String] = ["test_subs_1", "test_subs_2"]
     }
 }

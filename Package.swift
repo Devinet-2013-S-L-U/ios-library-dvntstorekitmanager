@@ -7,7 +7,7 @@ let package = Package(
     name: "DVNTStoreKitManager",
     platforms: [
         .macOS(.v10_12),
-        .iOS(.v10),
+        .iOS(.v12),
         .tvOS(.v10),
         .watchOS(.v3)
     ],
@@ -18,10 +18,11 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://bitbucket.org/Devinet_Team/ios-library-dvntalertmanager", from: "1.1.2"),
+        .package(url: "https://github.com/crashoverride777/swifty-receipt-validator.git", from: "6.1.0")
     ],
     targets: [
         .target(
             name: "DVNTStoreKitManager",
-            dependencies: ["DVNTAlertManager"])
+            dependencies: ["DVNTAlertManager", "SwiftyReceiptValidator"])
     ]
 )
