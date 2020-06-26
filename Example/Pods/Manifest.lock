@@ -3,7 +3,7 @@ PODS:
     - DVNTStringExtension (~> 1.0.6)
     - DVNTUIWindowExtension (~> 1.0.6)
     - MaterialComponents (~> 109.2.0)
-  - DVNTStoreKitManager (1.0.0):
+  - DVNTStoreKitManager (1.0.1):
     - DVNTAlertManager (~> 1.1.2)
     - SwiftyReceiptValidator (~> 6.1.0)
   - DVNTStringExtension (1.0.6)
@@ -639,7 +639,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   DVNTAlertManager: 1774d1b1934c47e83d0428353aa09d3bbb035f16
-  DVNTStoreKitManager: a105f87ac6badc1cb3398faa372809cdec5e69a1
+  DVNTStoreKitManager: 1d0dd69b672c6a4d513ade1efc5f7008303b8e46
   DVNTStringExtension: 55d7b68da9bd0b1aa00d80fc91a1d0c0ecb890e3
   DVNTUIWindowExtension: 9feb16327d7311a01998bb1e4aee7cfee6e8e8f0
   MaterialComponents: 59bfbfe08fc1ac204b21ba69100beabb932e3699
