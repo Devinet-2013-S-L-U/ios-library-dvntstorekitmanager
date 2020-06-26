@@ -173,7 +173,7 @@ public class DVNTStoreKitManager: NSObject
         let validationRequest = SRVPurchaseValidationRequest(productId: productId, sharedSecret: self.secret)
         self.receiptValidator.validate(validationRequest) { result in
             switch result {
-            case .success(let response):
+            case .success(_):
                 defer {
                     queue.finishTransaction(transaction)
                 }
