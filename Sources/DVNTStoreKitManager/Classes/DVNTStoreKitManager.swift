@@ -211,10 +211,6 @@ public class DVNTStoreKitManager: NSObject
             switch result {
             case .success(let response):
                 for receipt in response.validSubscriptionReceipts {
-                    print("~~~~ PRODUCT ID: \(receipt.productId)")
-                    print("~~~~ PURCHASED: \(receipt.purchaseDate)")
-                    print("~~~~ EXPIRES: \(receipt.expiresDate)")
-                    print("~~~~ \n")
                     if !self.purchasedProductIdentifiers.contains(receipt.productId) {
                         self.purchasedProductIdentifiers.append(receipt.productId)
                         self.delegate?.storeKitManagerActiveSubscriptionDetected?(productIdentifier: receipt.productId)
