@@ -78,12 +78,16 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource
 
 extension ViewController: DVNTStoreKitManagerDelegate
 {
-    func storeKitManagerInitialSubscriptionCheckDidFinish()
+    func storeKitManagerStorePurchaseWasRetained(productIdentifier: String) {
+        print("Purchase was retained!")
+    }
+    
+    func storeKitManagerSubscriptionValidationDidFinish()
     {
         DispatchQueue.main.async { self.tableView.reloadData() }
     }
     
-    func storeKitManagerActiveSubscriptionDetected(productId: String)
+    func storeKitManagerActiveSubscriptionDetected(productIdentifier: String)
     {
         DispatchQueue.main.async { self.tableView.reloadData() }
     }

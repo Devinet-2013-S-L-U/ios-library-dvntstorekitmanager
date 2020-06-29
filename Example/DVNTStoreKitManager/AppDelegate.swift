@@ -22,6 +22,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         return true
     }
     
+    func applicationDidBecomeActive(_ application: UIApplication)
+    {
+        self.storeKitManager.setShouldAddStorePayment(false)
+    }
+    
     // MARK: - Other methods
     
     private final func initializeStoreKitManager()
