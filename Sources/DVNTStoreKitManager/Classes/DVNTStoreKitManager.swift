@@ -166,7 +166,7 @@ public class DVNTStoreKitManager: NSObject
     
     public final func isSubscription(_ product: SKProduct) -> Bool
     {
-        return product.subscriptionGroupIdentifier != nil
+        return product.subscriptionPeriod != nil
     }
     
     private final func validatePurchase(queue: SKPaymentQueue, transaction: SKPaymentTransaction, productId: String, sharedSecret: String?, success: @escaping () -> Void, failure: @escaping (Error?) -> Void)
