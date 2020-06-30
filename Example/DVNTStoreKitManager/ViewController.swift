@@ -8,6 +8,7 @@
 
 import UIKit
 import DVNTStoreKitManager
+import SwiftyReceiptValidator
 
 class ViewController: UIViewController
 {
