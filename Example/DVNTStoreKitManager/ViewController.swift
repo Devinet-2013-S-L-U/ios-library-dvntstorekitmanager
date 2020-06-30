@@ -87,7 +87,7 @@ extension ViewController: DVNTStoreKitManagerDelegate
         DispatchQueue.main.async { self.tableView.reloadData() }
     }
     
-    func storeKitManagerActiveSubscriptionDetected(productIdentifier: String)
+    func storeKitManagerActiveSubscriptionDetected(productIdentifier: String, receipt: SRVReceiptInApp)
     {
         DispatchQueue.main.async { self.tableView.reloadData() }
     }

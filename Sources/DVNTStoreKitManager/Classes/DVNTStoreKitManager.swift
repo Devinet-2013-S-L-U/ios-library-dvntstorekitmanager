@@ -11,17 +11,16 @@ import StoreKit
 import DVNTAlertManager
 import SwiftyReceiptValidator
 
-@objc public protocol DVNTStoreKitManagerDelegate
+public protocol DVNTStoreKitManagerDelegate
 {
+    func storeKitManagerSubscriptionValidationDidFinish()
+    func storekitManagerPurchaseUserUnableToMakePayments()
+    func storeKitManagerStorePurchaseWasRetained(productIdentifier: String)
     func storeKitManagerPurchaseDidFail(productIdentifier: String, error: Error?)
+    func storeKitManagerProductsListDidChange(storeKitManager: DVNTStoreKitManager)
     func storeKitManagerPurchaseDidSucced(productIdentifier: String, transactionIdentifier: String?)
     func storeKitManagerActiveSubscriptionDetected(productIdentifier: String, receipt: SRVReceiptInApp)
     func storeKitManagerPurchaseRestoredSuccesfully(productIdentifier: String, transactionIdentifier: String?)
-    
-    @objc optional func storekitManagerPurchaseUserUnableToMakePayments()
-    @objc optional func storeKitManagerSubscriptionValidationDidFinish()
-    @objc optional func storeKitManagerStorePurchaseWasRetained(productIdentifier: String)
-    @objc optional func storeKitManagerProductsListDidChange(storeKitManager: DVNTStoreKitManager)
 }
 
 public class DVNTStoreKitManager: NSObject
@@ -43,7 +42,7 @@ public class DVNTStoreKitManager: NSObject
     
     private final var products: [SKProduct] = [] {
         didSet {
-            self.delegate?.storeKitManagerProductsListDidChange?(storeKitManager: self)
+            self.delegate?.storeKitManagerProductsListDidChange(storeKitManager: self)
         }
     }
     private final var inAppPurchaseIdentifiers: [String] = [] {
@@ -143,7 +142,7 @@ public class DVNTStoreKitManager: NSObject
             SKPaymentQueue.default().add(paymentRequest)
         }else{
             print("💰 ⛔️ DVNTStoreKitManager: This user cannot make a payment.")
-            self.delegate?.storekitManagerPurchaseUserUnableToMakePayments?()
+            self.delegate?.storekitManagerPurchaseUserUnableToMakePayments()
             DispatchQueue.main.async { self.alertManager.hideLoadingView() }
         }
         #endif
@@ -213,14 +212,14 @@ public class DVNTStoreKitManager: NSObject
                 for receipt in response.validSubscriptionReceipts {
                     if !self.purchasedProductIdentifiers.contains(receipt.productId) {
                         self.purchasedProductIdentifiers.append(receipt.productId)
-                        self.delegate?.storeKitManagerActiveSubscriptionDetected?(productIdentifier: receipt.productId, receipt: receipt)
+                        self.delegate?.storeKitManagerActiveSubscriptionDetected(productIdentifier: receipt.productId, receipt: receipt)
                     }
                 }
-                self.delegate?.storeKitManagerSubscriptionValidationDidFinish?()
+                self.delegate?.storeKitManagerSubscriptionValidationDidFinish()
                 print("💰 ✅ DVNTStoreKitManager: The validation of the subscriptions did finish successfully")
             case .failure(let error):
                 DispatchQueue.main.async { self.alertManager.hideLoadingView() }
-                self.delegate?.storeKitManagerSubscriptionValidationDidFinish?()
+                self.delegate?.storeKitManagerSubscriptionValidationDidFinish()
                 print("💰 ⛔️ DVNTStoreKitManager: The validation of the subscriptions did finish with error \(error.localizedDescription)")
             }
         }
@@ -271,7 +270,7 @@ extension DVNTStoreKitManager: SKPaymentTransactionObserver
             self.alertManager.showLoadingView(isUserinteractionEnabled: false)
         }else{
             self.storedPayments.append(payment)
-            self.delegate?.storeKitManagerStorePurchaseWasRetained?(productIdentifier: payment.productIdentifier)
+            self.delegate?.storeKitManagerStorePurchaseWasRetained(productIdentifier: payment.productIdentifier)
         }
         
         return self.shouldAddStorePayment
