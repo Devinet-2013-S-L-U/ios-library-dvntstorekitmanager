@@ -20,7 +20,7 @@ import SwiftyReceiptValidator
     @objc optional func storekitManagerPurchaseUserUnableToMakePayments()
     @objc optional func storeKitManagerSubscriptionValidationDidFinish()
     @objc optional func storeKitManagerStorePurchaseWasRetained(productIdentifier: String)
-    @objc optional func storeKitManagerActiveSubscriptionDetected(productIdentifier: String)
+    @objc optional func storeKitManagerActiveSubscriptionDetected(productIdentifier: String, receipt: SRVReceiptInApp)
     @objc optional func storeKitManagerProductsListDidChange(storeKitManager: DVNTStoreKitManager)
 }
 
@@ -213,7 +213,7 @@ public class DVNTStoreKitManager: NSObject
                 for receipt in response.validSubscriptionReceipts {
                     if !self.purchasedProductIdentifiers.contains(receipt.productId) {
                         self.purchasedProductIdentifiers.append(receipt.productId)
-                        self.delegate?.storeKitManagerActiveSubscriptionDetected?(productIdentifier: receipt.productId)
+                        self.delegate?.storeKitManagerActiveSubscriptionDetected?(productIdentifier: receipt.productId, receipt: receipt)
                     }
                 }
                 self.delegate?.storeKitManagerSubscriptionValidationDidFinish?()
