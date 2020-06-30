@@ -15,12 +15,12 @@ import SwiftyReceiptValidator
 {
     func storeKitManagerPurchaseDidFail(productIdentifier: String, error: Error?)
     func storeKitManagerPurchaseDidSucced(productIdentifier: String, transactionIdentifier: String?)
+    func storeKitManagerActiveSubscriptionDetected(productIdentifier: String, receipt: SRVReceiptInApp)
     func storeKitManagerPurchaseRestoredSuccesfully(productIdentifier: String, transactionIdentifier: String?)
     
     @objc optional func storekitManagerPurchaseUserUnableToMakePayments()
     @objc optional func storeKitManagerSubscriptionValidationDidFinish()
     @objc optional func storeKitManagerStorePurchaseWasRetained(productIdentifier: String)
-    @objc optional func storeKitManagerActiveSubscriptionDetected(productIdentifier: String, receipt: SRVReceiptInApp)
     @objc optional func storeKitManagerProductsListDidChange(storeKitManager: DVNTStoreKitManager)
 }
 
