@@ -5838,7 +5838,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1150;
+				LastUpgradeCheck = 1100;
 			};
 			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -6801,6 +6801,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7F6168E980A55699714DC3F5D3838D2D /* MotionAnimator.debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -6849,6 +6850,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = FBB1DDF8369EFC835555C42E53963854 /* SwiftyReceiptValidator.release.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -6882,6 +6884,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 6AB3288B12095DDD965FBFC9B46928EF /* DVNTStringExtension.release.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -6914,6 +6917,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C734E7668FD2F3107C779DD3D4CCB685 /* DVNTUIWindowExtension.debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -6945,6 +6949,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 13831DFA797CEE722E96EC1B7AE97497 /* SwiftyReceiptValidator.debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -6973,10 +6978,44 @@
 			};
 			name = Debug;
 		};
+		2352C706C4C9CAE60C019DFFE3C64CC8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 27B7D0C14A5D960475C6779E49ADEAEA /* DVNTStoreKitManager.debug.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/DVNTStoreKitManager/DVNTStoreKitManager-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/DVNTStoreKitManager/DVNTStoreKitManager-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/DVNTStoreKitManager/DVNTStoreKitManager.modulemap";
+				PRODUCT_MODULE_NAME = DVNTStoreKitManager;
+				PRODUCT_NAME = DVNTStoreKitManager;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
 		2A97091280E531788E04B402154A47A2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2814BB3600D6625985F0C7F40C8CAB8F /* MDFTextAccessibility.release.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -7005,42 +7044,11 @@
 			};
 			name = Release;
 		};
-		316E4B2DF2DB225C5C1F3CC6CA703970 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 27B7D0C14A5D960475C6779E49ADEAEA /* DVNTStoreKitManager.debug.xcconfig */;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/DVNTStoreKitManager/DVNTStoreKitManager-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/DVNTStoreKitManager/DVNTStoreKitManager-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/DVNTStoreKitManager/DVNTStoreKitManager.modulemap";
-				PRODUCT_MODULE_NAME = DVNTStoreKitManager;
-				PRODUCT_NAME = DVNTStoreKitManager;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
 		3762D88C61AFD8927C2E0A3795CE9A02 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9A50948F824EB3456477912F5DA94EAB /* DVNTAlertManager.debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -7089,6 +7097,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E52407EC3C0472C43E187ABBD0E35EB9 /* MDFTextAccessibility.debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -7189,6 +7198,7 @@
 			baseConfigurationReference = 67132E76F9739E77E5B5FC987735520E /* Pods-DVNTStoreKitManager_Example.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -7273,6 +7283,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8A5F5F80A31AFFEE138992D94277E1A9 /* MDFInternationalization.release.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -7305,6 +7316,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 36D894B8C6FE8F4D763A12DDACFC0E5F /* MotionInterchange.debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -7331,39 +7343,6 @@
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
-		};
-		6F0DF652A453B4AFFC088518576C2115 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 33ACAA72C44BBF536536A01C25481D66 /* DVNTStoreKitManager.release.xcconfig */;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/DVNTStoreKitManager/DVNTStoreKitManager-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/DVNTStoreKitManager/DVNTStoreKitManager-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/DVNTStoreKitManager/DVNTStoreKitManager.modulemap";
-				PRODUCT_MODULE_NAME = DVNTStoreKitManager;
-				PRODUCT_NAME = DVNTStoreKitManager;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
 		};
 		72FF337806FF34AE2CEEBAA8E5D0E73B /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -7403,6 +7382,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F88FEECF3A8630FF1ED323B85C869ECF /* MotionAnimator.release.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -7435,6 +7415,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5105C4552634E9F210D37B72AA657474 /* MaterialComponents.release.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -7467,6 +7448,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A2714B2148D53807285141137321994C /* DVNTStringExtension.debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -7499,6 +7481,7 @@
 			baseConfigurationReference = 2FE91DA9F06A77A8C802E3F1DE0C5978 /* Pods-DVNTStoreKitManager_Example.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -7533,6 +7516,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 6895E1ED18A9F83CBCEEB7AC55107836 /* DVNTAlertManager.release.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -7565,6 +7549,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7D192300C793D9A6308C16C2D1A1168A /* MaterialComponents.debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -7664,6 +7649,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 071CF5C45E8DE4A685CE45C044117D06 /* MotionInterchange.release.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -7730,7 +7716,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -7825,6 +7810,40 @@
 			};
 			name = Release;
 		};
+		E71F560327537FCEBB8C13139B2474D6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 33ACAA72C44BBF536536A01C25481D66 /* DVNTStoreKitManager.release.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/DVNTStoreKitManager/DVNTStoreKitManager-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/DVNTStoreKitManager/DVNTStoreKitManager-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/DVNTStoreKitManager/DVNTStoreKitManager.modulemap";
+				PRODUCT_MODULE_NAME = DVNTStoreKitManager;
+				PRODUCT_NAME = DVNTStoreKitManager;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 		E871D45FAFF70913DDF9DF7F2449F35B /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5105C4552634E9F210D37B72AA657474 /* MaterialComponents.release.xcconfig */;
@@ -7846,6 +7865,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0D7B5AB113070A7EBA73FE716B4E0D4A /* DVNTUIWindowExtension.release.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -7878,7 +7898,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -7938,6 +7957,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B612AFE8FA6B185262AECB043C9BD6F0 /* MDFInternationalization.debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -8175,8 +8195,8 @@
 		CB7B645EEBC2B70ADE1107842A1690A0 /* Build configuration list for PBXNativeTarget "DVNTStoreKitManager" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				316E4B2DF2DB225C5C1F3CC6CA703970 /* Debug */,
-				6F0DF652A453B4AFFC088518576C2115 /* Release */,
+				2352C706C4C9CAE60C019DFFE3C64CC8 /* Debug */,
+				E71F560327537FCEBB8C13139B2474D6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

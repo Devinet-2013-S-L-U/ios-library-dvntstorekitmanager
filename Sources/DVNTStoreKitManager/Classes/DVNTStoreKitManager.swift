@@ -331,11 +331,19 @@ extension DVNTStoreKitManager: SKPaymentTransactionObserver
                     }, failure: { _ in })
                     break
                 case .failed:
-                    if let error = transaction.error as? SKError, error.code != .paymentCancelled, error.code != .unknown {
-                        self.alertManager.showBasicAlert(title: "Error", message: transaction.error?.localizedDescription ?? "Transaction did fail with an unknown error.")
-                        print(transaction.error != nil ? "💰 ⛔️ DVNTStoreKitManager: Transaction did fail with error '\(transaction.error!.localizedDescription)'" : "💰 ⛔️ DVNTStoreKitManager: Transaction did fail with an unknown error.")
-                        self.userIsPurchasing = false
-                        self.delegate?.storeKitManagerPurchaseDidFail(productIdentifier: transaction.payment.productIdentifier, error: transaction.error)
+                    if let error = transaction.error as? SKError {
+                        switch error.code {
+                        case .unknown: break
+                        case .paymentCancelled:
+                            if let index = self.storedPayments.firstIndex(of: transaction.payment) {
+                                self.storedPayments.remove(at: index)
+                            }
+                        default:
+                            self.alertManager.showBasicAlert(title: "Error", message: transaction.error?.localizedDescription ?? "Transaction did fail with an unknown error.")
+                            print(transaction.error != nil ? "💰 ⛔️ DVNTStoreKitManager: Transaction did fail with error '\(transaction.error!.localizedDescription)'" : "💰 ⛔️ DVNTStoreKitManager: Transaction did fail with an unknown error.")
+                            self.userIsPurchasing = false
+                            self.delegate?.storeKitManagerPurchaseDidFail(productIdentifier: transaction.payment.productIdentifier, error: transaction.error)
+                        }
                     }
                     queue.finishTransaction(transaction)
                     DispatchQueue.main.async { self.alertManager.hideLoadingView() }
