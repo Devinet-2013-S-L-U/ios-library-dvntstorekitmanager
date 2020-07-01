@@ -81,6 +81,10 @@ extension ViewController: DVNTStoreKitManagerDelegate
 {
     func storeKitManagerStorePurchaseWasRetained(productIdentifier: String) {
         print("Purchase was retained!")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {
+            print("PROCESSING STORED")
+            self.storeKitManager.processStoredPayments()
+        })
     }
     
     func storeKitManagerSubscriptionValidationDidFinish()

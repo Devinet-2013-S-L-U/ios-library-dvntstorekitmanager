@@ -335,7 +335,7 @@ extension DVNTStoreKitManager: SKPaymentTransactionObserver
                         switch error.code {
                         case .unknown: break
                         case .paymentCancelled:
-                            if let index = self.storedPayments.firstIndex(of: transaction.payment) {
+                            if let index = self.storedPayments.firstIndex(where: { $0.productIdentifier == transaction.payment.productIdentifier}) {
                                 self.storedPayments.remove(at: index)
                             }
                         default:
