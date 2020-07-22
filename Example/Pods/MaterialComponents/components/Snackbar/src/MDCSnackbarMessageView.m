@@ -182,7 +182,8 @@ static const MDCFontTextStyle kButtonTextStyle = MDCFontTextStyleButton;
     self.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     self.contentEdgeInsets = UIEdgeInsetsMake(buttonContentPadding, buttonContentPadding,
                                               buttonContentPadding, buttonContentPadding);
-
+    // Minimum touch target size (44, 44).
+    self.minimumSize = CGSizeMake(44, 44);
     // Make sure the button doesn't get too compressed.
     [self setContentCompressionResistancePriority:UILayoutPriorityRequired
                                           forAxis:UILayoutConstraintAxisHorizontal];
@@ -204,6 +205,8 @@ static const MDCFontTextStyle kButtonTextStyle = MDCFontTextStyleButton;
   NSMutableDictionary<NSNumber *, UIColor *> *_buttonTitleColors;
 
   BOOL _mdc_adjustsFontForContentSizeCategory;
+
+  BOOL _shouldDismissOnOverlayTap;
 }
 
 @synthesize mdc_overrideBaseElevation = _mdc_overrideBaseElevation;
@@ -240,6 +243,7 @@ static const MDCFontTextStyle kButtonTextStyle = MDCFontTextStyleButton;
     _messageFont = manager.messageFont;
     _buttonFont = manager.buttonFont;
     _message = message;
+    _shouldDismissOnOverlayTap = message.shouldDismissOnOverlayTap;
     _dismissalHandler = [handler copy];
     _mdc_overrideBaseElevation = manager.mdc_overrideBaseElevation;
     _traitCollectionDidChangeBlock = manager.traitCollectionDidChangeBlockForMessageView;
@@ -462,6 +466,17 @@ static const MDCFontTextStyle kButtonTextStyle = MDCFontTextStyleButton;
   if (self.traitCollectionDidChangeBlock) {
     self.traitCollectionDidChangeBlock(self, previousTraitCollection);
   }
+}
+
+- (NSString *)description {
+  NSString *messageString = self.message.description;
+  NSMutableString *description = [[NSMutableString alloc] init];
+  [description appendFormat:@"%@ {\n", [super description]];
+  [description appendFormat:@"  message: %@;\n",
+                            [messageString stringByReplacingOccurrencesOfString:@"\n"
+                                                                     withString:@"\n  "]];
+  [description appendString:@"}"];
+  return [description copy];
 }
 
 #pragma mark - Subclass overrides
@@ -1195,6 +1210,16 @@ static const MDCFontTextStyle kButtonTextStyle = MDCFontTextStyleButton;
 
 - (CGFloat)mdc_currentElevation {
   return self.elevation;
+}
+
+- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
+  BOOL result = [super pointInside:point withEvent:event];
+  BOOL accessibilityEnabled =
+      UIAccessibilityIsVoiceOverRunning() || UIAccessibilityIsSwitchControlRunning();
+  if (!result && !accessibilityEnabled && _shouldDismissOnOverlayTap) {
+    [self dismissWithAction:nil userInitiated:YES];
+  }
+  return result;
 }
 
 @end

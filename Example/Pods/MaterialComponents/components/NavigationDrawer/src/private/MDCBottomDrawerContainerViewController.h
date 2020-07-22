@@ -119,6 +119,17 @@
 @property(nonatomic, assign) CGFloat maximumInitialDrawerHeight;
 
 /**
+ The absolute height in points to which the drawer may expand when a user scrolls.
+
+ Defaults to 0, indicating no value has been set and it should use the default behavior of 100% of
+ the screen's height.
+
+ If the value is larger than the container's height, this will allow the drawer to be scrolled to
+ the full height of the container.
+ */
+@property(nonatomic, assign) CGFloat maximumDrawerHeight;
+
+/**
  A flag allowing clients to opt-in to the drawer adding additional height to the content to include
  the bottom safe area inset. This will remove the need for clients to calculate their content size
  with the bottom safe area when setting the preferredContentSize of the contentViewController.
@@ -160,6 +171,14 @@
  Defaults to NO.
  */
 @property(nonatomic, assign) BOOL shouldAdjustOnContentSizeChange;
+
+/**
+ Whether layout adjustments should be made to support iPad Slide Over.
+
+ Defaults to NO to maintain the same behavior that existed before this property
+ was added and to allow apps to migrate on their own schedule.
+ */
+@property(nonatomic) BOOL adjustLayoutForIPadSlideOver;
 
 /**
  Sets the content offset Y of the drawer's content. If contentOffsetY is set to 0, the

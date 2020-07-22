@@ -16,6 +16,8 @@
 
 #import "private/MDCActionSheetHeaderView.h"
 #import "private/MDCActionSheetItemTableViewCell.h"
+#import "private/MaterialActionSheetStrings.h"
+#import "private/MaterialActionSheetStrings_table.h"
 #import "MDCActionSheetControllerDelegate.h"
 #import "MaterialAvailability.h"
 #import "MaterialShadowElevations.h"
@@ -26,6 +28,9 @@ static NSString *const kReuseIdentifier = @"BaseCell";
 static const CGFloat kActionImageAlpha = (CGFloat)0.6;
 static const CGFloat kActionTextAlpha = (CGFloat)0.87;
 static const CGFloat kDividerDefaultAlpha = (CGFloat)0.12;
+
+// The Bundle for string resources.
+static NSString *const kMaterialActionSheetBundle = @"MaterialActionSheet.bundle";
 
 @interface MDCActionSheetController () <MDCBottomSheetPresentationControllerDelegate,
                                         UITableViewDelegate,
@@ -203,6 +208,12 @@ static const CGFloat kDividerDefaultAlpha = (CGFloat)0.12;
   [self.view addSubview:self.tableView];
   [self.view addSubview:self.header];
   [self.view addSubview:self.headerDividerView];
+
+  NSString *key =
+      kMaterialActionSheetStringTable[kStr_MaterialActionSheetPresentedAccessibilityAnnouncement];
+  NSString *announcement = NSLocalizedStringFromTableInBundle(
+      key, kMaterialActionSheetStringsTableName, [[self class] bundle], @"Alert");
+  UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, announcement);
 }
 
 - (void)viewDidLayoutSubviews {
@@ -371,6 +382,15 @@ static const CGFloat kDividerDefaultAlpha = (CGFloat)0.12;
   cell.dividerColor = action.dividerColor;
   cell.showsDivider = action.showsDivider;
   return cell;
+}
+
+- (void)tableView:(UITableView *)tableView
+      willDisplayCell:(nonnull UITableViewCell *)cell
+    forRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+  if ([self.delegate respondsToSelector:@selector(actionSheetController:
+                                                        willDisplayView:forRowAtIndexPath:)]) {
+    [self.delegate actionSheetController:self willDisplayView:cell forRowAtIndexPath:indexPath];
+  }
 }
 
 - (void)setContentEdgeInsets:(UIEdgeInsets)contentEdgeInsets {
@@ -571,6 +591,32 @@ static const CGFloat kDividerDefaultAlpha = (CGFloat)0.12;
   if ([self.delegate respondsToSelector:@selector(actionSheetControllerDidDismiss:)]) {
     [self.delegate actionSheetControllerDidDismiss:self];
   }
+}
+
+- (void)bottomSheetPresentationControllerDismissalAnimationCompleted:
+    (MDCBottomSheetPresentationController *)bottomSheet {
+  if ([self.delegate
+          respondsToSelector:@selector(actionSheetControllerDismissalAnimationCompleted:)]) {
+    [self.delegate actionSheetControllerDismissalAnimationCompleted:self];
+  }
+}
+
+#pragma mark - Resource bundle
+
++ (NSBundle *)bundle {
+  static NSBundle *bundle = nil;
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+    bundle = [NSBundle bundleWithPath:[self bundlePathWithName:kMaterialActionSheetBundle]];
+  });
+
+  return bundle;
+}
+
++ (NSString *)bundlePathWithName:(NSString *)bundleName {
+  NSBundle *bundle = [NSBundle bundleForClass:[MDCActionSheetController class]];
+  NSString *resourcePath = [(nil == bundle ? [NSBundle mainBundle] : bundle) resourcePath];
+  return [resourcePath stringByAppendingPathComponent:bundleName];
 }
 
 @end

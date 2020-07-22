@@ -21,9 +21,9 @@
 #import "MaterialMath.h"
 #import "MaterialTextControlsPrivate+BaseStyle.h"
 #import "MaterialTextControlsPrivate+Shared.h"
-#import "private/MDCBaseTextFieldLayout.h"
+#import "MaterialTextControlsPrivate+TextFields.h"
 
-@interface MDCBaseTextField () <MDCTextControl>
+@interface MDCBaseTextField () <MDCTextControlTextField>
 
 @property(strong, nonatomic) UILabel *label;
 @property(nonatomic, strong) MDCTextControlAssistiveLabelView *assistiveLabelView;
@@ -32,7 +32,7 @@
 @property(nonatomic, assign) MDCTextControlLabelPosition labelPosition;
 @property(nonatomic, assign) CGRect labelFrame;
 @property(nonatomic, assign) NSTimeInterval animationDuration;
-@property(nonatomic, assign) CGSize mostRecentlyComputedIntrinsicContentSize;
+@property(nonatomic, assign) CGSize cachedIntrinsicContentSize;
 
 /**
  This property maps MDCTextControlStates as NSNumbers to
@@ -125,9 +125,8 @@
 }
 
 - (CGSize)intrinsicContentSize {
-  self.mostRecentlyComputedIntrinsicContentSize =
-      [self preferredSizeWithWidth:CGRectGetWidth(self.bounds)];
-  return self.mostRecentlyComputedIntrinsicContentSize;
+  self.cachedIntrinsicContentSize = [self preferredSizeWithWidth:CGRectGetWidth(self.bounds)];
+  return self.cachedIntrinsicContentSize;
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
@@ -151,7 +150,7 @@
  -layoutSubviews in the layout cycle.
  */
 - (void)preLayoutSubviews {
-  if ([self widthHasChangedSinceIntrinsicContentSizeWasLastComputed]) {
+  if (![self validateWidth]) {
     [self invalidateIntrinsicContentSize];
   }
   self.textControlState = [self determineCurrentTextControlState];
@@ -173,7 +172,7 @@
   self.rightView.hidden = self.layout.rightViewHidden;
   [self animateLabel];
   [self.containerStyle applyStyleToTextControl:self animationDuration:self.animationDuration];
-  if ([self calculatedHeightHasChangedSinceIntrinsicContentSizeWasLastComputed]) {
+  if (![self validateHeight]) {
     [self invalidateIntrinsicContentSize];
   }
 }
@@ -209,15 +208,21 @@
   CGFloat clampedCustomAssistiveLabelDrawPriority =
       [self clampedCustomAssistiveLabelDrawPriority:self.customAssistiveLabelDrawPriority];
   CGFloat clearButtonSideLength = [self clearButtonSideLengthWithTextFieldSize:textFieldSize];
-  id<MDCTextControlVerticalPositioningReference> positioningReference =
-      [self createPositioningReference];
+  id<MDCTextControlVerticalPositioningReference> verticalPositioningReference =
+      [self createVerticalPositioningReference];
+  id<MDCTextControlHorizontalPositioning> horizontalPositioningReference =
+      [self createHorizontalPositioningReference];
   return [[MDCBaseTextFieldLayout alloc]
                  initWithTextFieldSize:textFieldSize
-                  positioningReference:positioningReference
+                  positioningReference:verticalPositioningReference
+        horizontalPositioningReference:horizontalPositioningReference
                                   text:self.text
                                   font:self.normalFont
                           floatingFont:self.floatingFont
                                  label:self.label
+                         labelPosition:self.labelPosition
+                         labelBehavior:self.labelBehavior
+                     sideViewAlignment:self.sideViewAlignment
                               leftView:self.leftView
                           leftViewMode:self.leftViewMode
                              rightView:self.rightView
@@ -232,7 +237,21 @@
                              isEditing:self.isEditing];
 }
 
-- (id<MDCTextControlVerticalPositioningReference>)createPositioningReference {
+- (id<MDCTextControlHorizontalPositioning>)createHorizontalPositioningReference {
+  id<MDCTextControlHorizontalPositioning> horizontalPositioningReference =
+      self.containerStyle.horizontalPositioningReference;
+  if (self.leadingEdgePaddingOverride) {
+    horizontalPositioningReference.leadingEdgePadding =
+        (CGFloat)[self.leadingEdgePaddingOverride doubleValue];
+  }
+  if (self.trailingEdgePaddingOverride) {
+    horizontalPositioningReference.trailingEdgePadding =
+        (CGFloat)[self.trailingEdgePaddingOverride doubleValue];
+  }
+  return horizontalPositioningReference;
+}
+
+- (id<MDCTextControlVerticalPositioningReference>)createVerticalPositioningReference {
   return [self.containerStyle
       positioningReferenceWithFloatingFontLineHeight:self.floatingFont.lineHeight
                                 normalFontLineHeight:self.normalFont.lineHeight
@@ -264,12 +283,12 @@
   return CGSizeMake(width, layout.calculatedHeight);
 }
 
-- (BOOL)widthHasChangedSinceIntrinsicContentSizeWasLastComputed {
-  return CGRectGetWidth(self.bounds) != self.mostRecentlyComputedIntrinsicContentSize.width;
+- (BOOL)validateWidth {
+  return CGRectGetWidth(self.bounds) == self.cachedIntrinsicContentSize.width;
 }
 
-- (BOOL)calculatedHeightHasChangedSinceIntrinsicContentSizeWasLastComputed {
-  return self.layout.calculatedHeight != self.mostRecentlyComputedIntrinsicContentSize.height;
+- (BOOL)validateHeight {
+  return self.layout.calculatedHeight == self.cachedIntrinsicContentSize.height;
 }
 
 - (BOOL)shouldLayoutForRTL {
@@ -308,6 +327,16 @@
 }
 
 #pragma mark Custom Accessors
+
+- (void)setLeadingEdgePaddingOverride:(NSNumber *)leadingEdgePaddingOverride {
+  _leadingEdgePaddingOverride = leadingEdgePaddingOverride;
+  [self setNeedsLayout];
+}
+
+- (void)setTrailingEdgePaddingOverride:(NSNumber *)trailingEdgePaddingOverride {
+  _trailingEdgePaddingOverride = trailingEdgePaddingOverride;
+  [self setNeedsLayout];
+}
 
 - (UILabel *)leadingAssistiveLabel {
   return self.assistiveLabelView.leadingAssistiveLabel;
@@ -468,10 +497,7 @@
 }
 
 - (CGRect)clearButtonRectForBounds:(CGRect)bounds {
-  if (self.labelPosition == MDCTextControlLabelPositionFloating) {
-    return self.layout.clearButtonFrameFloating;
-  }
-  return self.layout.clearButtonFrameNormal;
+  return self.layout.clearButtonFrame;
 }
 
 - (CGRect)placeholderRectForBounds:(CGRect)bounds {
@@ -616,6 +642,12 @@
     colorViewModel = [[MDCTextControlColorViewModel alloc] initWithState:textControlState];
   }
   return colorViewModel;
+}
+
+#pragma mark MDCTextControlTextField
+
+- (MDCTextControlTextFieldSideViewAlignment)sideViewAlignment {
+  return MDCTextControlTextFieldSideViewAlignmentCenteredInContainer;
 }
 
 #pragma mark Accessibility Overrides

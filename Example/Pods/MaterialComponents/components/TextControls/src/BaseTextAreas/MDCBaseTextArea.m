@@ -49,6 +49,7 @@ static const CGFloat kMDCBaseTextAreaDefaultMaximumNumberOfVisibleLines = (CGFlo
 @property(nonatomic, strong) MDCTextControlGradientManager *gradientManager;
 
 @property(strong, nonatomic) UITapGestureRecognizer *tapGesture;
+@property(nonatomic, assign) CGSize cachedIntrinsicContentSize;
 
 @end
 
@@ -150,7 +151,8 @@ static const CGFloat kMDCBaseTextAreaDefaultMaximumNumberOfVisibleLines = (CGFlo
 }
 
 - (CGSize)intrinsicContentSize {
-  return [self preferredSizeWithWidth:CGRectGetWidth(self.bounds)];
+  self.cachedIntrinsicContentSize = [self preferredSizeWithWidth:CGRectGetWidth(self.bounds)];
+  return self.cachedIntrinsicContentSize;
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
@@ -172,6 +174,9 @@ static const CGFloat kMDCBaseTextAreaDefaultMaximumNumberOfVisibleLines = (CGFlo
 #pragma mark Private Layout
 
 - (void)preLayoutSubviews {
+  if (![self validateWidth]) {
+    [self invalidateIntrinsicContentSize];
+  }
   self.textControlState = [self determineCurrentTextControlState];
   self.labelPosition = [self determineCurrentLabelPosition];
   MDCTextControlColorViewModel *colorViewModel =
@@ -191,16 +196,22 @@ static const CGFloat kMDCBaseTextAreaDefaultMaximumNumberOfVisibleLines = (CGFlo
   [self animateLabel];
   [self.containerStyle applyStyleToTextControl:self animationDuration:self.animationDuration];
   [self layoutGradientLayers];
+  if (![self validateHeight]) {
+    [self invalidateIntrinsicContentSize];
+  }
   [self.textView scrollRangeToVisible:self.textView.selectedRange];
 }
 
 - (MDCBaseTextAreaLayout *)calculateLayoutWithSize:(CGSize)size {
   CGFloat clampedCustomAssistiveLabelDrawPriority =
       [self clampedCustomAssistiveLabelDrawPriority:self.customAssistiveLabelDrawPriority];
-  id<MDCTextControlVerticalPositioningReference> positioningReference =
-      [self createPositioningReference];
+  id<MDCTextControlVerticalPositioningReference> verticalPositioningReference =
+      [self createVerticalPositioningReference];
+  id<MDCTextControlHorizontalPositioning> horizontalPositioningReference =
+      [self createHorizontalPositioningReference];
   return [[MDCBaseTextAreaLayout alloc] initWithSize:size
-                                positioningReference:positioningReference
+                        verticalPositioningReference:verticalPositioningReference
+                      horizontalPositioningReference:horizontalPositioningReference
                                                 text:self.baseTextAreaTextView.text
                                                 font:self.normalFont
                                         floatingFont:self.floatingFont
@@ -215,7 +226,7 @@ static const CGFloat kMDCBaseTextAreaDefaultMaximumNumberOfVisibleLines = (CGFlo
                                            isEditing:self.textView.isFirstResponder];
 }
 
-- (id<MDCTextControlVerticalPositioningReference>)createPositioningReference {
+- (id<MDCTextControlVerticalPositioningReference>)createVerticalPositioningReference {
   return [self.containerStyle
       positioningReferenceWithFloatingFontLineHeight:self.floatingFont.lineHeight
                                 normalFontLineHeight:self.normalFont.lineHeight
@@ -224,6 +235,20 @@ static const CGFloat kMDCBaseTextAreaDefaultMaximumNumberOfVisibleLines = (CGFlo
                                     numberOfTextRows:self.numberOfLinesOfVisibleText
                                              density:0
                             preferredContainerHeight:self.preferredContainerHeight];
+}
+
+- (id<MDCTextControlHorizontalPositioning>)createHorizontalPositioningReference {
+  id<MDCTextControlHorizontalPositioning> horizontalPositioningReference =
+      self.containerStyle.horizontalPositioningReference;
+  if (self.leadingEdgePaddingOverride) {
+    horizontalPositioningReference.leadingEdgePadding =
+        (CGFloat)[self.leadingEdgePaddingOverride doubleValue];
+  }
+  if (self.trailingEdgePaddingOverride) {
+    horizontalPositioningReference.trailingEdgePadding =
+        (CGFloat)[self.trailingEdgePaddingOverride doubleValue];
+  }
+  return horizontalPositioningReference;
 }
 
 - (CGFloat)clampedCustomAssistiveLabelDrawPriority:(CGFloat)customPriority {
@@ -242,6 +267,14 @@ static const CGFloat kMDCBaseTextAreaDefaultMaximumNumberOfVisibleLines = (CGFlo
   return CGSizeMake(width, layout.calculatedHeight);
 }
 
+- (BOOL)validateWidth {
+  return CGRectGetWidth(self.bounds) == self.cachedIntrinsicContentSize.width;
+}
+
+- (BOOL)validateHeight {
+  return self.layout.calculatedHeight == self.cachedIntrinsicContentSize.height;
+}
+
 - (void)layoutGradientLayers {
   CGRect gradientLayerFrame = self.containerFrame;
   self.gradientManager.horizontalGradient.frame = gradientLayerFrame;
@@ -252,14 +285,24 @@ static const CGFloat kMDCBaseTextAreaDefaultMaximumNumberOfVisibleLines = (CGFlo
 }
 
 - (CGFloat)numberOfLinesOfText {
-  CGSize fittingSize = CGSizeMake(CGRectGetWidth(self.textView.bounds), CGFLOAT_MAX);
-  NSDictionary *attributes = @{NSFontAttributeName : self.textView.font};
-  CGRect boundingRect =
-      [self.textView.text boundingRectWithSize:fittingSize
-                                       options:NSStringDrawingUsesLineFragmentOrigin
-                                    attributes:attributes
-                                       context:nil];
-  return MDCRound(CGRectGetHeight(boundingRect) / self.normalFont.lineHeight);
+  // For more context on measurinig the lines in a UITextView see here:
+  // https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/TextLayout/Tasks/CountLines.html
+  NSLayoutManager *layoutManager = self.textView.layoutManager;
+  NSUInteger numberOfGlyphs = layoutManager.numberOfGlyphs;
+  NSRange lineRange = NSMakeRange(0, 1);
+  NSUInteger index = 0;
+  NSUInteger numberOfLines = 0;
+  while (index < numberOfGlyphs) {
+    [layoutManager lineFragmentRectForGlyphAtIndex:index effectiveRange:&lineRange];
+    index = NSMaxRange(lineRange);
+    numberOfLines += 1;
+  }
+
+  if (self.textView.text.length > 0 &&
+      [self.textView.text characterAtIndex:self.textView.text.length - 1] == '\n') {
+    numberOfLines += 1;
+  }
+  return (CGFloat)numberOfLines;
 }
 
 - (CGFloat)numberOfLinesOfVisibleText {
@@ -323,6 +366,16 @@ static const CGFloat kMDCBaseTextAreaDefaultMaximumNumberOfVisibleLines = (CGFlo
 }
 
 #pragma mark Custom Accessors
+
+- (void)setLeadingEdgePaddingOverride:(NSNumber *)leadingEdgePaddingOverride {
+  _leadingEdgePaddingOverride = leadingEdgePaddingOverride;
+  [self setNeedsLayout];
+}
+
+- (void)setTrailingEdgePaddingOverride:(NSNumber *)trailingEdgePaddingOverride {
+  _trailingEdgePaddingOverride = trailingEdgePaddingOverride;
+  [self setNeedsLayout];
+}
 
 - (UITextView *)textView {
   return self.baseTextAreaTextView;

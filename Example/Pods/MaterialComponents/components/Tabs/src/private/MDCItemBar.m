@@ -506,9 +506,11 @@ static void *kItemPropertyContext = &kItemPropertyContext;
     s_keys = @[
       NSStringFromSelector(@selector(title)),
       NSStringFromSelector(@selector(image)),
+      NSStringFromSelector(@selector(selectedImage)),
       NSStringFromSelector(@selector(badgeValue)),
       NSStringFromSelector(@selector(badgeColor)),
-      NSStringFromSelector(@selector(accessibilityIdentifier))
+      NSStringFromSelector(@selector(accessibilityIdentifier)),
+      NSStringFromSelector(@selector(accessibilityLabel))
     ];
   });
   // clang-format on

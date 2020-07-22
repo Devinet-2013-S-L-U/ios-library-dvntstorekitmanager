@@ -36,7 +36,8 @@
           assistiveLabelDrawPriority:
               (MDCTextControlAssistiveLabelDrawPriority)assistiveLabelDrawPriority
     customAssistiveLabelDrawPriority:(CGFloat)customAssistiveLabelDrawPriority
-                   horizontalPadding:(CGFloat)horizontalPadding
+                  leadingEdgePadding:(CGFloat)leadingEdgePadding
+                 trailingEdgePadding:(CGFloat)trailingEdgePadding
          paddingAboveAssistiveLabels:(CGFloat)paddingAboveAssistiveLabels
          paddingBelowAssistiveLabels:(CGFloat)paddingBelowAssistiveLabels
                                isRTL:(BOOL)isRTL;

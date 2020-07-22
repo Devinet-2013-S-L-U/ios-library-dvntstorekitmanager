@@ -132,6 +132,10 @@ static const CGFloat kFilledFloatingLabelScaleFactor = (CGFloat)0.75;
             preferredContainerHeight:preferredContainerHeight];
 }
 
+- (MDCTextControlHorizontalPositioningReference *)horizontalPositioningReference {
+  return [[MDCTextControlHorizontalPositioningReference alloc] init];
+}
+
 #pragma mark Internal Styling Methods
 
 - (void)applyStyleTo:(UIView *)view

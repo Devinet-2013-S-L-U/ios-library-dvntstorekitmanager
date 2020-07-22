@@ -23,6 +23,12 @@
 typedef void (^MDCSnackbarMessageCompletionHandler)(BOOL userInitiated);
 
 /**
+ Called when a message is finished displaying, regardless of whether or not buttons were tapped.
+ */
+typedef void (^MDCSnackbarMessageCompletionHandlerWithError)(BOOL userInitiated,
+                                                             NSError *_Nullable error);
+
+/**
  Called when the button in the Snackbar is tapped.
  */
 typedef void (^MDCSnackbarMessageActionHandler)(void);
@@ -124,6 +130,15 @@ extern NSString *__nonnull const MDCSnackbarMessageBoldAttributeName;
 @property(nonatomic, copy, nullable) MDCSnackbarMessageCompletionHandler completionHandler;
 
 /**
+ Called when a message is finished displaying.
+
+ The message completion handler is called regardless of whether or not buttons were tapped and is
+ always called on the main thread.
+ */
+@property(nonatomic, copy, nullable)
+    MDCSnackbarMessageCompletionHandlerWithError completionHandlerWithError;
+
+/**
  The category of messages to which a message belongs.
 
  Default is nil. If set, only the last message of this category will be shown, any currently
@@ -197,6 +212,28 @@ extern NSString *__nonnull const MDCSnackbarMessageBoldAttributeName;
  Defaults to YES.
  */
 @property(nonatomic) BOOL automaticallyDismisses;
+
+/**
+ MDCSnackbarManager will display the snackbar message in this view.
+
+ Call this method to choose where in the view hierarchy this specific snackbar message will be
+ presented. This method should be called only in cases where the default behavior is unable to find
+ the correct view to place the snackbar message in. Furthermore, please set this property only if
+ this message is a special case and needs to be presented on a view different than the other
+ messages of this specific snackbar manager. Otherwise, please set the presentation host view by
+ using MDCSnackbarManager's @c setPresentationHostView.
+ */
+@property(nonatomic, weak, nullable) UIView *presentationHostViewOverride;
+
+/**
+ If true, the snackbar is dismissed when the user taps anywhere on the overlay.
+
+ @note: If VoiceOver is turned on, this value will be ignored and the snackbar will behave as if it
+ were set to NO.
+
+ Defaults to NO.
+ */
+@property(nonatomic) BOOL shouldDismissOnOverlayTap;
 
 @end
 

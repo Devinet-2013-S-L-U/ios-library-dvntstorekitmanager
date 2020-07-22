@@ -75,7 +75,7 @@ static NSString *const kMaterialDialogsBundle = @"MaterialDialogs.bundle";
 
 @end
 
-@interface MDCAlertController ()
+@interface MDCAlertController () <UITextViewDelegate>
 
 @property(nonatomic, nullable, weak) MDCAlertControllerView *alertView;
 @property(nonatomic, strong) MDCDialogTransitionController *transitionController;
@@ -230,11 +230,21 @@ static NSString *const kMaterialDialogsBundle = @"MaterialDialogs.bundle";
   }
 }
 
+- (void)setAttributedLinkColor:(UIColor *)attributedLinkColor {
+  if ([_attributedLinkColor isEqual:attributedLinkColor]) {
+    return;
+  }
+  _attributedLinkColor = attributedLinkColor;
+  if (self.alertView) {
+    self.alertView.messageTextView.tintColor = attributedLinkColor;
+  }
+}
+
 - (void)messageDidChange {
   if (self.attributedMessage.length > 0) {
-    self.alertView.messageLabel.attributedText = self.attributedMessage;
+    self.alertView.messageTextView.attributedText = self.attributedMessage;
   } else {
-    self.alertView.messageLabel.text = self.message;
+    self.alertView.messageTextView.text = self.message;
   }
   self.preferredContentSize =
       [self.alertView calculatePreferredContentSizeForBounds:CGRectInfinite.size];
@@ -243,7 +253,7 @@ static NSString *const kMaterialDialogsBundle = @"MaterialDialogs.bundle";
 - (void)setMessageAccessibilityLabel:(NSString *)messageAccessibilityLabel {
   _messageAccessibilityLabel = [messageAccessibilityLabel copy];
   if (self.alertView && messageAccessibilityLabel) {
-    self.alertView.messageLabel.accessibilityLabel = messageAccessibilityLabel;
+    self.alertView.messageTextView.accessibilityLabel = messageAccessibilityLabel;
   }
 }
 
@@ -594,6 +604,18 @@ static NSString *const kMaterialDialogsBundle = @"MaterialDialogs.bundle";
                                                     }];
 }
 
+#pragma mark - Text View Delegate
+
+- (BOOL)textView:(UITextView *)textView
+    shouldInteractWithURL:(NSURL *)URL
+                  inRange:(NSRange)characterRange
+              interaction:(UITextItemInteraction)interaction API_AVAILABLE(ios(10.0)) {
+  if (self.attributedMessageAction != nil) {
+    return self.attributedMessageAction(URL, characterRange, interaction);
+  }
+  return YES;
+}
+
 #pragma mark - UIViewController
 
 - (void)loadView {
@@ -700,10 +722,6 @@ static NSString *const kMaterialDialogsBundle = @"MaterialDialogs.bundle";
   }
 }
 
-- (BOOL)canBecomeFirstResponder {
-  return YES;
-}
-
 - (void)viewWillTransitionToSize:(CGSize)size
        withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
   [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
@@ -748,22 +766,39 @@ static NSString *const kMaterialDialogsBundle = @"MaterialDialogs.bundle";
         self.adjustsFontForContentSizeCategory;
   }
   if (self.attributedMessage.length > 0) {
-    self.alertView.messageLabel.attributedText = self.attributedMessage;
+    self.alertView.messageTextView.attributedText = self.attributedMessage;
   } else {
-    self.alertView.messageLabel.text = self.message;
+    self.alertView.messageTextView.text = self.message;
   }
   self.alertView.titleLabel.accessibilityLabel = self.titleAccessibilityLabel ?: self.title;
-  self.alertView.messageLabel.accessibilityLabel = self.messageAccessibilityLabel ?: self.message;
+  self.alertView.messageTextView.accessibilityLabel =
+      self.messageAccessibilityLabel ?: self.message ?: self.attributedMessage.string;
+  // Set messageTextView's accessibilityValue to the empty string to resolve b/158732017.
+  // MessageTextView acts as a label and should not have an accessibilityValue.
+  // Setting the accessibilityValue to nil causes VoiceOver to use the default value, which is the
+  // text of the message, so the value must be set to the empty string instead.
+  self.alertView.messageTextView.accessibilityValue = @"";
+  self.alertView.messageTextView.delegate = self;
+
   self.alertView.titleIconImageView.accessibilityLabel = self.imageAccessibilityLabel;
   self.alertView.titleIconView.accessibilityLabel = self.imageAccessibilityLabel;
 
   // TODO(https://github.com/material-components/material-components-ios/issues/8671): Update
-  // adjustsFontForContentSizeCategory for messageLabel
+  // adjustsFontForContentSizeCategory for messageTextView
   self.alertView.accessoryView = self.accessoryView;
   self.alertView.titleFont = self.titleFont;
   self.alertView.messageFont = self.messageFont;
   self.alertView.titleColor = self.titleColor ?: UIColor.blackColor;
-  self.alertView.messageColor = self.messageColor ?: UIColor.blackColor;
+  self.alertView.messageTextView.tintColor = self.attributedLinkColor;
+  if (self.attributedMessage.length > 0) {
+    // Avoid overriding `messageColor` during initialization, to allow the attributed messages's
+    // foregroundColor to take precedence in case `messageColor` was not set.
+    if (self.messageColor != nil) {
+      self.alertView.messageColor = self.messageColor;
+    }
+  } else {
+    self.alertView.messageColor = self.messageColor ?: UIColor.blackColor;
+  }
   self.alertView.adjustsFontForContentSizeCategoryWhenScaledFontIsUnavailable =
       self.adjustsFontForContentSizeCategoryWhenScaledFontIsUnavailable;
   if (self.backgroundColor) {

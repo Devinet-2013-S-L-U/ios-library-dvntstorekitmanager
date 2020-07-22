@@ -111,14 +111,6 @@
  */
 @property(nonatomic, strong, nullable) UIFont *titleFont UI_APPEARANCE_SELECTOR;
 
-/*
- This property determines if an @c MDCChipView should use the @c MDCRippleView behavior or not.
- By setting this property to @c YES, @c MDCStatefulRippleView is used to provide the user visual
- touch feedback, instead of the legacy @c MDCInkView.
- @note Defaults to @c NO.
- */
-@property(nonatomic, assign) BOOL enableRippleBehavior;
-
 /**
  Enabling the selection of the Chip on tap (when RippleBehavior is enabled).
  When rippleAllowsSelection is enabled, tapping a chip automatically toggles the chip's selected
@@ -136,6 +128,15 @@
  */
 @property(nullable, nonatomic, strong) id<MDCShapeGenerating> shapeGenerator UI_APPEARANCE_SELECTOR;
 
+/**
+ The corner radius for the chip.
+
+ Use this property to configure corner radius instead of @c self.layer.cornerRadius.
+
+ By default, it is set to keep the chip fully rounded.
+ */
+@property(nonatomic) CGFloat cornerRadius;
+
 /*
  Indicates whether the chip should automatically update its font when the device’s
  UIContentSizeCategory is changed.
@@ -151,20 +152,6 @@
     BOOL mdc_adjustsFontForContentSizeCategory UI_APPEARANCE_SELECTOR;
 
 /**
- Affects the fallback behavior for when a scaled font is not provided.
-
- If enabled, the font size will adjust even if a scaled font has not been provided for
- a given UIFont property on this component.
-
- If disabled, the font size will only be adjusted if a scaled font has been provided.
- This behavior most closely matches UIKit's.
-
- Default value is YES, but this flag will eventually default to NO and then be deprecated
- and deleted.
- */
-@property(nonatomic, assign) BOOL adjustsFontForContentSizeCategoryWhenScaledFontIsUnavailable;
-
-/**
  The minimum dimensions of the Chip. A non-positive value for either height or width is equivalent
  to no minimum for that dimension.
 
@@ -177,6 +164,17 @@
  area for the Chip.
  */
 @property(nonatomic, assign) UIEdgeInsets hitAreaInsets;
+
+/**
+ A Boolean value that determines whether the visible area is centered in the bounds of the view.
+
+ If set to YES, the visible area is centered in the bounds of the view, which is often used to
+ configure invisible tappable area. If set to NO, the visible area fills its bounds. This property
+ doesn't affect the result of @c sizeThatFits:.
+
+ The default value is @c NO.
+*/
+@property(nonatomic, assign) BOOL centerVisibleArea;
 
 /**
  A block that is invoked when the MDCChipView receives a call to @c
@@ -325,5 +323,42 @@
  */
 - (void)setTitleColor:(nullable UIColor *)titleColor
              forState:(UIControlState)state UI_APPEARANCE_SELECTOR;
+
+#pragma mark - Deprecated
+
+/**
+The inset or outset margins for the rectangle surrounding all of the chip’s visible area.
+
+A positive value shrinks the visible area of the chip. A negative value expands the visible area
+of the chip.
+*/
+@property(nonatomic, assign) UIEdgeInsets visibleAreaInsets
+    __attribute__((deprecated("Consider using centerVisibleArea to adjust visible area.")));
+
+@end
+
+@interface MDCChipView (ToBeDeprecated)
+
+/*
+ This property determines if an @c MDCChipView should use the @c MDCRippleView behavior or not.
+ By setting this property to @c YES, @c MDCStatefulRippleView is used to provide the user visual
+ touch feedback, instead of the legacy @c MDCInkView.
+ @note Defaults to @c NO.
+ */
+@property(nonatomic, assign) BOOL enableRippleBehavior;
+
+/**
+ Affects the fallback behavior for when a scaled font is not provided.
+
+ If enabled, the font size will adjust even if a scaled font has not been provided for
+ a given UIFont property on this component.
+
+ If disabled, the font size will only be adjusted if a scaled font has been provided.
+ This behavior most closely matches UIKit's.
+
+ Default value is YES, but this flag will eventually default to NO and then be deprecated
+ and deleted.
+ */
+@property(nonatomic, assign) BOOL adjustsFontForContentSizeCategoryWhenScaledFontIsUnavailable;
 
 @end

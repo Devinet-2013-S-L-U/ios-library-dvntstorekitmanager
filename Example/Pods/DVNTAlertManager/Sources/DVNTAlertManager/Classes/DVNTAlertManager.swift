@@ -157,27 +157,29 @@ public class DVNTAlertManager
     public func hideLoadingView()
     {
         if self.isShowingLoadingView {
-            if let keyWindow = UIApplication.shared.keyWindow, let loadingView = self.loadingView {
-                if self.alertStyle == .Android {
-                    for view in loadingView.subviews {
-                        if view is MDCActivityIndicator {
-                            let activityIndicator = view as! MDCActivityIndicator
-                            activityIndicator.stopAnimating()
-                            break
+            DispatchQueue.main.async {
+                if let keyWindow = UIApplication.shared.keyWindow, let loadingView = self.loadingView {
+                    if self.alertStyle == .Android {
+                        for view in loadingView.subviews {
+                            if view is MDCActivityIndicator {
+                                let activityIndicator = view as! MDCActivityIndicator
+                                activityIndicator.stopAnimating()
+                                break
+                            }
+                        }
+                    }else{
+                        for view in loadingView.subviews {
+                            if view is UIActivityIndicatorView {
+                                let activityIndicator = view as! UIActivityIndicatorView
+                                activityIndicator.stopAnimating()
+                                break
+                            }
                         }
                     }
-                }else{
-                    for view in loadingView.subviews {
-                        if view is UIActivityIndicatorView {
-                            let activityIndicator = view as! UIActivityIndicatorView
-                            activityIndicator.stopAnimating()
-                            break
-                        }
-                    }
+                    loadingView.removeFromSuperview()
+                    keyWindow.isUserInteractionEnabled = true
+                    self.isShowingLoadingView = false
                 }
-                loadingView.removeFromSuperview()
-                keyWindow.isUserInteractionEnabled = true
-                self.isShowingLoadingView = false
             }
         }
     }

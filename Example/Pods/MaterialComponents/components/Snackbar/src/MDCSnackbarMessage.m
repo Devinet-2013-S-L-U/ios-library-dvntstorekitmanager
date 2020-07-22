@@ -74,19 +74,35 @@ static BOOL _usesLegacySnackbar = NO;
   copy.focusOnShow = self.focusOnShow;
   copy.elementToFocusOnDismiss = self.elementToFocusOnDismiss;
   copy.automaticallyDismisses = self.automaticallyDismisses;
+  copy.presentationHostViewOverride = self.presentationHostViewOverride;
+  copy.shouldDismissOnOverlayTap = self.shouldDismissOnOverlayTap;
 
   // Unfortunately there's not really a concept of 'copying' a block (in the same way you would copy
   // a string, for example). A block's pointer is immutable once it is created and copied to the
   // heap, so we're pretty safe just using the same block.
   copy.completionHandler = self.completionHandler;
+  copy.completionHandlerWithError = self.completionHandlerWithError;
   copy.action = self.action;
   copy.snackbarMessageWillPresentBlock = self.snackbarMessageWillPresentBlock;
+  copy.error = self.error;
 
   return copy;
 }
 
 - (dispatch_queue_t)targetQueue {
   return dispatch_get_main_queue();
+}
+
+- (NSString *)description {
+  NSMutableString *description = [[NSMutableString alloc] init];
+  [description appendFormat:@"<%@: %p> {\n", [self class], self];
+  [description appendFormat:@"  text: \"%@\",\n", self.text];
+  if (self.action) {
+    [description appendFormat:@"  action: \"%@\",\n", self.action.title];
+  }
+  [description appendFormat:@"  viewClass: \"%@\",\n", self.viewClass];
+  [description appendString:@"}"];
+  return [description copy];
 }
 
 #pragma mark Text
@@ -122,14 +138,22 @@ static BOOL _usesLegacySnackbar = NO;
 
 - (void)executeCompletionHandlerWithUserInteraction:(BOOL)userInteraction
                                          completion:(void (^)(void))completion {
-  if (self.completionHandler) {
+  if (self.completionHandlerWithError || self.completionHandler) {
     dispatch_async(self.targetQueue, ^{
-      self.completionHandler(userInteraction);
+      NSError *error = self.error;
+      self.error = nil;  // Break retain cycle.
+      if (self.completionHandlerWithError) {
+        self.completionHandlerWithError(userInteraction, error);
+      }
+      if (self.completionHandler) {
+        self.completionHandler(userInteraction);
+      }
       if (completion) {
         completion();
       }
     });
   } else {
+    self.error = nil;  // Break retain cycle.
     if (completion) {
       completion();
     }

@@ -50,9 +50,6 @@ static NSString *const kOfAnnouncement = @"of";
 @interface MDCBottomNavigationBar () <MDCInkTouchControllerDelegate,
                                       MDCRippleTouchControllerDelegate>
 
-// Declared in MDCBottomNavigationBar (ToBeDeprecated)
-@property(nonatomic, assign) BOOL sizeThatFitsIncludesSafeArea;
-
 @property(nonatomic, assign) BOOL itemsDistributed;
 @property(nonatomic, readonly) BOOL isTitleBelowIcon;
 @property(nonatomic, assign) CGFloat maxLandscapeClusterContainerWidth;
@@ -65,6 +62,7 @@ static NSString *const kOfAnnouncement = @"of";
 @property(nonatomic, strong) NSMutableArray *inkControllers;
 @property(nonatomic) BOOL shouldPretendToBeATabBar;
 @property(nonatomic, strong) UILayoutGuide *barItemsLayoutGuide NS_AVAILABLE_IOS(9_0);
+@property(nonatomic, assign) BOOL enableRippleBehavior;
 
 #if MDC_AVAILABLE_SDK_IOS(13_0)
 /**
@@ -641,9 +639,13 @@ static NSString *const kOfAnnouncement = @"of";
 
 #ifdef __IPHONE_13_4
     if (@available(iOS 13.4, *)) {
-      UIPointerInteraction *pointerInteraction =
-          [[UIPointerInteraction alloc] initWithDelegate:self];
-      [itemView addInteraction:pointerInteraction];
+      // Because some iOS 13 betas did not have the UIPointerInteraction class, we need to verify
+      // that it exists before attempting to use it.
+      if (NSClassFromString(@"UIPointerInteraction")) {
+        UIPointerInteraction *pointerInteraction =
+            [[UIPointerInteraction alloc] initWithDelegate:self];
+        [itemView addInteraction:pointerInteraction];
+      }
     }
 #endif
 

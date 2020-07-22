@@ -12,8 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#import "MDCAlertControllerView+Private.h"
 #import "MDCAlertControllerView.h"
+#import "MDCAlertActionManager.h"
+#import "MDCAlertControllerView+Private.h"
 
 #import <MDFInternationalization/MDFInternationalization.h>
 
@@ -35,9 +36,17 @@ static const CGFloat MDCDialogActionMinTouchTarget = 48.0f;
 
 static const CGFloat MDCDialogMessageOpacity = 0.54f;
 
+@interface MDCNonselectableTextView : UITextView
+@end
+
 @interface MDCAlertControllerView ()
 
 @property(nonatomic, getter=isVerticalActionsLayout) BOOL verticalActionsLayout;
+
+@property(nonatomic, strong, nullable) UIFont *buttonFont UI_APPEARANCE_SELECTOR;
+@property(nonatomic, strong, nullable) UIColor *buttonColor UI_APPEARANCE_SELECTOR;
+@property(nonatomic, strong, nullable) UIColor *buttonInkColor UI_APPEARANCE_SELECTOR;
+@property(nonatomic, assign) BOOL enableRippleBehavior;
 
 @end
 
@@ -86,16 +95,25 @@ static const CGFloat MDCDialogMessageOpacity = 0.54f;
     self.titleLabel.accessibilityTraits |= UIAccessibilityTraitHeader;
     [self.titleScrollView addSubview:self.titleLabel];
 
-    self.messageLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-    self.messageLabel.numberOfLines = 0;
-    self.messageLabel.textAlignment = NSTextAlignmentNatural;
+    self.messageTextView = [[MDCNonselectableTextView alloc] initWithFrame:CGRectZero];
+    self.messageTextView.textAlignment = NSTextAlignmentNatural;
+    self.messageTextView.textContainerInset = UIEdgeInsetsZero;
+    self.messageTextView.textContainer.lineFragmentPadding = 0.0f;
+    self.messageTextView.editable = NO;
+    self.messageTextView.scrollEnabled = NO;
+    self.messageTextView.selectable = YES;  // Enables link tap.
     if (self.mdc_adjustsFontForContentSizeCategory) {
-      self.messageLabel.font = [UIFont mdc_preferredFontForMaterialTextStyle:MDCFontTextStyleBody1];
+      self.messageTextView.font =
+          [UIFont mdc_preferredFontForMaterialTextStyle:MDCFontTextStyleBody1];
     } else {
-      self.messageLabel.font = [MDCTypography body1Font];
+      self.messageTextView.font = [MDCTypography body1Font];
     }
-    self.messageLabel.textColor = [UIColor colorWithWhite:0 alpha:MDCDialogMessageOpacity];
-    [self.contentScrollView addSubview:self.messageLabel];
+    self.messageTextView.textColor = [UIColor colorWithWhite:0 alpha:MDCDialogMessageOpacity];
+    // The messageTextView is a private API, and therefore it needs to inherit its background
+    // color from the alert's background so it can be themed (necessary for dark mode support,
+    // for instance).
+    self.messageTextView.backgroundColor = UIColor.clearColor;
+    [self.contentScrollView addSubview:self.messageTextView];
 
     [self setNeedsLayout];
   }
@@ -141,10 +159,10 @@ static const CGFloat MDCDialogMessageOpacity = 0.54f;
         self.adjustsFontForContentSizeCategoryWhenScaledFontIsUnavailable;
     button.mdc_adjustsFontForContentSizeCategory = self.mdc_adjustsFontForContentSizeCategory;
     // TODO(#1726): Determine default text color values for Normal and Disabled
-    CGRect buttonRect = button.bounds;
-    buttonRect.size.height = MAX(buttonRect.size.height, MDCDialogActionButtonMinimumHeight);
-    buttonRect.size.width = MAX(buttonRect.size.width, MDCDialogActionButtonMinimumWidth);
-    button.frame = buttonRect;
+    button.minimumSize =
+        CGSizeMake(MDCDialogActionButtonMinimumWidth, MDCDialogActionButtonMinimumHeight);
+    // Set centerVisibleArea to YES by default.
+    button.centerVisibleArea = YES;
   }
 }
 
@@ -256,11 +274,11 @@ static const CGFloat MDCDialogMessageOpacity = 0.54f;
 }
 
 - (NSString *)message {
-  return self.messageLabel.text;
+  return self.messageTextView.text;
 }
 
 - (void)setMessage:(NSString *)message {
-  self.messageLabel.text = message;
+  self.messageTextView.text = message;
 
   [self setNeedsLayout];
 }
@@ -281,7 +299,7 @@ static const CGFloat MDCDialogMessageOpacity = 0.54f;
     }
   }
 
-  self.messageLabel.font = messageFont;
+  self.messageTextView.font = messageFont;
   [self setNeedsLayout];
 }
 
@@ -295,15 +313,15 @@ static const CGFloat MDCDialogMessageOpacity = 0.54f;
 - (void)setMessageColor:(UIColor *)messageColor {
   _messageColor = messageColor;
 
-  _messageLabel.textColor = messageColor;
+  _messageTextView.textColor = messageColor;
 }
 
 - (NSTextAlignment)messageAlignment {
-  return self.messageLabel.textAlignment;
+  return self.messageTextView.textAlignment;
 }
 
 - (void)setMessageAlignment:(NSTextAlignment)messageAlignment {
-  self.messageLabel.textAlignment = messageAlignment;
+  self.messageTextView.textAlignment = messageAlignment;
 }
 
 - (void)setAccessoryView:(UIView *)accessoryView {
@@ -395,20 +413,18 @@ static const CGFloat MDCDialogMessageOpacity = 0.54f;
 #pragma mark - Internal
 
 - (CGSize)actionFittingSizeInHorizontalLayout {
-  CGSize size = CGSizeZero;
+  CGSize size = CGSizeMake([self horizontalSpacing], 0.0f);
   NSArray<MDCButton *> *buttons = self.actionManager.buttonsInActionOrder;
+  UIEdgeInsets actionsInsets = [self actionsInsetsForButtons:buttons isHorizontalLayout:YES];
   if (0 < buttons.count) {
-    CGFloat maxButtonHeight = MDCDialogActionButtonMinimumHeight;
-    size.width = self.actionsInsets.left + self.actionsInsets.right;
+    CGFloat maxButtonHeight =
+        MAX(MDCDialogActionButtonMinimumHeight, MDCDialogActionMinTouchTarget);
     for (UIButton *button in buttons) {
       CGSize buttonSize = [button sizeThatFits:size];
       size.width += buttonSize.width;
       maxButtonHeight = MAX(maxButtonHeight, buttonSize.height);
-      if (button != buttons.lastObject) {
-        size.width += self.actionsHorizontalMargin;
-      }
     }
-    size.height = self.actionsInsets.top + maxButtonHeight + self.actionsInsets.bottom;
+    size.height = actionsInsets.top + maxButtonHeight + actionsInsets.bottom;
   }
 
   return size;
@@ -417,21 +433,114 @@ static const CGFloat MDCDialogMessageOpacity = 0.54f;
 - (CGSize)actionButtonsSizeInVerticalLayout {
   CGSize size = CGSizeZero;
   NSArray<MDCButton *> *buttons = self.actionManager.buttonsInActionOrder;
+  UIEdgeInsets actionsInsets = [self actionsInsetsForButtons:buttons isHorizontalLayout:NO];
   if (0 < buttons.count) {
-    size.height = self.actionsInsets.top + self.actionsInsets.bottom;
-    CGFloat widthInset = self.actionsInsets.left + self.actionsInsets.right;
-    for (UIButton *button in buttons) {
+    size.height = actionsInsets.top + actionsInsets.bottom;
+    CGFloat widthInset = actionsInsets.left + actionsInsets.right;
+    for (NSUInteger index = 0; index < buttons.count; ++index) {
+      MDCButton *button = buttons[index];
       CGSize buttonSize = [button sizeThatFits:size];
-      buttonSize.height = MAX(buttonSize.height, MDCDialogActionButtonMinimumHeight);
+      CGFloat minButtonHeight =
+          MAX(MDCDialogActionButtonMinimumHeight, MDCDialogActionMinTouchTarget);
+      buttonSize.height = MAX(buttonSize.height, minButtonHeight);
       size.height += buttonSize.height;
       size.width = MAX(size.width, buttonSize.width + widthInset);
       if (button != buttons.lastObject) {
-        size.height += self.actionsVerticalMargin;
+        MDCButton *nextButton = buttons[index + 1];
+        CGFloat verticalMargin = [self actionsVerticalMarginBetweenTopButton:button
+                                                                bottomButton:nextButton];
+        size.height += verticalMargin;
       }
     }
   }
 
   return size;
+}
+
+- (UIEdgeInsets)actionsInsetsForButtons:(NSArray<MDCButton *> *)buttons
+                     isHorizontalLayout:(BOOL)isHorizontalLayout {
+  UIEdgeInsets actionInsets = self.actionsInsets;
+
+  if (buttons.count == 0) {
+    return actionInsets;
+  }
+
+  if (isHorizontalLayout) {
+    CGFloat maxButtonHeight = MDCDialogActionButtonMinimumHeight;
+    for (MDCButton *button in buttons) {
+      CGSize buttonSize = [button sizeThatFits:CGSizeZero];
+      maxButtonHeight = MAX(maxButtonHeight, buttonSize.height);
+    }
+    if (maxButtonHeight < MDCDialogActionMinTouchTarget) {
+      // Adjust actionInsets when buttons don't meet the minimum touch area requirement.
+      CGFloat verticalInsetsAdjustment = MDCDialogActionMinTouchTarget - maxButtonHeight;
+      actionInsets.top -= verticalInsetsAdjustment / 2;
+      actionInsets.bottom -= verticalInsetsAdjustment / 2;
+    }
+  } else {
+    MDCButton *topButton = buttons.firstObject;
+    CGSize topButtonSize = [topButton sizeThatFits:CGSizeZero];
+    if (topButtonSize.height < MDCDialogActionMinTouchTarget) {
+      CGFloat verticalInsetsAdjustment = MDCDialogActionMinTouchTarget - topButtonSize.height;
+      actionInsets.top -= verticalInsetsAdjustment / 2;
+    }
+    MDCButton *bottomButton = buttons.lastObject;
+    CGSize bottomButtonSize = [bottomButton sizeThatFits:CGSizeZero];
+    if (bottomButtonSize.height < MDCDialogActionMinTouchTarget) {
+      CGFloat verticalInsetsAdjustment = MDCDialogActionMinTouchTarget - bottomButtonSize.height;
+      actionInsets.bottom -= verticalInsetsAdjustment / 2;
+    }
+  }
+
+  return actionInsets;
+}
+
+- (CGFloat)actionsVerticalMarginBetweenTopButton:(MDCButton *)topButton
+                                    bottomButton:(MDCButton *)bottomButton {
+  CGFloat actionsVerticalMargin = self.actionsVerticalMargin;
+  CGSize topButtonSize = [topButton sizeThatFits:CGSizeZero];
+  if (topButtonSize.height < MDCDialogActionMinTouchTarget) {
+    CGFloat verticalInsetsAdjustment = MDCDialogActionMinTouchTarget - topButtonSize.height;
+    actionsVerticalMargin -= verticalInsetsAdjustment / 2;
+  }
+  CGSize bottomButtonSize = [bottomButton sizeThatFits:CGSizeZero];
+  if (bottomButtonSize.height < MDCDialogActionMinTouchTarget) {
+    CGFloat verticalInsetsAdjustment = MDCDialogActionMinTouchTarget - bottomButtonSize.height;
+    actionsVerticalMargin -= verticalInsetsAdjustment / 2;
+  }
+  return actionsVerticalMargin;
+}
+
+- (CGFloat)horizontalSpacing {
+  NSUInteger count = self.actionManager.buttonsInActionOrder.count;
+  CGFloat spacing = self.actionsInsets.left + self.actionsInsets.right +
+                    (count - 1) * self.actionsHorizontalMargin;
+  return spacing;
+}
+
+- (CGFloat)widestAction {
+  CGFloat widest = 0.0f;
+  for (MDCButton *button in self.actionManager.buttonsInActionOrder) {
+    // For justified alignment, minimumSize is used to control button's visible area.
+    // If user sets a custom value, it is ignored because button's final size is decided
+    // during layout.
+    // We need to reset minimumSize during sizeThatFits: to make sure it doesn't affect the
+    // calculation here.
+    CGSize currentMinimumSize = CGSizeZero;
+    if (self.actionsHorizontalAlignment == MDCContentHorizontalAlignmentJustified) {
+      currentMinimumSize = button.minimumSize;
+      button.minimumSize =
+          CGSizeMake(MDCDialogActionButtonMinimumWidth, MDCDialogActionButtonMinimumHeight);
+    }
+    CGSize buttonSize = [button sizeThatFits:CGSizeZero];
+    if (buttonSize.width > widest) {
+      widest = buttonSize.width;
+    }
+    if (self.actionsHorizontalAlignment == MDCContentHorizontalAlignmentJustified) {
+      button.minimumSize = currentMinimumSize;
+    }
+  }
+  return widest;
 }
 
 - (BOOL)hasTitleIconOrImage {
@@ -453,6 +562,11 @@ static const CGFloat MDCDialogMessageOpacity = 0.54f;
 - (BOOL)hasAccessoryView {
   CGSize accessoryViewSize = [self.accessoryView systemLayoutSizeFittingSize:CGRectInfinite.size];
   return accessoryViewSize.height > 0.0f;
+}
+
+- (CGSize)messageTextViewSizeThatFits:(CGSize)size {
+  // Returns a size of zero when there's no message, to ensure no space is reserved for it.
+  return [self.messageTextView hasText] ? [self.messageTextView sizeThatFits:size] : CGSizeZero;
 }
 
 /** Return the space between the title and the title icon, or 0 if any of them is missing. */
@@ -487,11 +601,22 @@ static const CGFloat MDCDialogMessageOpacity = 0.54f;
   return ([self hasMessage] && [self hasAccessoryView]) ? self.accessoryViewVerticalInset : 0.0f;
 }
 
+// Returns the size of the title view or the current size of the title icon imageView.
 - (CGSize)titleIconViewSize {
   if (self.titleIconView != nil) {
     return self.titleIconView.frame.size;
   } else if (self.titleIconImageView != nil) {
     return self.titleIconImageView.frame.size;
+  }
+  return CGSizeZero;
+}
+
+// Returns the size of the title view or the original size of the title icon image.
+- (CGSize)titleIconImageSize {
+  if (self.titleIconView != nil) {
+    return self.titleIconView.frame.size;
+  } else if (self.titleIcon != nil) {
+    return self.titleIcon.size;
   }
   return CGSizeZero;
 }
@@ -515,7 +640,7 @@ static const CGFloat MDCDialogMessageOpacity = 0.54f;
  @param boundsSize is the total bounds without any internal margins or padding.
 */
 - (CGRect)titleIconFrameWithTitleSize:(CGSize)titleSize boundsSize:(CGSize)boundsSize {
-  CGSize titleIconViewSize = [self titleIconViewSize];
+  CGSize titleIconViewSize = [self titleIconImageSize];
   CGFloat leftInset = self.titleIconInsets.left;
   CGFloat topInset = self.titleIconInsets.top;
   CGFloat titleIconHeight = titleIconViewSize.height;
@@ -574,7 +699,8 @@ static const CGFloat MDCDialogMessageOpacity = 0.54f;
   CGFloat titleWidth = [self.titleLabel sizeThatFits:boundsSize].width;
 
   boundsSize.width = boundingWidth - contentInsets;
-  CGSize messageSize = [self.messageLabel sizeThatFits:boundsSize];
+
+  CGSize messageSize = [self messageTextViewSizeThatFits:boundsSize];
   CGSize accessoryViewSize = [self.accessoryView systemLayoutSizeFittingSize:boundsSize];
 
   CGFloat maxWidth = MAX(messageSize.width, accessoryViewSize.width);
@@ -601,8 +727,9 @@ static const CGFloat MDCDialogMessageOpacity = 0.54f;
 
   CGSize contentSize = CGRectInfinite.size;
   contentSize.width = boundingWidth - contentInsets;
-  CGFloat contentWidth = MAX([self.messageLabel sizeThatFits:contentSize].width,
-                             [self.accessoryView systemLayoutSizeFittingSize:contentSize].width);
+  CGFloat messageWidth = [self messageTextViewSizeThatFits:contentSize].width;
+  CGFloat contentWidth =
+      MAX(messageWidth, [self.accessoryView systemLayoutSizeFittingSize:contentSize].width);
 
   CGSize titleViewSize = CGRectInfinite.size;
   titleViewSize.width = boundingWidth - titleInsets;
@@ -625,8 +752,16 @@ static const CGFloat MDCDialogMessageOpacity = 0.54f;
   CGSize horizontalSize = [self actionFittingSizeInHorizontalLayout];
   CGSize verticalSize = [self actionButtonsSizeInVerticalLayout];
 
+  BOOL isVertical = boundsSize.width < horizontalSize.width;
+  NSUInteger count = self.actionManager.buttonsInActionOrder.count;
+  if (self.actionsHorizontalAlignment == MDCContentHorizontalAlignmentJustified && count > 1) {
+    // b/155350470: ensure long justified actions are vertically aligned based on the longest
+    // button.
+    isVertical =
+        [self widestAction] > (CGFloat)ceil((boundingWidth - [self horizontalSpacing]) / count);
+  }
   CGSize actionsSize;
-  if (boundsSize.width < horizontalSize.width) {
+  if (isVertical) {
     // Use VerticalLayout
     if (self.actionsHorizontalAlignmentInVerticalLayout == MDCContentHorizontalAlignmentJustified) {
       verticalSize.width = boundingWidth - (self.actionsInsets.left + self.actionsInsets.right);
@@ -636,7 +771,7 @@ static const CGFloat MDCDialogMessageOpacity = 0.54f;
     self.verticalActionsLayout = YES;
   } else {
     // Use HorizontalLayout
-    if (self.actionsHorizontalAlignmentInVerticalLayout == MDCContentHorizontalAlignmentJustified) {
+    if (self.actionsHorizontalAlignment == MDCContentHorizontalAlignmentJustified) {
       horizontalSize.width = boundingWidth - (self.actionsInsets.left + self.actionsInsets.right);
     }
     actionsSize.width = MIN(horizontalSize.width, boundsSize.width);
@@ -648,6 +783,10 @@ static const CGFloat MDCDialogMessageOpacity = 0.54f;
   actionsSize.height = (CGFloat)ceil(actionsSize.height);
 
   return actionsSize;
+}
+
+- (BOOL)canBecomeFirstResponder {
+  return YES;
 }
 
 - (void)layoutSubviews {
@@ -684,7 +823,7 @@ static const CGFloat MDCDialogMessageOpacity = 0.54f;
 
   CGSize contentBoundsSize = boundsSize;
   contentBoundsSize.width = boundsSize.width - (self.contentInsets.left + self.contentInsets.right);
-  CGSize messageSize = [self.messageLabel sizeThatFits:contentBoundsSize];
+  CGSize messageSize = [self messageTextViewSizeThatFits:contentBoundsSize];
   messageSize.width = contentBoundsSize.width;
 
   CGSize accessoryViewSize =
@@ -710,7 +849,7 @@ static const CGFloat MDCDialogMessageOpacity = 0.54f;
       accessoryViewSize.width, accessoryViewSize.height);
 
   self.titleLabel.frame = titleFrame;
-  self.messageLabel.frame = messageFrame;
+  self.messageTextView.frame = messageFrame;
   self.accessoryView.frame = accessoryViewFrame;
 
   // Actions
@@ -724,7 +863,13 @@ static const CGFloat MDCDialogMessageOpacity = 0.54f;
   }
   self.actionsScrollView.contentSize = actionsFrame.size;
 
-  [self setHitAreaForButtons:buttons];
+  for (MDCButton *button in buttons) {
+    [button sizeToFit];
+    CGRect buttonFrame = button.frame;
+    button.frame = CGRectMake(buttonFrame.origin.x, buttonFrame.origin.y,
+                              MAX(MDCDialogActionMinTouchTarget, CGRectGetWidth(buttonFrame)),
+                              MAX(MDCDialogActionMinTouchTarget, CGRectGetHeight(buttonFrame)));
+  }
 
   if (self.isVerticalActionsLayout) {
     [self layoutVerticalButtons:buttons];
@@ -756,7 +901,7 @@ static const CGFloat MDCDialogMessageOpacity = 0.54f;
     contentScrollViewRect.size.height =
         MAX(0.f, actionsScrollViewRect.origin.y - contentScrollViewRect.origin.y);
 
-    self.messageLabel.accessibilityFrame = UIAccessibilityConvertFrameToScreenCoordinates(
+    self.messageTextView.accessibilityFrame = UIAccessibilityConvertFrameToScreenCoordinates(
         CGRectMake(messageFrame.origin.x, contentScrollViewRect.origin.y, messageFrame.size.width,
                    MIN(contentScrollViewRect.size.height, messageFrame.size.height)),
         self);
@@ -765,42 +910,25 @@ static const CGFloat MDCDialogMessageOpacity = 0.54f;
   self.contentScrollView.frame = contentScrollViewRect;
 }
 
-- (void)setHitAreaForButtons:(NSArray<MDCButton *> *)buttons {
-  for (MDCButton *button in buttons) {
-    [button sizeToFit];
-    CGRect buttonFrame = button.frame;
-    buttonFrame.size.width = MAX(CGRectGetWidth(buttonFrame), MDCDialogActionButtonMinimumWidth);
-    buttonFrame.size.height = MAX(CGRectGetHeight(buttonFrame), MDCDialogActionButtonMinimumHeight);
-    button.frame = buttonFrame;
-    CGFloat verticalInsets = (CGRectGetHeight(button.frame) - MDCDialogActionMinTouchTarget) / 2.0f;
-    CGFloat horizontalInsets =
-        (CGRectGetWidth(button.frame) - MDCDialogActionMinTouchTarget) / 2.0f;
-    verticalInsets = MIN(0.0f, verticalInsets);
-    horizontalInsets = MIN(0.0f, horizontalInsets);
-    button.hitAreaInsets =
-        UIEdgeInsetsMake(verticalInsets, horizontalInsets, verticalInsets, horizontalInsets);
-  }
-}
-
 - (void)layoutHorizontalButtons:(NSArray<MDCButton *> *)buttons actionSize:(CGSize)actionSize {
-  CGFloat maxButtonWidth = self.actionsScrollView.contentSize.width -
-                           (self.actionsInsets.left + self.actionsInsets.right);
+  UIEdgeInsets actionsInsets = [self actionsInsetsForButtons:buttons isHorizontalLayout:YES];
+  CGFloat maxButtonWidth =
+      self.actionsScrollView.contentSize.width - (actionsInsets.left + actionsInsets.right);
   CGPoint buttonOrigin = CGPointZero;
   CGFloat buttonWidth = 0.f;
   CGFloat multiplier =
       self.actionsHorizontalAlignment == MDCContentHorizontalAlignmentLeading ? 1.f : -1.f;
   if (self.actionsHorizontalAlignment == MDCContentHorizontalAlignmentLeading) {
-    buttonOrigin.x = self.actionsInsets.left;
+    buttonOrigin.x = actionsInsets.left;
   } else if (self.actionsHorizontalAlignment == MDCContentHorizontalAlignmentCenter) {
-    CGFloat actionWidthNoInsets =
-        actionSize.width - self.actionsInsets.left - self.actionsInsets.right;
+    CGFloat actionWidthNoInsets = actionSize.width - actionsInsets.left - actionsInsets.right;
     buttonOrigin.x = ((self.actionsScrollView.contentSize.width - actionWidthNoInsets) / 2.f) +
                      actionWidthNoInsets;
   } else {  // trailing or justified
-    buttonOrigin.x = self.actionsScrollView.contentSize.width - self.actionsInsets.right;
+    buttonOrigin.x = self.actionsScrollView.contentSize.width - actionsInsets.right;
   }
-  buttonOrigin.y = self.actionsInsets.top;
-  for (UIButton *button in buttons) {
+  buttonOrigin.y = actionsInsets.top;
+  for (MDCButton *button in buttons) {
     CGRect buttonRect = button.frame;
 
     buttonWidth = buttonRect.size.width;
@@ -811,6 +939,9 @@ static const CGFloat MDCDialogMessageOpacity = 0.54f;
       } else {
         buttonWidth = maxButtonWidth;
       }
+      // Adjust minimumSize based on maxButtonWidth to increase the visible area of button.
+      button.minimumSize = CGSizeMake(MAX(buttonWidth, MDCDialogActionButtonMinimumWidth),
+                                      button.minimumSize.height);
     }
 
     if (self.actionsHorizontalAlignment != MDCContentHorizontalAlignmentLeading) {
@@ -840,19 +971,21 @@ static const CGFloat MDCDialogMessageOpacity = 0.54f;
 }
 
 - (void)layoutVerticalButtons:(NSArray<MDCButton *> *)buttons {
-  CGFloat maxButtonWidth = self.actionsScrollView.contentSize.width -
-                           (self.actionsInsets.left + self.actionsInsets.right);
+  UIEdgeInsets actionsInsets = [self actionsInsetsForButtons:buttons isHorizontalLayout:NO];
+  CGFloat maxButtonWidth =
+      self.actionsScrollView.contentSize.width - (actionsInsets.left + actionsInsets.right);
   CGFloat multiplier = self.orderVerticalActionsByEmphasis ? 1.f : -1.f;
   CGPoint buttonCenter;
   CGPoint buttonOrigin;
   buttonOrigin.y = self.orderVerticalActionsByEmphasis
-                       ? self.actionsInsets.bottom
-                       : self.actionsScrollView.contentSize.height - self.actionsInsets.bottom;
+                       ? actionsInsets.top
+                       : self.actionsScrollView.contentSize.height - actionsInsets.top;
   if (self.actionsHorizontalAlignmentInVerticalLayout == MDCContentHorizontalAlignmentCenter ||
       self.actionsHorizontalAlignmentInVerticalLayout == MDCContentHorizontalAlignmentJustified) {
     buttonCenter.x = self.actionsScrollView.contentSize.width / 2.0f;
     buttonCenter.y = buttonOrigin.y;
-    for (UIButton *button in buttons) {
+    for (NSUInteger index = 0; index < buttons.count; ++index) {
+      MDCButton *button = buttons[index];
       CGRect buttonRect = button.bounds;
 
       if (CGRectGetWidth(buttonRect) > maxButtonWidth ||
@@ -860,6 +993,9 @@ static const CGFloat MDCDialogMessageOpacity = 0.54f;
               MDCContentHorizontalAlignmentJustified) {
         buttonRect.size.width = maxButtonWidth;
         button.bounds = buttonRect;
+        // Adjust minimumSize based on maxButtonWidth to increase the visible area of button.
+        button.minimumSize = CGSizeMake(MAX(maxButtonWidth, MDCDialogActionButtonMinimumWidth),
+                                        button.minimumSize.height);
       }
 
       buttonCenter.y += multiplier * (buttonRect.size.height / 2.0f);
@@ -868,25 +1004,30 @@ static const CGFloat MDCDialogMessageOpacity = 0.54f;
 
       if (button != buttons.lastObject) {
         buttonCenter.y += multiplier * (buttonRect.size.height / 2.0f);
-        buttonCenter.y += multiplier * self.actionsVerticalMargin;
+        MDCButton *nextButton = buttons[index + 1];
+        CGFloat verticalMargin = [self actionsVerticalMarginBetweenTopButton:button
+                                                                bottomButton:nextButton];
+        buttonCenter.y += multiplier * verticalMargin;
       }
     }
 
   } else {  // Leading/Trailing alignment.
-    for (UIButton *button in buttons) {
+    for (NSUInteger index = 0; index < buttons.count; ++index) {
+      MDCButton *button = buttons[index];
       CGRect buttonRect = button.bounds;
-      buttonOrigin.x = self.actionsInsets.left;
+      buttonOrigin.x = actionsInsets.left;
       if (self.actionsHorizontalAlignmentInVerticalLayout ==
           MDCContentHorizontalAlignmentTrailing) {
-        buttonOrigin.x = self.actionsScrollView.contentSize.width - buttonRect.size.width -
-                         self.actionsInsets.right;
+        buttonOrigin.x =
+            self.actionsScrollView.contentSize.width - buttonRect.size.width - actionsInsets.right;
       }
-      buttonOrigin.y += multiplier * buttonRect.size.height;
-
       buttonRect.origin = buttonOrigin;
       button.frame = buttonRect;
       if (button != buttons.lastObject) {
-        buttonOrigin.y += multiplier * self.actionsVerticalMargin;
+        MDCButton *nextButton = buttons[index + 1];
+        CGFloat verticalMargin = [self actionsVerticalMarginBetweenTopButton:button
+                                                                bottomButton:nextButton];
+        buttonOrigin.y += multiplier * (buttonRect.size.height + verticalMargin);
       }
     }
     // Handle RTL
@@ -923,6 +1064,33 @@ static const CGFloat MDCDialogMessageOpacity = 0.54f;
   [self updateButtonFont];
 
   [self setNeedsLayout];
+}
+
+@end
+
+@implementation MDCNonselectableTextView
+
+// Disabling text selection when selectable is YES, while allowing gestures for inlined links.
+- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
+  if (![super pointInside:point withEvent:event]) {
+    return NO;
+  }
+
+  UITextPosition *position = [self closestPositionToPoint:point];
+  if (!position) {
+    return NO;
+  }
+
+  UITextRange *range = [self.tokenizer rangeEnclosingPosition:position
+                                              withGranularity:UITextGranularityCharacter
+                                                  inDirection:UITextLayoutDirectionLeft];
+  if (!range) {
+    return NO;
+  }
+
+  NSInteger offset = [self offsetFromPosition:self.beginningOfDocument toPosition:range.start];
+  id link = [self.attributedText attribute:NSLinkAttributeName atIndex:offset effectiveRange:nil];
+  return link != nil;
 }
 
 @end
