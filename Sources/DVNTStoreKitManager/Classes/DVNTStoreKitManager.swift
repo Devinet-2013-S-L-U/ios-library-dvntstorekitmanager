@@ -121,12 +121,12 @@ public class DVNTStoreKitManager: NSObject
         request.start()
     }
     
-    public final func buy(_ product: SKProduct, shouldShowSpinner: Bool = false)
+    public final func buy(_ product: SKProduct)
     {
-        self.buy(product.productIdentifier, shouldShowSpinner: shouldShowSpinner)
+        self.buy(product.productIdentifier)
     }
     
-    public final func buy(_ productIdentifier: String, shouldShowSpinner: Bool = false)
+    public final func buy(_ productIdentifier: String)
     {
         #if targetEnvironment(simulator)
         self.alertManager.showBasicAlert(title: "Error", message: "A real device must be used to perform this action.")
@@ -137,7 +137,7 @@ public class DVNTStoreKitManager: NSObject
             print("💰 ⛔️ DVNTStoreKitManager: There is another purchase in progress, please wait.")
             return
         }
-        if shouldShowSpinner { self.alertManager.showLoadingView(isUserinteractionEnabled: false) }
+
         if self.isAuthorizedForPayments {
             let paymentRequest = SKMutablePayment()
             paymentRequest.productIdentifier = productIdentifier
@@ -146,15 +146,13 @@ public class DVNTStoreKitManager: NSObject
         }else{
             print("💰 ⛔️ DVNTStoreKitManager: This user cannot make a payment.")
             self.delegate?.storekitManagerPurchaseUserUnableToMakePayments()
-            DispatchQueue.main.async { self.alertManager.hideLoadingView() }
         }
         #endif
     }
     
-    public final func restore(shouldShowSpinner: Bool = false)
+    public final func restore()
     {
         print("💰 ⚠️ DVNTStoreKitManager: Restoring purchases...")
-        if shouldShowSpinner { self.alertManager.showLoadingView(isUserinteractionEnabled: false) }
         SKPaymentQueue.default().restoreCompletedTransactions(withApplicationUsername: self.userApplicationId)
     }
     
@@ -182,23 +180,20 @@ public class DVNTStoreKitManager: NSObject
                     queue.finishTransaction(transaction)
                 }
                 UserDefaults.standard.set(true, forKey: productId)
-                DispatchQueue.main.async { self.alertManager.hideLoadingView() }
                 if !self.isSubscription(productId) {
                     self.delegate?.storeKitManagerPurchaseRestoredSuccesfully(productIdentifier: transaction.payment.productIdentifier, transactionIdentifier: transaction.transactionIdentifier)
                 }
                 print("💰 ✅ DVNTStoreKitManager: Purchase of '\(productId)' validated successfully")
                 success()
             case .failure(let error):
-                DispatchQueue.main.async { self.alertManager.hideLoadingView() }
                 print("💰 ⛔️ DVNTStoreKitManager: Validation of product '\(productId)' did finish with error \(error.localizedDescription)")
                 failure(error)
             }
         }
     }
     
-    public final func processStoredPayments(shouldShowSpinner: Bool = false)
+    public final func processStoredPayments()
     {
-        if shouldShowSpinner { self.alertManager.showLoadingView(isUserinteractionEnabled: false) }
         for payment in self.storedPayments {
             SKPaymentQueue.default().add(payment)
         }
@@ -223,7 +218,6 @@ public class DVNTStoreKitManager: NSObject
                 }
                 print("💰 ✅ DVNTStoreKitManager: The validation of the subscriptions did finish successfully")
             case .failure(let error):
-                DispatchQueue.main.async { self.alertManager.hideLoadingView() }
                 print("💰 ⛔️ DVNTStoreKitManager: The validation of the subscriptions did finish with error \(error.localizedDescription)")
             }
             
@@ -279,7 +273,6 @@ extension DVNTStoreKitManager: SKPaymentTransactionObserver
     public func paymentQueue(_ queue: SKPaymentQueue, shouldAddStorePayment payment: SKPayment, for product: SKProduct) -> Bool
     {
         if self.shouldAddStorePayment {
-            self.alertManager.showLoadingView(isUserinteractionEnabled: false)
         }else{
             self.storedPayments.append(payment)
             self.delegate?.storeKitManagerStorePurchaseWasRetained(productIdentifier: payment.productIdentifier)
@@ -291,14 +284,12 @@ extension DVNTStoreKitManager: SKPaymentTransactionObserver
     public func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue)
     {
         self.validateSubscriptions()
-        DispatchQueue.main.async { self.alertManager.hideLoadingView() }
         print("💰 ✅ DVNTStoreKitManager: Purchases restored successfully")
     }
     
     public func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error)
     {
         self.validateSubscriptions()
-        DispatchQueue.main.async { self.alertManager.hideLoadingView() }
         print("💰 ⛔️ DVNTStoreKitManager: Error while restoring purchases '\(error.localizedDescription)'")
     }
     
@@ -339,7 +330,7 @@ extension DVNTStoreKitManager: SKPaymentTransactionObserver
                             if let index = self.storedPayments.firstIndex(where: { $0.productIdentifier == transaction.payment.productIdentifier}) {
                                 self.storedPayments.remove(at: index)
                             }
-                            self.delegate?.storeKitHelperPurchaseCancel()
+                            self.delegate?.storeKitManagerPurchaseCancel()
                         default:
                             self.alertManager.showBasicAlert(title: "Error", message: transaction.error?.localizedDescription ?? "Transaction did fail with an unknown error.")
                             print(transaction.error != nil ? "💰 ⛔️ DVNTStoreKitManager: Transaction did fail with error '\(transaction.error!.localizedDescription)'" : "💰 ⛔️ DVNTStoreKitManager: Transaction did fail with an unknown error.")
@@ -348,11 +339,9 @@ extension DVNTStoreKitManager: SKPaymentTransactionObserver
                         }
                     }
                     queue.finishTransaction(transaction)
-                    DispatchQueue.main.async { self.alertManager.hideLoadingView() }
                     return
                 default:
                     queue.finishTransaction(transaction)
-                    DispatchQueue.main.async { self.alertManager.hideLoadingView() }
                     break
                 }
             }

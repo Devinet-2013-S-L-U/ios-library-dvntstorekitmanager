@@ -26,7 +26,7 @@ class ViewController: UIViewController
     
     @IBAction func restoreButtonAction(_ sender: Any)
     {
-        self.storeKitManager.restore(shouldShowSpinner: true)
+        self.storeKitManager.restore()
     }
 }
 
@@ -71,7 +71,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource
         tableView.deselectRow(at: indexPath, animated: true)
         
         let currentProduct = self.storeKitManager.getProducts()[indexPath.row]
-        self.storeKitManager.buy(currentProduct, shouldShowSpinner: true)
+        self.storeKitManager.buy(currentProduct)
     }
 }
 
@@ -80,9 +80,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource
 extension ViewController: DVNTStoreKitManagerDelegate
 {
     func storeKitManagerStorePurchaseWasRetained(productIdentifier: String) {
-        print("Purchase was retained!")
         DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {
-            print("PROCESSING STORED")
             self.storeKitManager.processStoredPayments()
         })
     }
@@ -114,5 +112,8 @@ extension ViewController: DVNTStoreKitManagerDelegate
     { }
     
     func storeKitManagerProductsListDidChange(storeKitManager: DVNTStoreKitManager)
+    { }
+    
+    func storeKitManagerPurchaseCancel()
     { }
 }
