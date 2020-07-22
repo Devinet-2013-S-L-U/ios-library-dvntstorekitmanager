@@ -13,7 +13,7 @@ import SwiftyReceiptValidator
 
 public protocol DVNTStoreKitManagerDelegate
 {
-    func storeKitHelperPurchaseCancel()
+    func storeKitManagerPurchaseCancel()
     func storeKitManagerSubscriptionValidationDidFinish()
     func storekitManagerPurchaseUserUnableToMakePayments()
     func storeKitManagerStorePurchaseWasRetained(productIdentifier: String)
