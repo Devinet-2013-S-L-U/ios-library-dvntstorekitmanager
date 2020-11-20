@@ -14,6 +14,7 @@
 
 #import <UIKit/UIKit.h>
 
+#import "MDCBaseTextAreaDelegate.h"
 #import "MDCTextControlLabelBehavior.h"
 #import "MDCTextControlState.h"
 
@@ -21,6 +22,11 @@
  A UIControl subclass that leverages UITextView to provide multi-line text input
 */
 @interface MDCBaseTextArea : UIControl <UIContentSizeCategoryAdjusting>
+
+/**
+ The text area's delegate.
+ */
+@property(weak, nonatomic, nullable) id<MDCBaseTextAreaDelegate> baseTextAreaDelegate;
 
 /**
  The @c label is a label that occupies the area the text usually occupies when there is no
@@ -150,5 +156,23 @@ values are allowed.
  property is @c nil by default.
  */
 @property(nullable, nonatomic, strong) NSNumber *trailingEdgePaddingOverride;
+
+/**
+ This property determines the corner radius of the container, when applicable. Setting this property
+ is a no-op for MDCBaseTextField and any subclasses with invisible containers. For subclasses with
+ visible containers it will apply the radius to a combination of the four corners that is
+ approrpriate for the given style.
+
+ @note If the value of this property is sufficiently large you may need to set @c
+ leadingEdgePaddingOverride or @c trailingEdgePaddingOverride.
+ */
+@property(nonatomic, assign) CGFloat containerRadius;
+
+/**
+ This property is modeled after the @c placeholder property on UITextField. Note that setting @c
+ placeholder is different than setting the @c text property on MDCBaseTextArea's @c label property.
+ @c label and @c placeholder are unrelated.
+ */
+@property(nonatomic, strong, nullable) NSString *placeholder;
 
 @end

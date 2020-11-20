@@ -71,7 +71,9 @@
   _mdc_overrideBaseElevation = -1;
 
   _dismissOnBackgroundTap = YES;
+  _shouldDismissOnAccessibilityPerformEscape = YES;
   _shouldForwardBackgroundTouchEvents = NO;
+  _shouldDisplayMobileLandscapeFullscreen = YES;
   _isDrawerClosed = YES;
   _lastOffset = NSNotFound;
 }
@@ -169,7 +171,8 @@
   return self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact;
 }
 - (BOOL)shouldPresentFullScreen {
-  return [self isAccessibilityMode] || [self isMobileLandscape];
+  return [self isAccessibilityMode] ||
+         (self.shouldDisplayMobileLandscapeFullscreen && [self isMobileLandscape]);
 }
 
 - (BOOL)contentReachesFullScreen {
@@ -228,6 +231,12 @@
 
 - (void)setShouldForwardBackgroundTouchEvents:(BOOL)shouldForwardBackgroundTouchEvents {
   _shouldForwardBackgroundTouchEvents = shouldForwardBackgroundTouchEvents;
+  if ([self.presentationController isKindOfClass:[MDCBottomDrawerPresentationController class]]) {
+    MDCBottomDrawerPresentationController *bottomDrawerPresentationController =
+        (MDCBottomDrawerPresentationController *)self.presentationController;
+    bottomDrawerPresentationController.shouldForwardBackgroundTouchEvents =
+        self.shouldForwardBackgroundTouchEvents;
+  }
   if (shouldForwardBackgroundTouchEvents) {
     [self setDismissOnBackgroundTap:NO];
   }
@@ -332,6 +341,10 @@
 
 // Adds the Z gesture for dismissal.
 - (BOOL)accessibilityPerformEscape {
+  if (!self.shouldDismissOnAccessibilityPerformEscape) {
+    return NO;
+  }
+
   [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
   return YES;
 }
@@ -357,6 +370,12 @@
   _isDrawerClosed = YES;
   if ([self.delegate respondsToSelector:@selector(bottomDrawerControllerDidEndCloseTransition:)]) {
     [self.delegate bottomDrawerControllerDidEndCloseTransition:self];
+  }
+}
+
+- (void)bottomDrawerDidTapScrim:(MDCBottomDrawerPresentationController *)presentationController {
+  if ([self.delegate respondsToSelector:@selector(bottomDrawerControllerDidTapScrim:)]) {
+    [self.delegate bottomDrawerControllerDidTapScrim:self];
   }
 }
 
@@ -460,6 +479,16 @@
         (MDCBottomDrawerPresentationController *)self.presentationController;
     bottomDrawerPresentationController.adjustLayoutForIPadSlideOver =
         self.adjustLayoutForIPadSlideOver;
+  }
+}
+
+- (void)setShouldDisplayMobileLandscapeFullscreen:(BOOL)shouldDisplayMobileLandscapeFullscreen {
+  _shouldDisplayMobileLandscapeFullscreen = shouldDisplayMobileLandscapeFullscreen;
+  if ([self.presentationController isKindOfClass:[MDCBottomDrawerPresentationController class]]) {
+    MDCBottomDrawerPresentationController *bottomDrawerPresentationController =
+        (MDCBottomDrawerPresentationController *)self.presentationController;
+    bottomDrawerPresentationController.shouldDisplayMobileLandscapeFullscreen =
+        self.shouldDisplayMobileLandscapeFullscreen;
   }
 }
 

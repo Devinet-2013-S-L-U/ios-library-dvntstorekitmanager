@@ -21,4 +21,5 @@
 #import "MDCTextControlHorizontalPositioningReference.h"
 #import "MDCTextControlLabelAnimation.h"
 #import "MDCTextControlLabelPosition.h"
+#import "MDCTextControlPlaceholderSupport.h"
 #import "MDCTextControlVerticalPositioningReference.h"

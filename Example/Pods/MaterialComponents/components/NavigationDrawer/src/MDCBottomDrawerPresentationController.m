@@ -77,6 +77,7 @@ static CGFloat kTopHandleTopMargin = (CGFloat)5.0;
     _drawerShadowColor = [UIColor.blackColor colorWithAlphaComponent:(CGFloat)0.2];
     _elevation = MDCShadowElevationNavDrawer;
     _dismissOnBackgroundTap = YES;
+    _shouldDisplayMobileLandscapeFullscreen = YES;
   }
   return self;
 }
@@ -115,6 +116,8 @@ static CGFloat kTopHandleTopMargin = (CGFloat)5.0;
   bottomDrawerContainerViewController.drawerShadowColor = self.drawerShadowColor;
   bottomDrawerContainerViewController.adjustLayoutForIPadSlideOver =
       self.adjustLayoutForIPadSlideOver;
+  bottomDrawerContainerViewController.shouldDisplayMobileLandscapeFullscreen =
+      self.shouldDisplayMobileLandscapeFullscreen;
   if ([self.presentedViewController isKindOfClass:[MDCBottomDrawerViewController class]]) {
     // If in fact the presentedViewController is an MDCBottomDrawerViewController,
     // we then know there is a content and an (optional) header view controller.
@@ -239,10 +242,10 @@ static CGFloat kTopHandleTopMargin = (CGFloat)5.0;
 }
 
 - (void)presentationTransitionDidEnd:(BOOL)completed {
-  if (self.dismissOnBackgroundTap) {
-    // Set up the tap recognizer to dimiss the drawer by.
+  if (!self.shouldForwardBackgroundTouchEvents) {
+    // Set up the tap recognizer.
     UITapGestureRecognizer *tapGestureRecognizer =
-        [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideDrawer)];
+        [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(scrimTapped)];
     [self.containerView addGestureRecognizer:tapGestureRecognizer];
     tapGestureRecognizer.delegate = self;
   }
@@ -391,6 +394,15 @@ static CGFloat kTopHandleTopMargin = (CGFloat)5.0;
 
 - (void)hideDrawer {
   [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)scrimTapped {
+  [self.delegate bottomDrawerDidTapScrim:self];
+
+  // Dismiss the drawer on tap if enabled.
+  if (self.dismissOnBackgroundTap) {
+    [self hideDrawer];
+  }
 }
 
 #pragma mark UIGestureRecognizerDelegate

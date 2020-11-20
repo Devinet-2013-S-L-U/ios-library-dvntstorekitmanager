@@ -43,7 +43,7 @@ public enum SRVError: Error {
 // MARK: - LocalizedError
 
 extension SRVError: LocalizedError {
-    
+
     public var errorDescription: String? {
         switch self {
         case .noReceiptFoundInBundle:

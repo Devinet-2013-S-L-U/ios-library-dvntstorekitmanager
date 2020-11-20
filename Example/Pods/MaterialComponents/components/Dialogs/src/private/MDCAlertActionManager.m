@@ -13,6 +13,7 @@
 // limitations under the License.
 
 #import "MDCAlertActionManager.h"
+#import "MaterialButtons.h"
 
 @interface MDCAlertActionManager ()
 
@@ -55,7 +56,7 @@
 }
 
 - (BOOL)hasAction:(nonnull MDCAlertAction *)action {
-  return [_actions indexOfObject:action] != NSNotFound;
+  return [_actions indexOfObjectIdenticalTo:action] != NSNotFound;
 }
 
 - (nullable MDCButton *)buttonForAction:(nonnull MDCAlertAction *)action {
@@ -93,7 +94,9 @@
   button.accessibilityIdentifier = action.accessibilityIdentifier;
 #ifdef __IPHONE_13_4
   if (@available(iOS 13.4, *)) {
-    button.pointerInteractionEnabled = YES;
+    if ([self respondsToSelector:@selector(isPointerInteractionEnabled)]) {
+      button.pointerInteractionEnabled = YES;
+    }
   }
 #endif
   [button addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];

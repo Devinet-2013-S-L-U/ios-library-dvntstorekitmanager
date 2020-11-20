@@ -17,6 +17,7 @@
 
 #import "MaterialElevation.h"
 #import "MaterialInk.h"
+#import "MaterialRipple.h"
 #import "MaterialShadowElevations.h"
 #import "MaterialShapes.h"
 
@@ -36,17 +37,24 @@
  */
 @interface MDCButton : UIButton <MDCElevatable, MDCElevationOverriding>
 
-/** The ink style of the button. */
-@property(nonatomic, assign) MDCInkStyle inkStyle UI_APPEARANCE_SELECTOR;
+/** The ripple style of the button. */
+@property(nonatomic, assign) MDCRippleStyle rippleStyle;
 
-/** The ink color of the button. */
-@property(nonatomic, strong, null_resettable) UIColor *inkColor UI_APPEARANCE_SELECTOR;
+/**
+ The color of the ripple.
 
-/*
- Maximum radius of the button's ink. If the radius <= 0 then half the length of the diagonal of
- self.bounds is used. This value is ignored if button's @c inkStyle is set to |MDCInkStyleBounded|.
+ @note Defaults to a transparent black.
  */
-@property(nonatomic, assign) CGFloat inkMaxRippleRadius UI_APPEARANCE_SELECTOR;
+@property(nonatomic, strong, null_resettable) UIColor *rippleColor;
+
+/**
+ The maximum radius the ripple can expand to.
+
+ @note This property is ignored if @c rippleStyle is set to @c MDCRippleStyleBounded.
+
+ @note Defaults to 0.
+ */
+@property(nonatomic, assign) CGFloat rippleMaximumRadius;
 
 /**
  This property determines if an @c MDCButton should use the @c MDCInkView behavior or not.
@@ -84,6 +92,14 @@
 @property(nonatomic, assign) BOOL centerVisibleArea;
 
 /**
+ The edges of this guide are constrained to equal the edges of the visible area
+ when @c centerVisibleArea is @c YES.
+
+ @note If centerVisibleArea is @c NO then visibleAreaLayoutGuide is nil.
+*/
+@property(nonatomic, readonly, strong, nullable) UILayoutGuide *visibleAreaLayoutGuide;
+
+/**
  The default content edge insets of the button. They are set at initialization time.
  */
 @property(nonatomic, readonly) UIEdgeInsets defaultContentEdgeInsets;
@@ -95,6 +111,11 @@
  Default is CGSizeZero.
  */
 @property(nonatomic) CGSize inkViewOffset;
+
+/**
+ The inset or outset margins for the rectangle surrounding the button’s ripple.
+ */
+@property(nonatomic, assign) UIEdgeInsets rippleEdgeInsets;
 
 /**
  The minimum size of the button’s alignment rect. If either the height or width are non-positive
@@ -356,9 +377,7 @@
 
  The button uses this property to determine intrinsicContentSize and sizeThatFits:.
 
- @note This property sets the @c shapeGenerator. Therefore you cannot use both properties
- simultaneously. If you do wish to use a custom shape with visibleAreaInsets, please set your own
- shapeGenerator that is inset from the frame instead of setting this property directly.
+ @note This API will be deprecated and removed. Consider using @c centerVisibleArea.
 
  Default is UIEdgeInsetsZero.
 */
@@ -395,5 +414,17 @@
        a future version, this API will eventually be deprecated and then deleted.
  */
 @property(nonatomic, assign) BOOL accessibilityTraitsIncludesButton;
+
+/** The ink style of the button. */
+@property(nonatomic, assign) MDCInkStyle inkStyle UI_APPEARANCE_SELECTOR;
+
+/** The ink color of the button. */
+@property(nonatomic, strong, null_resettable) UIColor *inkColor UI_APPEARANCE_SELECTOR;
+
+/*
+ Maximum radius of the button's ink. If the radius <= 0 then half the length of the diagonal of
+ self.bounds is used. This value is ignored if button's @c inkStyle is set to |MDCInkStyleBounded|.
+ */
+@property(nonatomic, assign) CGFloat inkMaxRippleRadius UI_APPEARANCE_SELECTOR;
 
 @end

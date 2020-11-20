@@ -222,6 +222,7 @@ NSString *const kMDCBottomDrawerScrollViewAccessibilityIdentifier =
     _elevation = MDCShadowElevationNavDrawer;
     _shadowedView = [[MDCBottomDrawerShadowedView alloc] init];
     _shouldAdjustOnContentSizeChange = NO;
+    _shouldDisplayMobileLandscapeFullscreen = YES;
   }
   return self;
 }
@@ -280,9 +281,11 @@ NSString *const kMDCBottomDrawerScrollViewAccessibilityIdentifier =
     CGPoint contentOffset = [(NSValue *)[change objectForKey:NSKeyValueChangeNewKey] CGPointValue];
     CGPoint oldContentOffset =
         [(NSValue *)[change objectForKey:NSKeyValueChangeOldKey] CGPointValue];
-    self.scrollViewIsDraggedToBottom = contentOffset.y == oldContentOffset.y
-                                           ? self.scrollViewIsDraggedToBottom
-                                           : contentOffset.y < oldContentOffset.y;
+    self.scrollViewIsDraggedToBottom =
+        (contentOffset.y == oldContentOffset.y ? self.scrollViewIsDraggedToBottom
+                                               : contentOffset.y < oldContentOffset.y)
+            ? YES
+            : NO;
 
     // The normalized content offset takes the content offset and updates it if using the
     // performance logic that comes with setting the tracking scroll view. The reason we update
@@ -385,7 +388,8 @@ NSString *const kMDCBottomDrawerScrollViewAccessibilityIdentifier =
 }
 
 - (BOOL)shouldPresentFullScreen {
-  return [self isAccessibilityMode] || [self isMobileLandscape] || _shouldPresentAtFullscreen;
+  return [self isAccessibilityMode] || _shouldPresentAtFullscreen ||
+         (_shouldDisplayMobileLandscapeFullscreen && [self isMobileLandscape]);
 }
 
 - (BOOL)contentReachesFullscreen {
@@ -1071,7 +1075,7 @@ NSString *const kMDCBottomDrawerScrollViewAccessibilityIdentifier =
       // `updateContentOffsetForPerformantScrolling` method because the contentDiff
       // will not necessarily be 0 when there is no scrolling delta.
       // Therefore by rounding we are able to align to a reasonable content offset.
-      _contentHeaderTopInset = MDCRound(_contentHeaderTopInset);
+      _contentHeaderTopInset = round(_contentHeaderTopInset);
       // The minimum inset value should be the size of the safe area inset, as
       // kInitialDrawerHeightFactor discounts the safe area when receiving the height factor.
       // If we are using `maximumDrawerHeight` then we assume that the drawer does not go into the

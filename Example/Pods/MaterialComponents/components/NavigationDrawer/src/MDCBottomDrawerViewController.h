@@ -116,6 +116,15 @@
 @property(nonatomic, assign) BOOL dismissOnBackgroundTap;
 
 /**
+ A flag allowing clients to opt-out of the drawer closing when user uses accessibility escape
+ gesture. If set to NO, you can alternatively set an accessibility escape action by implementing the
+ @c accessibilityPerformEscape method in your provided contentViewController.
+
+ @default YES The drawer dismisses on z-gesture.
+ */
+@property(nonatomic, assign) BOOL shouldDismissOnAccessibilityPerformEscape;
+
+/**
  A flag allowing clients to opt-in to handling background touch events.
 
  @default NO The drawer will not forward touch events.
@@ -195,6 +204,15 @@
  was added and to allow apps to migrate on their own schedule.
  */
 @property(nonatomic) BOOL adjustLayoutForIPadSlideOver;
+
+/**
+ Whether to display mobile landscape view as fullscreen.
+
+ When enabled, the drawer will fill the screen in landscape on mobile devices.
+
+ Defaults to YES.
+*/
+@property(nonatomic) BOOL shouldDisplayMobileLandscapeFullscreen;
 
 /**
  Sets the top corners radius for an MDCBottomDrawerState drawerState

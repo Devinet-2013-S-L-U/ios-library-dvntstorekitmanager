@@ -16,6 +16,8 @@
 
 #import "MaterialTextControls+Enums.h"
 
+@protocol MDCBaseTextFieldDelegate;
+
 /**
  The superclass of MDCFilledTextField and MDCOutlinedTextField. While not forbidden by the compiler,
  subclassing this class is not supported and is highly discouraged.
@@ -48,22 +50,26 @@
 @property(strong, nonatomic, readonly, nonnull) UILabel *trailingAssistiveLabel;
 
 /**
- This is an RTL-aware wrapper around UITextField's leftView/rightView class.
+ This is an RTL-aware alternative to UITextField's leftView/rightView properties. Use this property
+ instead of @c UITextField's @c rightView and @c leftView.
  */
 @property(strong, nonatomic, nullable) UIView *leadingView;
 
 /**
- This is an RTL-aware wrapper around UITextField's leftView/rightView class.
+ This is an RTL-aware alternative to UITextField's leftView/rightView properties. Use this property
+ instead of @c UITextField's @c rightView and @c leftView.
  */
 @property(strong, nonatomic, nullable) UIView *trailingView;
 
 /**
- This is an RTL-aware wrapper around UITextField's leftViewMode/rightViewMode class.
+ This is an RTL-aware alternative to UITextField's leftView/rightView properties. Use this property
+ instead of @c UITextField's @c rightViewMode and @c leftViewMode.
  */
 @property(nonatomic, assign) UITextFieldViewMode leadingViewMode;
 
 /**
- This is an RTL-aware wrapper around UITextField's leftViewMode/rightViewMode class.
+ This is an RTL-aware alternative to UITextField's leftView/rightView properties. Use this property
+ instead of @c UITextField's @c rightViewMode and @c leftViewMode.
  */
 @property(nonatomic, assign) UITextFieldViewMode trailingViewMode;
 
@@ -164,6 +170,32 @@
  property is @c nil by default.
  */
 @property(nullable, nonatomic, strong) NSNumber *trailingEdgePaddingOverride;
+
+/**
+ This property allows the user to override the default height of the container. The container is the
+ region above the the assistive labels within the text field. If there is no assistive label text,
+ the container's frame will be equal to the frame of the text field itself.
+
+ If this property is set to a value that's smaller than the
+ default height of the container it will be ignored.
+ */
+@property(nonatomic, assign) CGFloat preferredContainerHeight;
+
+/**
+ This delegate receives text field related updates not covered by @c UITextFieldDelegate.
+ */
+@property(nonatomic, weak, nullable) id<MDCBaseTextFieldDelegate> baseTextFieldDelegate;
+
+/**
+ This property determines the corner radius of the container, when applicable. Setting this property
+ is a no-op for MDCBaseTextField and any subclasses with invisible containers. For subclasses with
+ visible containers it will apply the radius to a combination of the four corners that is
+ approrpriate for the given style.
+
+ @note If the value of this property is sufficiently large you may need to set @c
+ leadingEdgePaddingOverride or @c trailingEdgePaddingOverride.
+ */
+@property(nonatomic, assign) CGFloat containerRadius;
 
 @end
 

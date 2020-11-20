@@ -18,11 +18,13 @@
 #import <MDFInternationalization/MDFInternationalization.h>
 #import <QuartzCore/QuartzCore.h>
 
-#import "MaterialMath.h"
-#import "MaterialTextControlsPrivate+BaseStyle.h"
-#import "MaterialTextControlsPrivate+Shared.h"
 #import "private/MDCBaseTextAreaLayout.h"
 #import "private/MDCBaseTextAreaTextView.h"
+#import "MDCBaseTextAreaDelegate.h"
+#import "MaterialTextControlsPrivate+BaseStyle.h"
+#import "MaterialTextControlsPrivate+Shared.h"
+
+static char *const kKVOContextMDCBaseTextArea = "kKVOContextMDCBaseTextArea";
 
 static const CGFloat kMDCBaseTextAreaDefaultMinimumNumberOfVisibleLines = (CGFloat)2.0;
 static const CGFloat kMDCBaseTextAreaDefaultMaximumNumberOfVisibleLines = (CGFloat)4.0;
@@ -33,6 +35,7 @@ static const CGFloat kMDCBaseTextAreaDefaultMaximumNumberOfVisibleLines = (CGFlo
 
 #pragma mark MDCTextControl properties
 @property(strong, nonatomic) UILabel *label;
+@property(nonatomic, strong) UILabel *placeholderLabel;
 @property(nonatomic, strong) MDCTextControlAssistiveLabelView *assistiveLabelView;
 @property(strong, nonatomic) MDCBaseTextAreaLayout *layout;
 @property(nonatomic, assign) MDCTextControlState textControlState;
@@ -50,6 +53,7 @@ static const CGFloat kMDCBaseTextAreaDefaultMaximumNumberOfVisibleLines = (CGFlo
 
 @property(strong, nonatomic) UITapGestureRecognizer *tapGesture;
 @property(nonatomic, assign) CGSize cachedIntrinsicContentSize;
+@property(nonatomic, assign) CGFloat cachedNumberOfLinesOfText;
 
 @end
 
@@ -85,7 +89,13 @@ static const CGFloat kMDCBaseTextAreaDefaultMaximumNumberOfVisibleLines = (CGFlo
   [self setUpLabel];
   [self setUpAssistiveLabels];
   [self setUpTextView];
+  [self setUpPlaceholderLabel];
   [self observeTextViewNotifications];
+  [self observeAssistiveLabelKeyPaths];
+}
+
+- (void)dealloc {
+  [self removeObservers];
 }
 
 #pragma mark Setup
@@ -127,6 +137,11 @@ static const CGFloat kMDCBaseTextAreaDefaultMaximumNumberOfVisibleLines = (CGFlo
 - (void)setUpLabel {
   self.label = [[UILabel alloc] init];
   [self addSubview:self.label];
+}
+
+- (void)setUpPlaceholderLabel {
+  self.placeholderLabel = [[UILabel alloc] init];
+  [self.textView addSubview:self.placeholderLabel];
 }
 
 - (void)setUpTextView {
@@ -174,9 +189,6 @@ static const CGFloat kMDCBaseTextAreaDefaultMaximumNumberOfVisibleLines = (CGFlo
 #pragma mark Private Layout
 
 - (void)preLayoutSubviews {
-  if (![self validateWidth]) {
-    [self invalidateIntrinsicContentSize];
-  }
   self.textControlState = [self determineCurrentTextControlState];
   self.labelPosition = [self determineCurrentLabelPosition];
   MDCTextControlColorViewModel *colorViewModel =
@@ -190,16 +202,26 @@ static const CGFloat kMDCBaseTextAreaDefaultMaximumNumberOfVisibleLines = (CGFlo
 - (void)postLayoutSubviews {
   self.maskedTextViewContainerView.frame = self.containerFrame;
   self.textView.frame = self.layout.textViewFrame;
+  [self updatePlaceholderLabel];
   self.assistiveLabelView.frame = self.layout.assistiveLabelViewFrame;
   self.assistiveLabelView.layout = self.layout.assistiveLabelViewLayout;
   [self.assistiveLabelView setNeedsLayout];
   [self animateLabel];
   [self.containerStyle applyStyleToTextControl:self animationDuration:self.animationDuration];
   [self layoutGradientLayers];
-  if (![self validateHeight]) {
-    [self invalidateIntrinsicContentSize];
+  [self scrollToVisibleText];
+  if ([self widthHasChanged] || [self calculatedHeightHasChanged]) {
+    [self handleIntrinsicContentSizeChange];
   }
-  [self.textView scrollRangeToVisible:self.textView.selectedRange];
+}
+
+- (void)scrollToVisibleText {
+  // This method was added to address b/161887902, with help from
+  // https://stackoverflow.com/a/49631521
+  NSRange range = NSMakeRange(self.textView.text.length - 1, 1);
+  [self.textView scrollRangeToVisible:range];
+  self.textView.scrollEnabled = NO;
+  self.textView.scrollEnabled = YES;
 }
 
 - (MDCBaseTextAreaLayout *)calculateLayoutWithSize:(CGSize)size {
@@ -234,7 +256,8 @@ static const CGFloat kMDCBaseTextAreaDefaultMaximumNumberOfVisibleLines = (CGFlo
                                                       self.normalFont.leading)
                                     numberOfTextRows:self.numberOfLinesOfVisibleText
                                              density:0
-                            preferredContainerHeight:self.preferredContainerHeight];
+                            preferredContainerHeight:self.preferredContainerHeight
+                              isMultilineTextControl:YES];
 }
 
 - (id<MDCTextControlHorizontalPositioning>)createHorizontalPositioningReference {
@@ -267,12 +290,20 @@ static const CGFloat kMDCBaseTextAreaDefaultMaximumNumberOfVisibleLines = (CGFlo
   return CGSizeMake(width, layout.calculatedHeight);
 }
 
-- (BOOL)validateWidth {
-  return CGRectGetWidth(self.bounds) == self.cachedIntrinsicContentSize.width;
+- (BOOL)widthHasChanged {
+  return CGRectGetWidth(self.bounds) != self.cachedIntrinsicContentSize.width;
 }
 
-- (BOOL)validateHeight {
-  return self.layout.calculatedHeight == self.cachedIntrinsicContentSize.height;
+- (BOOL)calculatedHeightHasChanged {
+  return self.layout.calculatedHeight != self.cachedIntrinsicContentSize.height;
+}
+
+- (void)handleIntrinsicContentSizeChange {
+  [self invalidateIntrinsicContentSize];
+  if ([self.baseTextAreaDelegate respondsToSelector:@selector(baseTextArea:shouldChangeSize:)]) {
+    CGSize preferredSize = CGSizeMake(CGRectGetWidth(self.bounds), self.layout.calculatedHeight);
+    [self.baseTextAreaDelegate baseTextArea:self shouldChangeSize:preferredSize];
+  }
 }
 
 - (void)layoutGradientLayers {
@@ -285,7 +316,7 @@ static const CGFloat kMDCBaseTextAreaDefaultMaximumNumberOfVisibleLines = (CGFlo
 }
 
 - (CGFloat)numberOfLinesOfText {
-  // For more context on measurinig the lines in a UITextView see here:
+  // For more context on measuring the lines in a UITextView see here:
   // https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/TextLayout/Tasks/CountLines.html
   NSLayoutManager *layoutManager = self.textView.layoutManager;
   NSUInteger numberOfGlyphs = layoutManager.numberOfGlyphs;
@@ -298,10 +329,17 @@ static const CGFloat kMDCBaseTextAreaDefaultMaximumNumberOfVisibleLines = (CGFlo
     numberOfLines += 1;
   }
 
-  if (self.textView.text.length > 0 &&
-      [self.textView.text characterAtIndex:self.textView.text.length - 1] == '\n') {
+  BOOL textEndsInNewLine =
+      self.textView.text.length > 0 &&
+      [self.textView.text characterAtIndex:self.textView.text.length - 1] == '\n';
+  if (textEndsInNewLine) {
     numberOfLines += 1;
   }
+  BOOL numberOfLinesChanged = self.cachedNumberOfLinesOfText != (CGFloat)numberOfLines;
+  if (numberOfLinesChanged) {
+    [self setNeedsLayout];
+  }
+  self.cachedNumberOfLinesOfText = (CGFloat)numberOfLines;
   return (CGFloat)numberOfLines;
 }
 
@@ -334,6 +372,81 @@ static const CGFloat kMDCBaseTextAreaDefaultMaximumNumberOfVisibleLines = (CGFlo
   BOOL isEnabled = self.enabled && self.baseTextAreaTextView.isEditable;
   BOOL isEditing = self.textView.isFirstResponder;
   return MDCTextControlStateWith(isEnabled, isEditing);
+}
+
+#pragma mark Placeholder
+
+- (BOOL)shouldPlaceholderBeVisible {
+  return MDCTextControlShouldPlaceholderBeVisibleWithPlaceholder(
+      self.placeholder, self.textView.text, self.labelPosition);
+}
+
+/**
+ This method provides the default paragraph style object for the placeholder label. Without this
+ it's much harder to get the placeholder to be perfectly vertically aligned with the text in the
+ text view.
+ */
+- (NSParagraphStyle *)defaultPlaceholderParagraphStyle {
+  static NSParagraphStyle *paragraphStyle = nil;
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+    id attribute =
+        [self defaultUiTextFieldPlaceholderAttributeWithKey:NSParagraphStyleAttributeName];
+    if ([attribute isKindOfClass:[NSParagraphStyle class]]) {
+      paragraphStyle = (NSParagraphStyle *)attribute;
+    }
+  });
+  return paragraphStyle;
+}
+
+- (UIColor *)defaultPlaceholderColor {
+  static UIColor *placeholderColor = nil;
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+    id attribute =
+        [self defaultUiTextFieldPlaceholderAttributeWithKey:NSForegroundColorAttributeName];
+    if ([attribute isKindOfClass:[UIColor class]]) {
+      placeholderColor = (UIColor *)attribute;
+    }
+  });
+  return placeholderColor;
+}
+
+- (id)defaultUiTextFieldPlaceholderAttributeWithKey:(NSAttributedStringKey)attributedStringKey {
+  UITextField *textField = [[UITextField alloc] init];
+  textField.placeholder = @"placeholder";
+  NSAttributedString *attributedPlaceholder = textField.attributedPlaceholder;
+  NSDictionary *attributeKeysToAttributes =
+      [attributedPlaceholder attributesAtIndex:0
+                         longestEffectiveRange:nil
+                                       inRange:NSMakeRange(0, attributedPlaceholder.length)];
+  for (NSAttributedStringKey key in attributeKeysToAttributes) {
+    if (key == attributedStringKey) {
+      return attributeKeysToAttributes[attributedStringKey];
+    }
+  }
+  return nil;
+}
+
+- (void)updatePlaceholderLabel {
+  if ([self shouldPlaceholderBeVisible]) {
+    NSDictionary<NSAttributedStringKey, id> *attributes = @{
+      NSParagraphStyleAttributeName : [self defaultPlaceholderParagraphStyle],
+      NSForegroundColorAttributeName : [self defaultPlaceholderColor],
+      NSFontAttributeName : self.normalFont
+    };
+    NSAttributedString *attributedPlaceholder =
+        [[NSAttributedString alloc] initWithString:self.placeholder attributes:attributes];
+    self.placeholderLabel.attributedText = attributedPlaceholder;
+    self.placeholderLabel.numberOfLines = (NSInteger)self.numberOfLinesOfVisibleText;
+    CGRect frame = self.textView.bounds;
+    CGSize sizeThatFits = [self.placeholderLabel sizeThatFits:frame.size];
+    frame.size = sizeThatFits;
+    self.placeholderLabel.frame = frame;
+    self.placeholderLabel.hidden = NO;
+  } else {
+    self.placeholderLabel.hidden = YES;
+  }
 }
 
 #pragma mark Label
@@ -379,6 +492,11 @@ static const CGFloat kMDCBaseTextAreaDefaultMaximumNumberOfVisibleLines = (CGFlo
 
 - (UITextView *)textView {
   return self.baseTextAreaTextView;
+}
+
+- (void)setPlaceholder:(NSString *)placeholder {
+  _placeholder = placeholder;
+  [self setNeedsLayout];
 }
 
 #pragma mark MDCTextControl Protocol Accessors
@@ -453,10 +571,18 @@ static const CGFloat kMDCBaseTextAreaDefaultMaximumNumberOfVisibleLines = (CGFlo
   } else if (labelPosition == MDCTextControlLabelPositionFloating) {
     labelColor = colorViewModel.floatingLabelColor;
   }
-  self.textView.textColor = colorViewModel.textColor;
-  self.leadingAssistiveLabel.textColor = colorViewModel.leadingAssistiveLabelColor;
-  self.trailingAssistiveLabel.textColor = colorViewModel.trailingAssistiveLabelColor;
-  self.label.textColor = labelColor;
+  if (![self.textView.textColor isEqual:colorViewModel.textColor]) {
+    self.textView.textColor = colorViewModel.textColor;
+  }
+  if (![self.leadingAssistiveLabel.textColor isEqual:colorViewModel.leadingAssistiveLabelColor]) {
+    self.leadingAssistiveLabel.textColor = colorViewModel.leadingAssistiveLabelColor;
+  }
+  if (![self.trailingAssistiveLabel.textColor isEqual:colorViewModel.trailingAssistiveLabelColor]) {
+    self.trailingAssistiveLabel.textColor = colorViewModel.trailingAssistiveLabelColor;
+  }
+  if (![self.label.textColor isEqual:labelColor]) {
+    self.label.textColor = labelColor;
+  }
 }
 
 - (void)setTextControlColorViewModel:(MDCTextControlColorViewModel *)TextControlColorViewModel
@@ -555,6 +681,62 @@ static const CGFloat kMDCBaseTextAreaDefaultMaximumNumberOfVisibleLines = (CGFlo
                                            selector:@selector(textViewChanged:)
                                                name:UITextViewTextDidChangeNotification
                                              object:nil];
+}
+
+#pragma mark - Key-value observing
+
+- (void)observeAssistiveLabelKeyPaths {
+  for (NSString *keyPath in [MDCBaseTextArea assistiveLabelKVOKeyPaths]) {
+    [self.leadingAssistiveLabel addObserver:self
+                                 forKeyPath:keyPath
+                                    options:NSKeyValueObservingOptionNew
+                                    context:kKVOContextMDCBaseTextArea];
+    [self.trailingAssistiveLabel addObserver:self
+                                  forKeyPath:keyPath
+                                     options:NSKeyValueObservingOptionNew
+                                     context:kKVOContextMDCBaseTextArea];
+  }
+}
+
+- (void)removeObservers {
+  for (NSString *keyPath in [MDCBaseTextArea assistiveLabelKVOKeyPaths]) {
+    [self.leadingAssistiveLabel removeObserver:self
+                                    forKeyPath:keyPath
+                                       context:kKVOContextMDCBaseTextArea];
+    [self.trailingAssistiveLabel removeObserver:self
+                                     forKeyPath:keyPath
+                                        context:kKVOContextMDCBaseTextArea];
+  }
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary<NSKeyValueChangeKey, id> *)change
+                       context:(void *)context {
+  if (context == kKVOContextMDCBaseTextArea) {
+    if (object != self.leadingAssistiveLabel && object != self.trailingAssistiveLabel) {
+      return;
+    }
+
+    for (NSString *assistiveLabelKeyPath in [MDCBaseTextArea assistiveLabelKVOKeyPaths]) {
+      if ([assistiveLabelKeyPath isEqualToString:keyPath]) {
+        [self setNeedsLayout];
+        break;
+      }
+    }
+  }
+}
+
++ (NSArray<NSString *> *)assistiveLabelKVOKeyPaths {
+  static NSArray<NSString *> *keyPaths = nil;
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+    keyPaths = @[
+      NSStringFromSelector(@selector(text)),
+      NSStringFromSelector(@selector(font)),
+    ];
+  });
+  return keyPaths;
 }
 
 @end

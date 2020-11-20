@@ -168,7 +168,7 @@ typedef NS_ENUM(NSInteger, MDCBottomNavigationBarAlignment) {
 @property(nonatomic, assign) CGFloat itemsContentHorizontalMargin;
 
 /**
- The amount of horizontal padding on the leading/trailing edges of each bar item. Defaults to 12.
+ The amount of horizontal padding on the leading/trailing edges of each bar item. Defaults to 0.
 
  @note: The amount of horizontal space between the bar items will be double this value.
  */
@@ -221,27 +221,29 @@ traitCollectionDidChange:. The block is called after the call to the superclass.
      UITraitCollection *_Nullable previousTraitCollection);
 
 /**
+ Sets the height of the navigation bar.
+
+ Note: If set to a value smaller or equal to zero (<= 0), the bar will default to a height of 56 in
+ the normal case, and to 40 if alignment is set to
+ MDCBottomNavigationBarAlignmentJustifiedAdjacentTitles and horizontalSizeClass is set to
+ UIUserInterfaceSizeClassRegular.
+
+ If value is bigger than 0 ( > 0), then the intrinsic height will match the provided barHeight.
+
+ Defaults to 0.
+ */
+@property(nonatomic, assign) CGFloat barHeight;
+
+/**
  Returns the navigation bar subview associated with the specific item.
 
  @param item A UITabBarItem
  */
 - (nullable UIView *)viewForItem:(nonnull UITabBarItem *)item;
 
-/**
- Flag to allow clients to gradually correct the size/position of the Bottom Navigation bar relative
- to the safe area on iOS 11+.
-
- NOTE: In an upcoming release, this flag will be removed and the default behavior will be to exclude
- the safe area in size calculations.
-
- Defaults to @c NO.
- */
-@property(nonatomic, assign) BOOL sizeThatFitsIncludesSafeArea __deprecated_msg(
-    "This was a migration API and is being removed.");
-
 @end
 
-/** APIs that are deprecated. No new code should rely on these APIs. */
+/** APIs that are ToBeDeprecated. */
 @interface MDCBottomNavigationBar (ToBeDeprecated)
 
 /**

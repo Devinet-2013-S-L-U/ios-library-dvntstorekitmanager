@@ -217,11 +217,6 @@ static NSString *const kBundle = @"MaterialProgressView.bundle";
                    completion:userCompletion];
 }
 
-- (void)setHidden:(BOOL)hidden {
-  [super setHidden:hidden];
-  UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, hidden ? nil : self);
-}
-
 - (void)setHidden:(BOOL)hidden
          animated:(BOOL)animated
        completion:(void (^__nullable)(BOOL finished))userCompletion {
@@ -393,7 +388,7 @@ static NSString *const kBundle = @"MaterialProgressView.bundle";
     // Update progressView with the current progress value.
     CGFloat scale = self.window.screen.scale > 0 ? self.window.screen.scale : 1;
     CGFloat pointWidth = self.progress * CGRectGetWidth(self.bounds);
-    CGFloat pixelAlignedWidth = MDCRound(pointWidth * scale) / scale;
+    CGFloat pixelAlignedWidth = round(pointWidth * scale) / scale;
     progressFrame = CGRectMake(0, 0, pixelAlignedWidth, CGRectGetHeight(self.bounds));
   } else {
     if (!self.animating) {

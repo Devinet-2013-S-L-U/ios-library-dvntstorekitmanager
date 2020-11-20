@@ -282,6 +282,8 @@ NSString *const kDeselectedCellAccessibilityHintKey =
   return CGRectMake(originX, originY, size.width, size.height);
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 - (MDCInkView *)inkView {
   if (!_inkView) {
     _inkView = [[MDCInkView alloc] initWithFrame:self.bounds];
@@ -305,6 +307,7 @@ NSString *const kDeselectedCellAccessibilityHintKey =
   }
   _inkView = inkView;
 }
+#pragma clang diagnostic pop
 
 - (MDCRippleView *)rippleView {
   if (!_rippleView) {
@@ -368,7 +371,8 @@ NSString *const kDeselectedCellAccessibilityHintKey =
       _usesCellSeparatorHiddenOverride ? _shouldHideSeparator : _attr.shouldHideSeparators;
   UIEdgeInsets separatorInset =
       _usesCellSeparatorInsetOverride ? _separatorInset : _attr.separatorInset;
-  BOOL isBottom = _attr.sectionOrdinalPosition & MDCCollectionViewOrdinalPositionVerticalBottom;
+  BOOL isBottom =
+      (_attr.sectionOrdinalPosition & MDCCollectionViewOrdinalPositionVerticalBottom) ? YES : NO;
   BOOL isGrid = _attr.isGridLayout;
 
   BOOL hideSeparator = isBottom || isHidden || isGrid;

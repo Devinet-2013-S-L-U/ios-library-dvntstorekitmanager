@@ -64,6 +64,8 @@ static NSString *const kMaterialDialogsBundle = @"MaterialDialogs.bundle";
   return self;
 }
 
+#pragma mark - NSCopying
+
 - (id)copyWithZone:(__unused NSZone *)zone {
   MDCAlertAction *action = [[self class] actionWithTitle:self.title
                                                 emphasis:self.emphasis
@@ -71,6 +73,22 @@ static NSString *const kMaterialDialogsBundle = @"MaterialDialogs.bundle";
   action.accessibilityIdentifier = self.accessibilityIdentifier;
 
   return action;
+}
+
+#pragma mark - NSObject
+
+- (BOOL)isEqual:(id)object {
+  if (![object isKindOfClass:[MDCAlertAction class]]) {
+    return NO;
+  }
+
+  MDCAlertAction *anotherAction = (MDCAlertAction *)object;
+  if (self == anotherAction) {
+    return YES;
+  }
+
+  return
+      [self.title isEqualToString:anotherAction.title] && self.emphasis == anotherAction.emphasis;
 }
 
 @end
@@ -174,12 +192,10 @@ static NSString *const kMaterialDialogsBundle = @"MaterialDialogs.bundle";
   if (self.traitCollectionDidChangeBlock) {
     self.traitCollectionDidChangeBlock(self, previousTraitCollection);
   }
-  if (@available(iOS 10.0, *)) {
-    if (![self.traitCollection.preferredContentSizeCategory
-            isEqualToString:previousTraitCollection.preferredContentSizeCategory]) {
-      self.preferredContentSize = [self.alertView
-          calculatePreferredContentSizeForBounds:CGRectStandardize(self.view.bounds).size];
-    }
+  if (![self.traitCollection.preferredContentSizeCategory
+          isEqualToString:previousTraitCollection.preferredContentSizeCategory]) {
+    self.preferredContentSize = [self.alertView
+        calculatePreferredContentSizeForBounds:CGRectStandardize(self.view.bounds).size];
   }
 }
 
@@ -397,14 +413,6 @@ static NSString *const kMaterialDialogsBundle = @"MaterialDialogs.bundle";
   }
 }
 
-// b/117717380: Will be deprecated
-- (void)setButtonFont:(UIFont *)buttonFont {
-  _buttonFont = buttonFont;
-  if (self.alertView) {
-    self.alertView.buttonFont = buttonFont;
-  }
-}
-
 - (void)setTitleColor:(UIColor *)titleColor {
   _titleColor = titleColor;
   if (self.alertView) {
@@ -584,24 +592,20 @@ static NSString *const kMaterialDialogsBundle = @"MaterialDialogs.bundle";
 
 - (void)actionButtonPressed:(id)button forEvent:(UIEvent *)event {
   MDCAlertAction *action = [self.actionManager actionForButton:button];
+  if ([self.delegate respondsToSelector:@selector(alertController:didTapAction:withEvent:)]) {
+    [self.delegate alertController:self didTapAction:action withEvent:event];
+  }
 
   // We call our action.completionHandler after we dismiss the existing alert in case the handler
   // also presents a view controller. Otherwise we get a warning about presenting on a controller
   // which is already presenting.
-  [self.presentingViewController dismissViewControllerAnimated:YES
-                                                    completion:^(void) {
-                                                      if (action.completionHandler) {
-                                                        if ([self.delegate
-                                                                respondsToSelector:@selector
-                                                                (alertController:
-                                                                    didTapAction:withEvent:)]) {
-                                                          [self.delegate alertController:self
-                                                                            didTapAction:action
-                                                                               withEvent:event];
-                                                        }
-                                                        action.completionHandler(action);
-                                                      }
-                                                    }];
+  [self.presentingViewController
+      dismissViewControllerAnimated:YES
+                         completion:^(void) {
+                           if (action.completionHandler) {
+                             action.completionHandler(action);
+                           }
+                         }];
 }
 
 #pragma mark - Text View Delegate
@@ -609,7 +613,7 @@ static NSString *const kMaterialDialogsBundle = @"MaterialDialogs.bundle";
 - (BOOL)textView:(UITextView *)textView
     shouldInteractWithURL:(NSURL *)URL
                   inRange:(NSRange)characterRange
-              interaction:(UITextItemInteraction)interaction API_AVAILABLE(ios(10.0)) {
+              interaction:(UITextItemInteraction)interaction {
   if (self.attributedMessageAction != nil) {
     return self.attributedMessageAction(URL, characterRange, interaction);
   }
@@ -761,10 +765,8 @@ static NSString *const kMaterialDialogsBundle = @"MaterialDialogs.bundle";
 
 - (void)setupAlertView {
   self.alertView.titleLabel.text = self.title;
-  if (@available(iOS 10.0, *)) {
-    self.alertView.titleLabel.adjustsFontForContentSizeCategory =
-        self.adjustsFontForContentSizeCategory;
-  }
+  self.alertView.titleLabel.adjustsFontForContentSizeCategory =
+      self.adjustsFontForContentSizeCategory;
   if (self.attributedMessage.length > 0) {
     self.alertView.messageTextView.attributedText = self.attributedMessage;
   } else {
@@ -809,7 +811,6 @@ static NSString *const kMaterialDialogsBundle = @"MaterialDialogs.bundle";
     // Avoid reset title color to white when setting it to nil. only set it for an actual UIColor.
     self.alertView.buttonColor = self.buttonTitleColor;  // b/117717380: Will be deprecated
   }
-  self.alertView.buttonFont = self.buttonFont;  // b/117717380: Will be deprecated
   if (self.buttonInkColor) {
     // Avoid reset ink color to white when setting it to nil. only set it for an actual UIColor.
     self.alertView.buttonInkColor = self.buttonInkColor;  // b/117717380: Will be deprecated

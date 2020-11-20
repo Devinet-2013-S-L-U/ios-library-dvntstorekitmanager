@@ -19,13 +19,13 @@
 #import <MDFInternationalization/MDFInternationalization.h>
 
 #import "MaterialButtons.h"
-#import "MaterialMath.h"
+#import "MaterialDialogs.h"
 #import "MaterialTypography.h"
+#import "MaterialMath.h"
 
 // https://material.io/go/design-dialogs#dialogs-specs
 static const MDCFontTextStyle kTitleTextStyle = MDCFontTextStyleTitle;
 static const MDCFontTextStyle kMessageTextStyle = MDCFontTextStyleBody1;
-static const MDCFontTextStyle kButtonTextStyle = MDCFontTextStyleButton;
 
 static const CGFloat MDCDialogMaximumWidth = 560.0f;
 static const CGFloat MDCDialogMinimumWidth = 280.0f;
@@ -43,7 +43,6 @@ static const CGFloat MDCDialogMessageOpacity = 0.54f;
 
 @property(nonatomic, getter=isVerticalActionsLayout) BOOL verticalActionsLayout;
 
-@property(nonatomic, strong, nullable) UIFont *buttonFont UI_APPEARANCE_SELECTOR;
 @property(nonatomic, strong, nullable) UIColor *buttonColor UI_APPEARANCE_SELECTOR;
 @property(nonatomic, strong, nullable) UIColor *buttonInkColor UI_APPEARANCE_SELECTOR;
 @property(nonatomic, assign) BOOL enableRippleBehavior;
@@ -71,6 +70,7 @@ static const CGFloat MDCDialogMessageOpacity = 0.54f;
     self.actionsHorizontalMargin = 8.0f;
     self.actionsVerticalMargin = 12.0f;
     self.accessoryViewVerticalInset = 20.0f;
+    self.accessoryViewHorizontalInset = 0.0f;
 
     self.titleScrollView = [[UIScrollView alloc] initWithFrame:CGRectZero];
     [self addSubview:self.titleScrollView];
@@ -150,7 +150,6 @@ static const CGFloat MDCDialogMessageOpacity = 0.54f;
       // reset the title to the default
       [button setTitleColor:_buttonColor forState:UIControlStateNormal];
     }
-    [button setTitleFont:_buttonFont forState:UIControlStateNormal];
     button.enableRippleBehavior = self.enableRippleBehavior;
     button.inkColor = self.buttonInkColor;
     // These two lines must be after @c setTitleFont:forState: in order to @c MDCButton to handle
@@ -342,33 +341,29 @@ static const CGFloat MDCDialogMessageOpacity = 0.54f;
   [self setNeedsLayout];
 }
 
-- (void)setButtonFont:(UIFont *)font {
-  _buttonFont = font;
-
-  [self updateButtonFont];
-}
-
 - (void)updateButtonFont {
-  UIFont *finalButtonFont = self.buttonFont ?: [[self class] buttonFontDefault];
-  if (self.mdc_adjustsFontForContentSizeCategory) {
-    if (self.adjustsFontForContentSizeCategoryWhenScaledFontIsUnavailable) {
-      finalButtonFont = [finalButtonFont
-          mdc_fontSizedForMaterialTextStyle:kTitleTextStyle
-                       scaledForDynamicType:self.mdc_adjustsFontForContentSizeCategory];
-    }
-  }
   for (MDCButton *button in self.actionManager.buttonsInActionOrder) {
-    [button setTitleFont:finalButtonFont forState:UIControlStateNormal];
+    UIFont *buttonFont;
+    if (button.enableTitleFontForState) {
+      buttonFont = [button titleFontForState:UIControlStateNormal];
+    } else {
+      buttonFont = button.titleLabel.font;
+    }
+    if (self.mdc_adjustsFontForContentSizeCategory) {
+      if (self.adjustsFontForContentSizeCategoryWhenScaledFontIsUnavailable) {
+        buttonFont = [buttonFont
+            mdc_fontSizedForMaterialTextStyle:kTitleTextStyle
+                         scaledForDynamicType:self.mdc_adjustsFontForContentSizeCategory];
+      }
+    }
+    if (button.enableTitleFontForState) {
+      [button setTitleFont:buttonFont forState:UIControlStateNormal];
+    } else {
+      button.titleLabel.font = buttonFont;
+    }
   }
 
   [self setNeedsLayout];
-}
-
-+ (UIFont *)buttonFontDefault {
-  if ([MDCTypography.fontLoader isKindOfClass:[MDCSystemFontLoader class]]) {
-    return [UIFont mdc_standardFontForMaterialTextStyle:kButtonTextStyle];
-  }
-  return [MDCTypography titleFont];
 }
 
 - (void)setButtonColor:(UIColor *)color {
@@ -583,16 +578,6 @@ static const CGFloat MDCDialogMessageOpacity = 0.54f;
   return ([self hasTitle] || [self hasTitleIconOrImage]) ? self.titleInsets.bottom : 0.0f;
 }
 
-- (CGFloat)titleViewInsetLeft {
-  return [self hasTitleIconOrImage] ? MIN(self.titleInsets.left, self.titleIconInsets.left)
-                                    : self.titleInsets.left;
-}
-
-- (CGFloat)titleViewInsetRight {
-  return [self hasTitleIconOrImage] ? MIN(self.titleInsets.right, self.titleIconInsets.right)
-                                    : self.titleInsets.right;
-}
-
 - (CGFloat)contentInsetTop {
   return ([self hasTitle] || [self hasTitleIconOrImage]) ? 0.0f : self.contentInsets.top;
 }
@@ -692,7 +677,10 @@ static const CGFloat MDCDialogMessageOpacity = 0.54f;
 // @param boundingWidth should not include any internal margins or padding
 - (CGSize)calculateContentSizeThatFitsWidth:(CGFloat)boundingWidth {
   CGFloat contentInsets = self.contentInsets.left + self.contentInsets.right;
-  CGFloat titleInsets = [self titleViewInsetLeft] + [self titleViewInsetRight];
+  if (self.accessoryViewHorizontalInset > 0) {
+    contentInsets += self.accessoryViewHorizontalInset * 2.0;
+  }
+  CGFloat titleInsets = self.titleInsets.left + self.titleInsets.right;
   CGSize boundsSize = CGRectInfinite.size;
 
   boundsSize.width = boundingWidth - titleInsets;
@@ -723,7 +711,7 @@ static const CGFloat MDCDialogMessageOpacity = 0.54f;
 */
 - (CGSize)calculateTitleViewSizeThatFitsWidth:(CGFloat)boundingWidth {
   CGFloat contentInsets = self.contentInsets.left + self.contentInsets.right;
-  CGFloat titleInsets = [self titleViewInsetLeft] + [self titleViewInsetRight];
+  CGFloat titleInsets = self.titleInsets.left + self.titleInsets.left;
 
   CGSize contentSize = CGRectInfinite.size;
   contentSize.width = boundingWidth - contentInsets;
@@ -845,8 +833,9 @@ static const CGFloat MDCDialogMessageOpacity = 0.54f;
   CGRect titleFrame = [self titleFrameWithTitleSize:titleSize];
   CGRect messageFrame = [self messageFrameWithSize:messageSize];
   CGRect accessoryViewFrame = CGRectMake(
-      self.contentInsets.left, CGRectGetMaxY(messageFrame) + [self accessoryVerticalInset],
-      accessoryViewSize.width, accessoryViewSize.height);
+      self.contentInsets.left + self.accessoryViewHorizontalInset,
+      CGRectGetMaxY(messageFrame) + [self accessoryVerticalInset],
+      accessoryViewSize.width - self.accessoryViewHorizontalInset * 2.0, accessoryViewSize.height);
 
   self.titleLabel.frame = titleFrame;
   self.messageTextView.frame = messageFrame;
@@ -1072,6 +1061,10 @@ static const CGFloat MDCDialogMessageOpacity = 0.54f;
 
 // Disabling text selection when selectable is YES, while allowing gestures for inlined links.
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
+  if (UIAccessibilityIsVoiceOverRunning()) {
+    return [super pointInside:point withEvent:event];
+  }
+
   if (![super pointInside:point withEvent:event]) {
     return NO;
   }
