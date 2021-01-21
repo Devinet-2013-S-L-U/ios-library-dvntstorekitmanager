@@ -106,8 +106,8 @@ static NSAttributedString *UppercaseAttributedString(NSAttributedString *string)
   BOOL _hasCustomDisabledTitleColor;
   BOOL _imageTintStatefulAPIEnabled;
 
-  // Cached accessibility settings.
-  NSMutableDictionary<NSNumber *, NSString *> *_nontransformedTitles;
+  // Cached titles and accessibility labels.
+  NSMutableDictionary<NSNumber *, id> *_nontransformedTitles;
   NSString *_accessibilityLabelExplicitValue;
 
   BOOL _mdc_adjustsFontForContentSizeCategory;
@@ -262,6 +262,7 @@ static NSAttributedString *UppercaseAttributedString(NSAttributedString *string)
   }
 
 #ifdef __IPHONE_13_4
+#if !TARGET_OS_TV
   if (@available(iOS 13.4, *)) {
     if ([self respondsToSelector:@selector(pointerStyleProvider)]) {
       __weak __typeof__(self) weakSelf = self;
@@ -282,7 +283,8 @@ static NSAttributedString *UppercaseAttributedString(NSAttributedString *string)
       self.pointerInteractionEnabled = NO;
     }
   }
-#endif
+#endif  // !TARGET_OS_TV
+#endif  // __IPHONE_13_4
 }
 
 - (void)dealloc {
@@ -534,7 +536,7 @@ static NSAttributedString *UppercaseAttributedString(NSAttributedString *string)
     NSString *title = nontransformedTitles[key];
     if ([title isKindOfClass:[NSAttributedString class]]) {
       [self setAttributedTitle:(NSAttributedString *)title forState:state];
-    } else {
+    } else if ([title isKindOfClass:[NSString class]]) {
       [self setTitle:title forState:state];
     }
   }
@@ -583,7 +585,7 @@ static NSAttributedString *UppercaseAttributedString(NSAttributedString *string)
   // Intercept any setting of the title and store a copy in case the accessibilityLabel
   // is requested and the original non-uppercased version needs to be returned.
   if ([title length]) {
-    _nontransformedTitles[@(state)] = [[title string] copy];
+    _nontransformedTitles[@(state)] = [title copy];
   } else {
     [_nontransformedTitles removeObjectForKey:@(state)];
   }
@@ -609,22 +611,32 @@ static NSAttributedString *UppercaseAttributedString(NSAttributedString *string)
     return [super accessibilityLabel];
   }
 
-  NSString *label = _accessibilityLabelExplicitValue;
-  if ([label length]) {
-    return label;
+  if ([_accessibilityLabelExplicitValue length]) {
+    return _accessibilityLabelExplicitValue;
   }
 
-  label = _nontransformedTitles[@(self.state)];
-  if ([label length]) {
-    return label;
+  NSString *titleLabel;
+  id stateTitle = _nontransformedTitles[@(self.state)];
+  if ([stateTitle isKindOfClass:[NSAttributedString class]]) {
+    titleLabel = [(NSAttributedString *)stateTitle string];
+  } else if ([stateTitle isKindOfClass:[NSString class]]) {
+    titleLabel = stateTitle;
+  }
+  if ([titleLabel length]) {
+    return titleLabel;
   }
 
-  label = _nontransformedTitles[@(UIControlStateNormal)];
-  if ([label length]) {
-    return label;
+  id normalTitle = _nontransformedTitles[@(UIControlStateNormal)];
+  if ([normalTitle isKindOfClass:[NSAttributedString class]]) {
+    titleLabel = [(NSAttributedString *)normalTitle string];
+  } else if ([normalTitle isKindOfClass:[NSString class]]) {
+    titleLabel = normalTitle;
+  }
+  if ([titleLabel length]) {
+    return titleLabel;
   }
 
-  label = [super accessibilityLabel];
+  NSString *label = [super accessibilityLabel];
   if ([label length]) {
     return label;
   }

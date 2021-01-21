@@ -249,8 +249,8 @@ public class DVNTAlertManager
                             currentViewController.present(alertController, animated: true, completion: nil)
                         }else{
                             let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-                            alertController.addAction(UIAlertAction(title: buttonActionText, style: .default) { (action) in buttonTouched(0) })
-                            alertController.addAction(UIAlertAction(title: cancelButtonText, style: .destructive) { (action) in buttonTouched(1) })
+                            alertController.addAction(UIAlertAction(title: buttonActionText, style: .destructive) { (action) in buttonTouched(0) })
+                            alertController.addAction(UIAlertAction(title: cancelButtonText, style: .default) { (action) in buttonTouched(1) })
                             currentViewController.present(alertController, animated: true, completion: nil)
                         }
                     }

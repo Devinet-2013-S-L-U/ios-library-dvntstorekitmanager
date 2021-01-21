@@ -12,15 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#import "MDCTextControl.h"
-#import "MDCTextControlAssistiveLabelView.h"
-#import "MDCTextControlAssistiveLabelViewLayout.h"
-#import "MDCTextControlColorViewModel.h"
-#import "MDCTextControlGradientManager.h"
-#import "MDCTextControlHorizontalPositioning.h"
-#import "MDCTextControlHorizontalPositioningReference.h"
-#import "MDCTextControlLabelAnimation.h"
-#import "MDCTextControlLabelPosition.h"
-#import "MDCTextControlPlaceholderSupport.h"
-#import "MDCTextControlSideViewSupport.h"
-#import "MDCTextControlVerticalPositioningReference.h"
+#import <UIKit/UIKit.h>
+
+/**
+ This enum represents different positions for the side image views in an @c
+ MDCSelfSizingStereoCell.
+ */
+typedef NS_ENUM(NSUInteger, MDCSelfSizingStereoCellImageViewVerticalPosition) {
+  /**
+   This value results in the image view being positioned at the top of the cell.
+   */
+  MDCSelfSizingStereoCellImageViewVerticalPositionTop,
+  /**
+   This value results in the image view being positioned in the vertical center of the
+   cell.
+   */
+  MDCSelfSizingStereoCellImageViewVerticalPositionCenter,
+};
