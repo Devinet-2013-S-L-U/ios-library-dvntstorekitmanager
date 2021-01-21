@@ -218,7 +218,14 @@ public class DVNTStoreKitManager: NSObject
                 }
                 print("💰 ✅ DVNTStoreKitManager: The validation of the subscriptions did finish successfully")
             case .failure(let error):
-                print("💰 ⛔️ DVNTStoreKitManager: The validation of the subscriptions did finish with error \(error.localizedDescription)")
+                switch error {
+                case .noReceiptFoundInBundle:
+                    print("💰 ✅ DVNTStoreKitManager: The validation of the subscriptions did finish because no receipts were found")
+                    break
+                default:
+                    print("💰 ⛔️ DVNTStoreKitManager: The validation of the subscriptions did finish with error \(error.localizedDescription)")
+                
+                }
             }
             
             if !self.isInitialSubscriptionVerificationCompleted {
