@@ -332,12 +332,15 @@ extension DVNTStoreKitManager: SKPaymentTransactionObserver
                 case .failed:
                     if let error = transaction.error as? SKError {
                         switch error.code {
-                        case .unknown: break
+                        case .unknown:
+                            self.delegate?.storeKitManagerPurchaseDidFail(productIdentifier: transaction.payment.productIdentifier, error: nil)
+                            
                         case .paymentCancelled:
                             if let index = self.storedPayments.firstIndex(where: { $0.productIdentifier == transaction.payment.productIdentifier}) {
                                 self.storedPayments.remove(at: index)
                             }
                             self.delegate?.storeKitManagerPurchaseCancel()
+                            
                         default:
                             self.alertManager.showBasicAlert(title: "Error", message: transaction.error?.localizedDescription ?? "Transaction did fail with an unknown error.")
                             print(transaction.error != nil ? "💰 ⛔️ DVNTStoreKitManager: Transaction did fail with error '\(transaction.error!.localizedDescription)'" : "💰 ⛔️ DVNTStoreKitManager: Transaction did fail with an unknown error.")
