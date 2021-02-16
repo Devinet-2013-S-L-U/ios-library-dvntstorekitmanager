@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
     
     s.name             = 'DVNTStoreKitManager'
-    s.version          = '1.0.22'
+    s.version          = '1.0.23'
     s.summary          = 'An amazing StoreKit wrapper.'
     s.description      = 'A wrapper to use StokeKit easily.'
     s.homepage         = 'https://www.devinet.es'
@@ -18,5 +18,5 @@ Pod::Spec.new do |s|
     s.exclude_files    = 'Sources/DVNTStoreKitManager/**/*.plist'
     
     s.dependency 'DVNTAlertManager', '~>1.1.12'
-    s.dependency 'SwiftyReceiptValidator', '~>6.1.8'
+    s.dependency 'SwiftyReceiptValidator', '~>6.1.9'
 end
