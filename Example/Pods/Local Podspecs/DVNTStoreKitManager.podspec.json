@@ -1,6 +1,6 @@
 {
   "name": "DVNTStoreKitManager",
-  "version": "1.0.20",
+  "version": "1.0.24",
   "summary": "An amazing StoreKit wrapper.",
   "description": "A wrapper to use StokeKit easily.",
   "homepage": "https://www.devinet.es",
@@ -26,7 +26,7 @@
   ],
   "source": {
     "git": "https://bitbucket.org/Devinet_Team/ios-library-dvntstorekitmanager.git",
-    "tag": "1.0.20"
+    "tag": "1.0.24"
   },
   "frameworks": [
     "UIKit",
@@ -36,10 +36,10 @@
   "exclude_files": "Sources/DVNTStoreKitManager/**/*.plist",
   "dependencies": {
     "DVNTAlertManager": [
-      "~>1.1.12"
+      "~>1.1.14"
     ],
     "SwiftyReceiptValidator": [
-      "~>6.1.8"
+      "~>6.1.9"
     ]
   },
   "swift_version": "5.2"

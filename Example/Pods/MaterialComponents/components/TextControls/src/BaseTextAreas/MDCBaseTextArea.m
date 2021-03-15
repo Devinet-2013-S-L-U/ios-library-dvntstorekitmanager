@@ -293,7 +293,7 @@ static const CGFloat kMDCBaseTextAreaDefaultMaximumNumberOfVisibleLines = (CGFlo
                                        textRowHeight:(self.normalFont.lineHeight +
                                                       self.normalFont.leading)
                                     numberOfTextRows:self.numberOfLinesOfVisibleText
-                                             density:0
+                                             density:self.verticalDensity
                             preferredContainerHeight:self.preferredContainerHeight
                               isMultilineTextControl:YES];
 }
@@ -398,14 +398,10 @@ static const CGFloat kMDCBaseTextAreaDefaultMaximumNumberOfVisibleLines = (CGFlo
 #pragma mark Dynamic Type
 
 - (void)setAdjustsFontForContentSizeCategory:(BOOL)adjustsFontForContentSizeCategory {
-  if (@available(iOS 10.0, *)) {
-    _adjustsFontForContentSizeCategory = adjustsFontForContentSizeCategory;
-    self.textView.adjustsFontForContentSizeCategory = adjustsFontForContentSizeCategory;
-    self.leadingAssistiveLabel.adjustsFontForContentSizeCategory =
-        adjustsFontForContentSizeCategory;
-    self.trailingAssistiveLabel.adjustsFontForContentSizeCategory =
-        adjustsFontForContentSizeCategory;
-  }
+  _adjustsFontForContentSizeCategory = adjustsFontForContentSizeCategory;
+  self.textView.adjustsFontForContentSizeCategory = adjustsFontForContentSizeCategory;
+  self.leadingAssistiveLabel.adjustsFontForContentSizeCategory = adjustsFontForContentSizeCategory;
+  self.trailingAssistiveLabel.adjustsFontForContentSizeCategory = adjustsFontForContentSizeCategory;
 }
 
 #pragma mark MDCTextControlState
@@ -535,6 +531,11 @@ static const CGFloat kMDCBaseTextAreaDefaultMaximumNumberOfVisibleLines = (CGFlo
 
 - (void)setPlaceholderColor:(UIColor *)placeholderColor {
   _placeholderColor = placeholderColor ?: [self defaultPlaceholderColor];
+}
+
+- (void)setVerticalDensity:(CGFloat)verticalDensity {
+  _verticalDensity = verticalDensity;
+  [self setNeedsLayout];
 }
 
 #pragma mark MDCTextControl Protocol Accessors
