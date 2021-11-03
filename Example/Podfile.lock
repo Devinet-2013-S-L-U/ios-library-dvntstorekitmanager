@@ -1,9 +1,9 @@
 PODS:
-  - DVNTAlertManager (1.2.4):
+  - DVNTAlertManager (1.2.5):
     - DVNTStringExtension (~> 1.0.6)
     - DVNTUIWindowExtension (~> 1.0.6)
-  - DVNTStoreKitManager (1.2.0):
-    - DVNTAlertManager (~> 1.2.4)
+  - DVNTStoreKitManager (1.2.3):
+    - DVNTAlertManager (~> 1.2.5)
     - SwiftyReceiptValidator (~> 6.4.0)
   - DVNTStringExtension (1.0.6)
   - DVNTUIWindowExtension (1.0.6)
@@ -25,12 +25,12 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  DVNTAlertManager: 9f599effbaf6ecad55fa93ef2b9385718ea97a46
-  DVNTStoreKitManager: 0c51725c48365c408f53cd908429f0ca0b19ac65
+  DVNTAlertManager: a2091f87c366301b09dcb9988f6ed61028b4ad50
+  DVNTStoreKitManager: 4e562720ec4855f8444e41c0ecc4142109d1e4db
   DVNTStringExtension: 55d7b68da9bd0b1aa00d80fc91a1d0c0ecb890e3
   DVNTUIWindowExtension: 9feb16327d7311a01998bb1e4aee7cfee6e8e8f0
   SwiftyReceiptValidator: b870775ccaf5369d3ae5afc97d3be7c646b4dd5f
 
-PODFILE CHECKSUM: dd6c45cadef80cc96414616d024aa4adb4129449
+PODFILE CHECKSUM: f592541133f444e56c27ecacfc481facddf3cd25
 
 COCOAPODS: 1.11.2

@@ -146,7 +146,7 @@
 		1D33B8D4E778759A5683E8CC85D3A7F2 /* PurchaseValidationRequest.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PurchaseValidationRequest.swift; path = Sources/Public/Models/Requests/PurchaseValidationRequest.swift; sourceTree = "<group>"; };
 		1E38BF3259C9AE14326479965FD9182D /* Pods-DVNTStoreKitManager_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-DVNTStoreKitManager_Example-dummy.m"; sourceTree = "<group>"; };
 		20FBBCDACB72E7C6C27AFCED1B432DA8 /* Pods-DVNTStoreKitManager_Example-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-DVNTStoreKitManager_Example-Info.plist"; sourceTree = "<group>"; };
-		259D186FE42B1E3E3212B7B5AC9185C6 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		259D186FE42B1E3E3212B7B5AC9185C6 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
 		25E5AF2F8E6E447F47CE1DE8D5DB7C8C /* DVNTUIWindowExtension-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "DVNTUIWindowExtension-prefix.pch"; sourceTree = "<group>"; };
 		27B7D0C14A5D960475C6779E49ADEAEA /* DVNTStoreKitManager.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = DVNTStoreKitManager.debug.xcconfig; sourceTree = "<group>"; };
 		2BC005312C8502A5AA7E08AC710F6114 /* DVNTAlertManager-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "DVNTAlertManager-prefix.pch"; sourceTree = "<group>"; };
@@ -179,14 +179,14 @@
 		716CF3E48BE6EBD6AC7720713C0AB2C6 /* PendingRenewalInfo+Mock.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "PendingRenewalInfo+Mock.swift"; path = "Sources/Public/Models/Mocks/PendingRenewalInfo+Mock.swift"; sourceTree = "<group>"; };
 		74BEDF7BAE19FA7A10DDE305CBC19EB3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		767E1CD3E3C4D003AB72CC53E2CB4BF8 /* DVNTStringExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = DVNTStringExtension.debug.xcconfig; sourceTree = "<group>"; };
-		86A20E25B11C2250FB6D496281A96343 /* DVNTStoreKitManager.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DVNTStoreKitManager.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		86A20E25B11C2250FB6D496281A96343 /* DVNTStoreKitManager */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = DVNTStoreKitManager; path = DVNTStoreKitManager.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8FC27CFB6014A61B0DD9750D8E480DB3 /* DVNTStoreKitManager-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "DVNTStoreKitManager-Info.plist"; sourceTree = "<group>"; };
-		9257DA070213F94361B8212FBBA033F7 /* DVNTAlertManager.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DVNTAlertManager.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9257DA070213F94361B8212FBBA033F7 /* DVNTAlertManager */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = DVNTAlertManager; path = DVNTAlertManager.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		93E3DCBC99982BDCB65A2605CE1E37BF /* ReceiptResponse.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ReceiptResponse.swift; path = Sources/Public/Models/Responses/ReceiptResponse.swift; sourceTree = "<group>"; };
 		942AFE161D205FED746D8168A73D214F /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/StoreKit.framework; sourceTree = DEVELOPER_DIR; };
 		99200BF3C4846A6EDA97642B379A4434 /* ReceiptResponse+Mock.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "ReceiptResponse+Mock.swift"; path = "Sources/Public/Models/Mocks/ReceiptResponse+Mock.swift"; sourceTree = "<group>"; };
-		9AC12CCEE54F9CC18526D5A85BD44459 /* Pods_DVNTStoreKitManager_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DVNTStoreKitManager_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9AC12CCEE54F9CC18526D5A85BD44459 /* Pods-DVNTStoreKitManager_Example */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-DVNTStoreKitManager_Example"; path = Pods_DVNTStoreKitManager_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9EB9E76BDC4EBF7D9B7EC658206AAD03 /* DVNTStringExtension-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "DVNTStringExtension-umbrella.h"; sourceTree = "<group>"; };
 		9F4CE038AD93259BDAF4081E59F42852 /* JSONDecoder+Receipt.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "JSONDecoder+Receipt.swift"; path = "Sources/Internal/JSONDecoder+Receipt.swift"; sourceTree = "<group>"; };
 		A55FA498E462E6E78E4DD9E44893D7D7 /* SubscriptionValidationRequest.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SubscriptionValidationRequest.swift; path = Sources/Public/Models/Requests/SubscriptionValidationRequest.swift; sourceTree = "<group>"; };
@@ -200,26 +200,26 @@
 		C093673B7439C64FFADAEDE8BCB5F80C /* Pods-DVNTStoreKitManager_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-DVNTStoreKitManager_Example-frameworks.sh"; sourceTree = "<group>"; };
 		C19CD51F75361452E01BB4328DFFE447 /* Configuration.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Configuration.swift; path = Sources/Public/Models/Configuration.swift; sourceTree = "<group>"; };
 		C44F6D2E58D8005B0429EB2782D205BC /* DVNTUIWindowExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = DVNTUIWindowExtension.release.xcconfig; sourceTree = "<group>"; };
-		C47EB46F3403D144A9D6D300BC4DABE9 /* DVNTUIWindowExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DVNTUIWindowExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C47EB46F3403D144A9D6D300BC4DABE9 /* DVNTUIWindowExtension */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = DVNTUIWindowExtension; path = DVNTUIWindowExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB0D3B66AB0E546F3297FD06A109934E /* DVNTAlertManager.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = DVNTAlertManager.release.xcconfig; sourceTree = "<group>"; };
 		CB5303690D182D803124E08EAE181A34 /* SwiftyReceiptValidator.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SwiftyReceiptValidator.release.xcconfig; sourceTree = "<group>"; };
 		CDB180758ED07820E4B15B8AAA460186 /* Localizable.strings */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = Localizable.strings; path = ca.lproj/Localizable.strings; sourceTree = "<group>"; };
 		CEBC1A8D5D648B8990DB37837531C8CF /* ResponseValidator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ResponseValidator.swift; path = Sources/Internal/ResponseValidator.swift; sourceTree = "<group>"; };
-		D114A36CEFD0783734DAFCE7C925B5A5 /* SwiftyReceiptValidator.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftyReceiptValidator.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D114A36CEFD0783734DAFCE7C925B5A5 /* SwiftyReceiptValidator */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SwiftyReceiptValidator; path = SwiftyReceiptValidator.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1D4F3B938FBBC739FC6150C5986FAB6 /* Pods-DVNTStoreKitManager_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-DVNTStoreKitManager_Example.modulemap"; sourceTree = "<group>"; };
 		D2B44225E7B5F8C22DD225D1D11E8E40 /* Localizable.strings */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = Localizable.strings; path = "es-419.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		D39183F5EB02BF8E914E93578B25B694 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		DBC42DEDAD07C961CD71A83BB3A29641 /* DVNTAlertManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DVNTAlertManager.swift; path = Sources/DVNTAlertManager/Classes/DVNTAlertManager.swift; sourceTree = "<group>"; };
 		DFC5725B7598478387CEC19B5DC5DB5F /* SubscriptionValidationResponse.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SubscriptionValidationResponse.swift; path = Sources/Public/Models/Responses/SubscriptionValidationResponse.swift; sourceTree = "<group>"; };
-		DFE427223DAD3B62406DE8247DFF332B /* DVNTStoreKitManager.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = DVNTStoreKitManager.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		DFE427223DAD3B62406DE8247DFF332B /* DVNTStoreKitManager.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = DVNTStoreKitManager.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		E054F493EF9BFE23BD4AC539DFF5166B /* Pods-DVNTStoreKitManager_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-DVNTStoreKitManager_Example-acknowledgements.plist"; sourceTree = "<group>"; };
 		E653D7BB93E510D596AB8BBC93DEE720 /* StatusCode.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StatusCode.swift; path = Sources/Public/Models/StatusCode.swift; sourceTree = "<group>"; };
 		E80BBBB9717C5E2823E85D056E3E9EF6 /* Localizable.strings */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = Localizable.strings; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		EB646D4C5748A3E467D70B87D9E4F2E3 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		EB646D4C5748A3E467D70B87D9E4F2E3 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
 		ED93B451ED10F6194D005F5B94E7E790 /* SubscriptionValidationResponse+Mock.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "SubscriptionValidationResponse+Mock.swift"; path = "Sources/Public/Models/Mocks/SubscriptionValidationResponse+Mock.swift"; sourceTree = "<group>"; };
 		EDB00F40D6FAC7C7C8D05083B9BB4770 /* Pods-DVNTStoreKitManager_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-DVNTStoreKitManager_Example-umbrella.h"; sourceTree = "<group>"; };
 		F42789B75D9F6A72B7BABBF4D93CF75C /* ReceiptURLFetcher.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ReceiptURLFetcher.swift; path = Sources/Internal/ReceiptURLFetcher.swift; sourceTree = "<group>"; };
-		F499BA28F349F15B75C37F9C610BBD4B /* DVNTStringExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DVNTStringExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F499BA28F349F15B75C37F9C610BBD4B /* DVNTStringExtension */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = DVNTStringExtension; path = DVNTStringExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F65A8C530922D6DD47403CF36376D443 /* SwiftyReceiptValidator.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SwiftyReceiptValidator.debug.xcconfig; sourceTree = "<group>"; };
 		F778BF0B05F93CFD875E12568401ED93 /* DVNTStringExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DVNTStringExtension.swift; path = Sources/DVNTStringExtension/Classes/DVNTStringExtension.swift; sourceTree = "<group>"; };
 		FA94E8339712365E0C2861F3E89177C1 /* DVNTAlertManager.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = DVNTAlertManager.debug.xcconfig; sourceTree = "<group>"; };
@@ -338,6 +338,7 @@
 				4A80BA1A9B9CBD72D1A71760875B30C6 /* Resources */,
 				4A714948BEB226C537E1A2DCDFE2B126 /* Support Files */,
 			);
+			name = DVNTAlertManager;
 			path = DVNTAlertManager;
 			sourceTree = "<group>";
 		};
@@ -371,6 +372,7 @@
 				176223733D2DE4DF32AAC54F5FE6D62B /* DVNTUIWindowExtension.swift */,
 				C095B1C25D9DA794310B8F7210454091 /* Support Files */,
 			);
+			name = DVNTUIWindowExtension;
 			path = DVNTUIWindowExtension;
 			sourceTree = "<group>";
 		};
@@ -434,6 +436,7 @@
 				0FA66912C2A7825EEBA94F00E3ABAA93 /* URLSessionManager.swift */,
 				7C1ACD08839FF6D750D7C8CB81E37EC8 /* Support Files */,
 			);
+			name = SwiftyReceiptValidator;
 			path = SwiftyReceiptValidator;
 			sourceTree = "<group>";
 		};
@@ -497,13 +500,13 @@
 		EB759D0B5A035F8A195E7672DC9CB8E7 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				9257DA070213F94361B8212FBBA033F7 /* DVNTAlertManager.framework */,
+				9257DA070213F94361B8212FBBA033F7 /* DVNTAlertManager */,
 				413B7402FDAF85CFD4C5D0AD2CFB17B9 /* DVNTAlertManager-DVNTAlertManagerResources */,
-				86A20E25B11C2250FB6D496281A96343 /* DVNTStoreKitManager.framework */,
-				F499BA28F349F15B75C37F9C610BBD4B /* DVNTStringExtension.framework */,
-				C47EB46F3403D144A9D6D300BC4DABE9 /* DVNTUIWindowExtension.framework */,
-				9AC12CCEE54F9CC18526D5A85BD44459 /* Pods_DVNTStoreKitManager_Example.framework */,
-				D114A36CEFD0783734DAFCE7C925B5A5 /* SwiftyReceiptValidator.framework */,
+				86A20E25B11C2250FB6D496281A96343 /* DVNTStoreKitManager */,
+				F499BA28F349F15B75C37F9C610BBD4B /* DVNTStringExtension */,
+				C47EB46F3403D144A9D6D300BC4DABE9 /* DVNTUIWindowExtension */,
+				9AC12CCEE54F9CC18526D5A85BD44459 /* Pods-DVNTStoreKitManager_Example */,
+				D114A36CEFD0783734DAFCE7C925B5A5 /* SwiftyReceiptValidator */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -529,6 +532,7 @@
 				F778BF0B05F93CFD875E12568401ED93 /* DVNTStringExtension.swift */,
 				EEA4C57D053426D77A322E548B942539 /* Support Files */,
 			);
+			name = DVNTStringExtension;
 			path = DVNTStringExtension;
 			sourceTree = "<group>";
 		};
@@ -624,7 +628,7 @@
 			);
 			name = DVNTAlertManager;
 			productName = DVNTAlertManager;
-			productReference = 9257DA070213F94361B8212FBBA033F7 /* DVNTAlertManager.framework */;
+			productReference = 9257DA070213F94361B8212FBBA033F7 /* DVNTAlertManager */;
 			productType = "com.apple.product-type.framework";
 		};
 		4D96E03F143E4250A289726CC8D22514 /* DVNTAlertManager-DVNTAlertManagerResources */ = {
@@ -664,7 +668,7 @@
 			);
 			name = "Pods-DVNTStoreKitManager_Example";
 			productName = Pods_DVNTStoreKitManager_Example;
-			productReference = 9AC12CCEE54F9CC18526D5A85BD44459 /* Pods_DVNTStoreKitManager_Example.framework */;
+			productReference = 9AC12CCEE54F9CC18526D5A85BD44459 /* Pods-DVNTStoreKitManager_Example */;
 			productType = "com.apple.product-type.framework";
 		};
 		953105EE8756F18C2A854DDFCBB2C2C4 /* DVNTStringExtension */ = {
@@ -682,7 +686,7 @@
 			);
 			name = DVNTStringExtension;
 			productName = DVNTStringExtension;
-			productReference = F499BA28F349F15B75C37F9C610BBD4B /* DVNTStringExtension.framework */;
+			productReference = F499BA28F349F15B75C37F9C610BBD4B /* DVNTStringExtension */;
 			productType = "com.apple.product-type.framework";
 		};
 		9F50EF2B5A7ED4D89607FB8BA2027554 /* DVNTUIWindowExtension */ = {
@@ -700,7 +704,7 @@
 			);
 			name = DVNTUIWindowExtension;
 			productName = DVNTUIWindowExtension;
-			productReference = C47EB46F3403D144A9D6D300BC4DABE9 /* DVNTUIWindowExtension.framework */;
+			productReference = C47EB46F3403D144A9D6D300BC4DABE9 /* DVNTUIWindowExtension */;
 			productType = "com.apple.product-type.framework";
 		};
 		BD7B9FC38139696C16901C096A6DFA6F /* SwiftyReceiptValidator */ = {
@@ -718,7 +722,7 @@
 			);
 			name = SwiftyReceiptValidator;
 			productName = SwiftyReceiptValidator;
-			productReference = D114A36CEFD0783734DAFCE7C925B5A5 /* SwiftyReceiptValidator.framework */;
+			productReference = D114A36CEFD0783734DAFCE7C925B5A5 /* SwiftyReceiptValidator */;
 			productType = "com.apple.product-type.framework";
 		};
 		D06687E5C7BA61869531F18BB904DDBE /* DVNTStoreKitManager */ = {
@@ -738,7 +742,7 @@
 			);
 			name = DVNTStoreKitManager;
 			productName = DVNTStoreKitManager;
-			productReference = 86A20E25B11C2250FB6D496281A96343 /* DVNTStoreKitManager.framework */;
+			productReference = 86A20E25B11C2250FB6D496281A96343 /* DVNTStoreKitManager */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -748,7 +752,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1240;
-				LastUpgradeCheck = 1310;
+				LastUpgradeCheck = 1240;
 			};
 			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -995,282 +999,14 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		004FF739B6DBBC272E8CCB304B8E1138 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = CB0D3B66AB0E546F3297FD06A109934E /* DVNTAlertManager.release.xcconfig */;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/DVNTAlertManager/DVNTAlertManager-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/DVNTAlertManager/DVNTAlertManager-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/DVNTAlertManager/DVNTAlertManager.modulemap";
-				PRODUCT_MODULE_NAME = DVNTAlertManager;
-				PRODUCT_NAME = DVNTAlertManager;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.5;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		4B49F52A323A50421D2276FACA36FD16 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = FA94E8339712365E0C2861F3E89177C1 /* DVNTAlertManager.debug.xcconfig */;
-			buildSettings = {
-				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/DVNTAlertManager";
-				IBSC_MODULE = DVNTAlertManager;
-				INFOPLIST_FILE = "Target Support Files/DVNTAlertManager/ResourceBundle-DVNTAlertManagerResources-DVNTAlertManager-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
-				PRODUCT_NAME = DVNTAlertManagerResources;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				WRAPPER_EXTENSION = bundle;
-			};
-			name = Debug;
-		};
-		4F456A5C70F944CF1C4B4A64E0E41F5E /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = F65A8C530922D6DD47403CF36376D443 /* SwiftyReceiptValidator.debug.xcconfig */;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/SwiftyReceiptValidator/SwiftyReceiptValidator-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/SwiftyReceiptValidator/SwiftyReceiptValidator-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/SwiftyReceiptValidator/SwiftyReceiptValidator.modulemap";
-				PRODUCT_MODULE_NAME = SwiftyReceiptValidator;
-				PRODUCT_NAME = SwiftyReceiptValidator;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		8CC7F173B05A6F4006A2EEC4FC8DE60E /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 33ACAA72C44BBF536536A01C25481D66 /* DVNTStoreKitManager.release.xcconfig */;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/DVNTStoreKitManager/DVNTStoreKitManager-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/DVNTStoreKitManager/DVNTStoreKitManager-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/DVNTStoreKitManager/DVNTStoreKitManager.modulemap";
-				PRODUCT_MODULE_NAME = DVNTStoreKitManager;
-				PRODUCT_NAME = DVNTStoreKitManager;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.5;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		995E540EFB279DFA68B5B1E216C68C36 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 67132E76F9739E77E5B5FC987735520E /* Pods-DVNTStoreKitManager_Example.debug.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-DVNTStoreKitManager_Example/Pods-DVNTStoreKitManager_Example-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-DVNTStoreKitManager_Example/Pods-DVNTStoreKitManager_Example.modulemap";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		9F7101B18EA9F4EDFF15A0778005CFE6 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 27B7D0C14A5D960475C6779E49ADEAEA /* DVNTStoreKitManager.debug.xcconfig */;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/DVNTStoreKitManager/DVNTStoreKitManager-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/DVNTStoreKitManager/DVNTStoreKitManager-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/DVNTStoreKitManager/DVNTStoreKitManager.modulemap";
-				PRODUCT_MODULE_NAME = DVNTStoreKitManager;
-				PRODUCT_NAME = DVNTStoreKitManager;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.5;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		A674E06DEB22F3D03080747582366119 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = AA0A9D23A73C59C1FC33A72622532E19 /* DVNTUIWindowExtension.debug.xcconfig */;
-			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/DVNTUIWindowExtension/DVNTUIWindowExtension-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/DVNTUIWindowExtension/DVNTUIWindowExtension-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/DVNTUIWindowExtension/DVNTUIWindowExtension.modulemap";
-				PRODUCT_MODULE_NAME = DVNTUIWindowExtension;
-				PRODUCT_NAME = DVNTUIWindowExtension;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		AA86456BCB0449F6D7617820B4A96B9B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = FA94E8339712365E0C2861F3E89177C1 /* DVNTAlertManager.debug.xcconfig */;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/DVNTAlertManager/DVNTAlertManager-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/DVNTAlertManager/DVNTAlertManager-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/DVNTAlertManager/DVNTAlertManager.modulemap";
-				PRODUCT_MODULE_NAME = DVNTAlertManager;
-				PRODUCT_NAME = DVNTAlertManager;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.5;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		AF74CF5766519399803D4AE9D190F06E /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = CB5303690D182D803124E08EAE181A34 /* SwiftyReceiptValidator.release.xcconfig */;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/SwiftyReceiptValidator/SwiftyReceiptValidator-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/SwiftyReceiptValidator/SwiftyReceiptValidator-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/SwiftyReceiptValidator/SwiftyReceiptValidator.modulemap";
-				PRODUCT_MODULE_NAME = SwiftyReceiptValidator;
-				PRODUCT_NAME = SwiftyReceiptValidator;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		AF90AE925DC71A42DA601BF5109BFB12 /* Release */ = {
+		1C9AA23CBF4293F58D0CAF42405D30BA /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = CB0D3B66AB0E546F3297FD06A109934E /* DVNTAlertManager.release.xcconfig */;
 			buildSettings = {
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/DVNTAlertManager";
 				IBSC_MODULE = DVNTAlertManager;
 				INFOPLIST_FILE = "Target Support Files/DVNTAlertManager/ResourceBundle-DVNTAlertManagerResources-DVNTAlertManager-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				PRODUCT_NAME = DVNTAlertManagerResources;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -1279,7 +1015,7 @@
 			};
 			name = Release;
 		};
-		BC01E0B73776AF6B58DC318A9BE988D7 /* Debug */ = {
+		2B9E26EAE2CD392AD762421F663075A1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1332,7 +1068,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1345,41 +1081,12 @@
 			};
 			name = Debug;
 		};
-		BD361F810071A2580380275674036D13 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 767E1CD3E3C4D003AB72CC53E2CB4BF8 /* DVNTStringExtension.debug.xcconfig */;
-			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/DVNTStringExtension/DVNTStringExtension-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/DVNTStringExtension/DVNTStringExtension-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/DVNTStringExtension/DVNTStringExtension.modulemap";
-				PRODUCT_MODULE_NAME = DVNTStringExtension;
-				PRODUCT_NAME = DVNTStringExtension;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		C19D6D79A6C2F5E750085A913CE1EDF5 /* Release */ = {
+		3D8D38B58F3B25CF355F5953DE07B230 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2FE91DA9F06A77A8C802E3F1DE0C5978 /* Pods-DVNTStoreKitManager_Example.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -1391,7 +1098,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "Target Support Files/Pods-DVNTStoreKitManager_Example/Pods-DVNTStoreKitManager_Example-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/Pods-DVNTStoreKitManager_Example/Pods-DVNTStoreKitManager_Example.modulemap";
@@ -1409,7 +1116,104 @@
 			};
 			name = Release;
 		};
-		C605C363CC9F26F9FF97DBB1D5C6E25C /* Release */ = {
+		47C76CFBDBCC17090AC86D0F14A5E42A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = FA94E8339712365E0C2861F3E89177C1 /* DVNTAlertManager.debug.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/DVNTAlertManager/DVNTAlertManager-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/DVNTAlertManager/DVNTAlertManager-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/DVNTAlertManager/DVNTAlertManager.modulemap";
+				PRODUCT_MODULE_NAME = DVNTAlertManager;
+				PRODUCT_NAME = DVNTAlertManager;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.5;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		4F456A5C70F944CF1C4B4A64E0E41F5E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F65A8C530922D6DD47403CF36376D443 /* SwiftyReceiptValidator.debug.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/SwiftyReceiptValidator/SwiftyReceiptValidator-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/SwiftyReceiptValidator/SwiftyReceiptValidator-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/SwiftyReceiptValidator/SwiftyReceiptValidator.modulemap";
+				PRODUCT_MODULE_NAME = SwiftyReceiptValidator;
+				PRODUCT_NAME = SwiftyReceiptValidator;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		58F44CA0F7CEEB2109F27582C2F63BD1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 33ACAA72C44BBF536536A01C25481D66 /* DVNTStoreKitManager.release.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/DVNTStoreKitManager/DVNTStoreKitManager-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/DVNTStoreKitManager/DVNTStoreKitManager-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/DVNTStoreKitManager/DVNTStoreKitManager.modulemap";
+				PRODUCT_MODULE_NAME = DVNTStoreKitManager;
+				PRODUCT_NAME = DVNTStoreKitManager;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.5;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		63FAF33E1C55B71A5F5A8B3CC8749F99 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1459,21 +1263,90 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				SYMROOT = "${SRCROOT}/../build";
 			};
 			name = Release;
 		};
-		E9E2E8F7ECA189A8DFBE437CED77622B /* Release */ = {
+		7419CD274C37E8C0D3242909A0F013E9 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C44F6D2E58D8005B0429EB2782D205BC /* DVNTUIWindowExtension.release.xcconfig */;
+			baseConfigurationReference = CB0D3B66AB0E546F3297FD06A109934E /* DVNTAlertManager.release.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/DVNTAlertManager/DVNTAlertManager-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/DVNTAlertManager/DVNTAlertManager-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/DVNTAlertManager/DVNTAlertManager.modulemap";
+				PRODUCT_MODULE_NAME = DVNTAlertManager;
+				PRODUCT_NAME = DVNTAlertManager;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.5;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		8C369357717FDBDF376CF18781C59025 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 67132E76F9739E77E5B5FC987735520E /* Pods-DVNTStoreKitManager_Example.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-DVNTStoreKitManager_Example/Pods-DVNTStoreKitManager_Example-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-DVNTStoreKitManager_Example/Pods-DVNTStoreKitManager_Example.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		A674E06DEB22F3D03080747582366119 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = AA0A9D23A73C59C1FC33A72622532E19 /* DVNTUIWindowExtension.debug.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
@@ -1485,7 +1358,150 @@
 				GCC_PREFIX_HEADER = "Target Support Files/DVNTUIWindowExtension/DVNTUIWindowExtension-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/DVNTUIWindowExtension/DVNTUIWindowExtension-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/DVNTUIWindowExtension/DVNTUIWindowExtension.modulemap";
+				PRODUCT_MODULE_NAME = DVNTUIWindowExtension;
+				PRODUCT_NAME = DVNTUIWindowExtension;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		AF74CF5766519399803D4AE9D190F06E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = CB5303690D182D803124E08EAE181A34 /* SwiftyReceiptValidator.release.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/SwiftyReceiptValidator/SwiftyReceiptValidator-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/SwiftyReceiptValidator/SwiftyReceiptValidator-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/SwiftyReceiptValidator/SwiftyReceiptValidator.modulemap";
+				PRODUCT_MODULE_NAME = SwiftyReceiptValidator;
+				PRODUCT_NAME = SwiftyReceiptValidator;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		B9583F6B42877CB7A538FD0B1B55962B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = FA94E8339712365E0C2861F3E89177C1 /* DVNTAlertManager.debug.xcconfig */;
+			buildSettings = {
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/DVNTAlertManager";
+				IBSC_MODULE = DVNTAlertManager;
+				INFOPLIST_FILE = "Target Support Files/DVNTAlertManager/ResourceBundle-DVNTAlertManagerResources-DVNTAlertManager-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				PRODUCT_NAME = DVNTAlertManagerResources;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		BD361F810071A2580380275674036D13 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 767E1CD3E3C4D003AB72CC53E2CB4BF8 /* DVNTStringExtension.debug.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/DVNTStringExtension/DVNTStringExtension-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/DVNTStringExtension/DVNTStringExtension-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/DVNTStringExtension/DVNTStringExtension.modulemap";
+				PRODUCT_MODULE_NAME = DVNTStringExtension;
+				PRODUCT_NAME = DVNTStringExtension;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		BE6737AB43849C92A3001F29BD7A0AD3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 27B7D0C14A5D960475C6779E49ADEAEA /* DVNTStoreKitManager.debug.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/DVNTStoreKitManager/DVNTStoreKitManager-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/DVNTStoreKitManager/DVNTStoreKitManager-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/DVNTStoreKitManager/DVNTStoreKitManager.modulemap";
+				PRODUCT_MODULE_NAME = DVNTStoreKitManager;
+				PRODUCT_NAME = DVNTStoreKitManager;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.5;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		E9E2E8F7ECA189A8DFBE437CED77622B /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C44F6D2E58D8005B0429EB2782D205BC /* DVNTUIWindowExtension.release.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/DVNTUIWindowExtension/DVNTUIWindowExtension-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/DVNTUIWindowExtension/DVNTUIWindowExtension-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/DVNTUIWindowExtension/DVNTUIWindowExtension.modulemap";
 				PRODUCT_MODULE_NAME = DVNTUIWindowExtension;
@@ -1505,6 +1521,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 430652120A6F58BCC58B2574DAB5C74C /* DVNTStringExtension.release.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
@@ -1516,7 +1533,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/DVNTStringExtension/DVNTStringExtension-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/DVNTStringExtension/DVNTStringExtension-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/DVNTStringExtension/DVNTStringExtension.modulemap";
 				PRODUCT_MODULE_NAME = DVNTStringExtension;
@@ -1547,8 +1564,8 @@
 		4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				BC01E0B73776AF6B58DC318A9BE988D7 /* Debug */,
-				C605C363CC9F26F9FF97DBB1D5C6E25C /* Release */,
+				2B9E26EAE2CD392AD762421F663075A1 /* Debug */,
+				63FAF33E1C55B71A5F5A8B3CC8749F99 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1556,8 +1573,8 @@
 		5D5CAAB4534FC57E2F090B38AB9E4E06 /* Build configuration list for PBXNativeTarget "DVNTAlertManager-DVNTAlertManagerResources" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				4B49F52A323A50421D2276FACA36FD16 /* Debug */,
-				AF90AE925DC71A42DA601BF5109BFB12 /* Release */,
+				B9583F6B42877CB7A538FD0B1B55962B /* Debug */,
+				1C9AA23CBF4293F58D0CAF42405D30BA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1565,8 +1582,8 @@
 		5FA4E9CF988893A9192C8A202B5B263D /* Build configuration list for PBXNativeTarget "DVNTStoreKitManager" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				9F7101B18EA9F4EDFF15A0778005CFE6 /* Debug */,
-				8CC7F173B05A6F4006A2EEC4FC8DE60E /* Release */,
+				BE6737AB43849C92A3001F29BD7A0AD3 /* Debug */,
+				58F44CA0F7CEEB2109F27582C2F63BD1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1574,8 +1591,8 @@
 		B7889C1A9ECEAB938B05D85ACF281912 /* Build configuration list for PBXNativeTarget "Pods-DVNTStoreKitManager_Example" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				995E540EFB279DFA68B5B1E216C68C36 /* Debug */,
-				C19D6D79A6C2F5E750085A913CE1EDF5 /* Release */,
+				8C369357717FDBDF376CF18781C59025 /* Debug */,
+				3D8D38B58F3B25CF355F5953DE07B230 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1583,8 +1600,8 @@
 		C3026F477CE950392FCF454F21ECB1BA /* Build configuration list for PBXNativeTarget "DVNTAlertManager" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				AA86456BCB0449F6D7617820B4A96B9B /* Debug */,
-				004FF739B6DBBC272E8CCB304B8E1138 /* Release */,
+				47C76CFBDBCC17090AC86D0F14A5E42A /* Debug */,
+				7419CD274C37E8C0D3242909A0F013E9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
