@@ -7,7 +7,7 @@ let package = Package(
     name: "DVNTStoreKitManager",
     platforms: [
         .macOS(.v10_12),
-        .iOS(.v11),
+        .iOS(.v12),
         .watchOS(.v3)
     ],
     products: [
