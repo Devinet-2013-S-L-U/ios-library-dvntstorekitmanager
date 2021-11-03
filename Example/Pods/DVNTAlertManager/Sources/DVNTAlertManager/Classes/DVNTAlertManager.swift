@@ -6,15 +6,13 @@
 //  Copyright © 2019 Devinet 2013, S.L.U. All rights reserved.
 //
 
+import UIKit
 import DVNTStringExtension
 import DVNTUIWindowExtension
-import MaterialComponents.MaterialDialogs
-import MaterialComponents.MaterialActivityIndicator
 
 public enum AlertStyleType
 {
     case iOS
-    case Android
 }
 
 public class DVNTAlertManager
@@ -44,15 +42,8 @@ public class DVNTAlertManager
         self.baseColor = color
         
         if let loadingView = self.loadingView {
-            if self.alertStyle == .Android {
-                for view in loadingView.subviews {
-                    if view is MDCActivityIndicator {
-                        let activityIndicator = view as! MDCActivityIndicator
-                        activityIndicator.cycleColors = [color, self.inkColor]
-                        break
-                    }
-                }
-            }else{
+            switch self.alertStyle {
+            case .iOS:
                 for view in loadingView.subviews {
                     if view is UIActivityIndicatorView {
                         let activityIndicator = view as! UIActivityIndicatorView
@@ -67,16 +58,6 @@ public class DVNTAlertManager
     public func setInkColor(_ color: UIColor)
     {
         self.inkColor = color
-        
-        if let loadingView = self.loadingView, self.alertStyle == .Android {
-            for view in loadingView.subviews {
-                if view is MDCActivityIndicator {
-                    let activityIndicator = view as! MDCActivityIndicator
-                    activityIndicator.cycleColors = [self.baseColor, self.inkColor]
-                    break
-                }
-            }
-        }
     }
     
     public func setLoadingViewBackgroundColor(_ color: UIColor)
@@ -94,7 +75,7 @@ public class DVNTAlertManager
     {
         if !self.isShowingLoadingView {
             DispatchQueue.main.async {
-                if let keyWindow = UIApplication.shared.keyWindow {
+                if let keyWindow = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
                     keyWindow.getVisibleViewController(completed: {(currentViewController) -> Void in
                         if let currentViewController = currentViewController {
                             if self.loadingView == nil {
@@ -107,24 +88,8 @@ public class DVNTAlertManager
                             }
                             
                             if let loadingView = self.loadingView {
-                                if self.alertStyle == .Android {
-                                    var found = false
-                                    for view in loadingView.subviews {
-                                        if view is MDCActivityIndicator {
-                                            let activityIndicator = view as! MDCActivityIndicator
-                                            activityIndicator.startAnimating()
-                                            found = true
-                                            break
-                                        }
-                                    }
-                                    if !found {
-                                        let activityIndicator = MDCActivityIndicator()
-                                        activityIndicator.cycleColors = [self.baseColor, self.inkColor]
-                                        activityIndicator.frame = CGRect(x: ((loadingView.frame.width / 2) - (activityIndicator.frame.width / 2)), y: ((loadingView.frame.height / 2) - (activityIndicator.frame.height / 2)), width: activityIndicator.frame.width, height: activityIndicator.frame.height)
-                                        loadingView.addSubview(activityIndicator)
-                                        activityIndicator.startAnimating()
-                                    }
-                                }else{
+                                switch self.alertStyle {
+                                case .iOS:
                                     var found = false
                                     for view in loadingView.subviews {
                                         if view is UIActivityIndicatorView {
@@ -135,7 +100,12 @@ public class DVNTAlertManager
                                         }
                                     }
                                     if !found {
-                                        let activityIndicator = UIActivityIndicatorView(style: .whiteLarge)
+                                        var activityIndicator: UIActivityIndicatorView!
+                                        if #available(iOS 13.0, *) {
+                                            activityIndicator = UIActivityIndicatorView(style: .large)
+                                        } else {
+                                            activityIndicator = UIActivityIndicatorView(style: .whiteLarge)
+                                        }
                                         activityIndicator.color = self.baseColor
                                         activityIndicator.frame = CGRect(x: ((loadingView.frame.width / 2) - (activityIndicator.frame.width / 2)), y: ((loadingView.frame.height / 2) - (activityIndicator.frame.height / 2)), width: activityIndicator.frame.width, height: activityIndicator.frame.height)
                                         loadingView.addSubview(activityIndicator)
@@ -158,16 +128,9 @@ public class DVNTAlertManager
     {
         if self.isShowingLoadingView {
             DispatchQueue.main.async {
-                if let keyWindow = UIApplication.shared.keyWindow, let loadingView = self.loadingView {
-                    if self.alertStyle == .Android {
-                        for view in loadingView.subviews {
-                            if view is MDCActivityIndicator {
-                                let activityIndicator = view as! MDCActivityIndicator
-                                activityIndicator.stopAnimating()
-                                break
-                            }
-                        }
-                    }else{
+                if let keyWindow = UIApplication.shared.windows.first(where: { $0.isKeyWindow }), let loadingView = self.loadingView {
+                    switch self.alertStyle {
+                    case .iOS:
                         for view in loadingView.subviews {
                             if view is UIActivityIndicatorView {
                                 let activityIndicator = view as! UIActivityIndicatorView
@@ -187,17 +150,11 @@ public class DVNTAlertManager
     public func showBasicAlert(title: String, message: String)
     {
         DispatchQueue.main.async {
-            if let keyWindow = UIApplication.shared.keyWindow {
+            if let keyWindow = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
                 keyWindow.getVisibleViewController(completed: {(currentViewController) -> Void in
                     if let currentViewController = currentViewController {
-                        if self.alertStyle == .Android {
-                            let alertController = MDCAlertController(title: title, message: message)
-                            alertController.buttonTitleColor = self.baseColor
-                            alertController.buttonInkColor = self.inkColor
-                            let buttonText = String.localize("general_ok", fromClass: DVNTAlertManager.self, forResource: "DVNTAlertManagerResources", ofType: "bundle").capitalized
-                            alertController.addAction(MDCAlertAction(title:buttonText))
-                            currentViewController.present(alertController, animated: true, completion: nil)
-                        }else{
+                        switch self.alertStyle {
+                        case .iOS:
                             let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
                             let buttonText = String.localize("general_ok", fromClass: DVNTAlertManager.self, forResource: "DVNTAlertManagerResources", ofType: "bundle").capitalized
                             alertController.addAction(UIAlertAction(title: buttonText, style: .default))
@@ -212,17 +169,11 @@ public class DVNTAlertManager
     public func showBasicAlertWithAction(title: String, message: String, buttonTouched: @escaping (Int) -> Void)
     {
         DispatchQueue.main.async {
-            if let keyWindow = UIApplication.shared.keyWindow {
+            if let keyWindow = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
                 keyWindow.getVisibleViewController(completed: {(currentViewController) -> Void in
                     if let currentViewController = currentViewController {
-                        if self.alertStyle == .Android {
-                            let alertController = MDCAlertController(title: title, message: message)
-                            alertController.buttonTitleColor = self.baseColor
-                            alertController.buttonInkColor = self.inkColor
-                            let buttonText = String.localize("general_ok", fromClass: DVNTAlertManager.self, forResource: "DVNTAlertManagerResources", ofType: "bundle").capitalized
-                            alertController.addAction(MDCAlertAction(title: buttonText) { (action) in buttonTouched(0) })
-                            currentViewController.present(alertController, animated: true, completion: nil)
-                        }else{
+                        switch self.alertStyle {
+                        case .iOS:
                             let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
                             let buttonText = String.localize("general_ok", fromClass: DVNTAlertManager.self, forResource: "DVNTAlertManagerResources", ofType: "bundle").capitalized
                             alertController.addAction(UIAlertAction(title: buttonText, style: .default) { (action) in buttonTouched(0) })
@@ -237,17 +188,11 @@ public class DVNTAlertManager
     public func showAlertWithTwoOptions(title: String, message: String, buttonActionText: String, cancelButtonText: String, buttonTouched: @escaping (Int) -> Void)
     {
         DispatchQueue.main.async {
-            if let keyWindow = UIApplication.shared.keyWindow {
+            if let keyWindow = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
                 keyWindow.getVisibleViewController(completed: {(currentViewController) -> Void in
                     if let currentViewController = currentViewController {
-                        if self.alertStyle == .Android {
-                            let alertController = MDCAlertController(title: title, message: message)
-                            alertController.buttonTitleColor = self.baseColor
-                            alertController.buttonInkColor = self.inkColor
-                            alertController.addAction(MDCAlertAction(title: buttonActionText) { (action) in buttonTouched(0) })
-                            alertController.addAction(MDCAlertAction(title: cancelButtonText) { (action) in buttonTouched(1) })
-                            currentViewController.present(alertController, animated: true, completion: nil)
-                        }else{
+                        switch self.alertStyle {
+                        case .iOS:
                             let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
                             alertController.addAction(UIAlertAction(title: buttonActionText, style: .destructive) { (action) in buttonTouched(0) })
                             alertController.addAction(UIAlertAction(title: cancelButtonText, style: .default) { (action) in buttonTouched(1) })
@@ -262,18 +207,11 @@ public class DVNTAlertManager
     public func showAlertWithThreeOptions(title: String, message: String, buttonActionText: String, buttonAction2Text: String, cancelButtonText: String, buttonTouched: @escaping (Int) -> Void)
     {
         DispatchQueue.main.async {
-            if let keyWindow = UIApplication.shared.keyWindow {
+            if let keyWindow = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
                 keyWindow.getVisibleViewController(completed: {(currentViewController) -> Void in
                     if let currentViewController = currentViewController {
-                        if self.alertStyle == .Android {
-                            let alertController = MDCAlertController(title: title, message: message)
-                            alertController.buttonTitleColor = self.baseColor
-                            alertController.buttonInkColor = self.inkColor
-                            alertController.addAction(MDCAlertAction(title: buttonActionText) { (action) in buttonTouched(0) })
-                            alertController.addAction(MDCAlertAction(title: buttonAction2Text) { (action) in buttonTouched(1) })
-                            alertController.addAction(MDCAlertAction(title: cancelButtonText) { (action) in buttonTouched(2) })
-                            currentViewController.present(alertController, animated: true, completion: nil)
-                        }else{
+                        switch self.alertStyle {
+                        case .iOS:
                             let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
                             alertController.addAction(UIAlertAction(title: buttonActionText, style: .default) { (action) in buttonTouched(0) })
                             alertController.addAction(UIAlertAction(title: buttonAction2Text, style: .default) { (action) in buttonTouched(1) })
@@ -289,7 +227,7 @@ public class DVNTAlertManager
     public func showAlertWithTextField(title: String, message: String, textFieldPlaceholder: String, buttonActionText: String, cancelButtonText: String, buttonTouched: @escaping (Int, String?) -> Void)
     {
         DispatchQueue.main.async {
-            if let keyWindow = UIApplication.shared.keyWindow {
+            if let keyWindow = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
                 keyWindow.getVisibleViewController(completed: {(currentViewController) -> Void in
                     if let currentViewController = currentViewController {
                         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)

@@ -35,13 +35,22 @@ import Combine
 import StoreKit
 
 public protocol SwiftyReceiptValidatorType {
+    func validate(_ request: SRVPurchaseValidationRequest, handler: @escaping (Result<SRVReceiptResponse, SRVError>) -> Void)
+    func validate(_ request: SRVSubscriptionValidationRequest, handler: @escaping (Result<SRVSubscriptionValidationResponse, SRVError>) -> Void)
+    
     @available(iOS 13, tvOS 13, macOS 10.15, *)
     func validatePublisher(for request: SRVPurchaseValidationRequest) -> AnyPublisher<SRVReceiptResponse, SRVError>
-    func validate(_ request: SRVPurchaseValidationRequest, handler: @escaping (Result<SRVReceiptResponse, SRVError>) -> Void)
 
     @available(iOS 13, tvOS 13, macOS 10.15, *)
     func validatePublisher(for request: SRVSubscriptionValidationRequest) -> AnyPublisher<SRVSubscriptionValidationResponse, SRVError>
-    func validate(_ request: SRVSubscriptionValidationRequest, handler: @escaping (Result<SRVSubscriptionValidationResponse, SRVError>) -> Void)
+    
+    #if os(iOS) || os(tvOS) // macOS currently does not support API to convert closures to async/await.
+    @available(iOS 15, tvOS 15, *)
+    func validate(_ request: SRVPurchaseValidationRequest) async throws -> SRVReceiptResponse
+
+    @available(iOS 15, tvOS 15, *)
+    func validate(_ request: SRVSubscriptionValidationRequest) async throws -> SRVSubscriptionValidationResponse
+    #endif
 }
 
 /*
@@ -111,11 +120,34 @@ extension SwiftyReceiptValidator: SwiftyReceiptValidatorType {
     /// - parameter request: The request configuration.
     @available(iOS 13, tvOS 13, macOS 10.15, *)
     public func validatePublisher(for request: SRVPurchaseValidationRequest) -> AnyPublisher<SRVReceiptResponse, SRVError> {
-        Future { [weak self] promise in
-            self?.validate(request, handler: promise)
+        Deferred {
+            Future { [weak self] promise in
+                self?.validate(request, handler: promise)
+            }
         }.eraseToAnyPublisher()
     }
-
+    
+    #if os(iOS) || os(tvOS)
+    /// Validate app store purchase (async/await)
+    ///
+    /// - parameter request: The request configuration.
+    /// - returns: The SRVReceiptResponse if no error thrown.
+    @available(iOS 15, tvOS 15, *)
+    public func validate(_ request: SRVPurchaseValidationRequest) async throws -> SRVReceiptResponse {
+        try await withCheckedThrowingContinuation { [weak self] continuation in
+            guard let self = self else { return }
+            self.validate(request) { result in
+                switch result {
+                case .success(let response):
+                    continuation.resume(returning: response)
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
+    #endif
+    
     /// Validate app store purchase
     ///
     /// - parameter request: The request configuration.
@@ -147,11 +179,34 @@ extension SwiftyReceiptValidator: SwiftyReceiptValidatorType {
     /// - parameter request: The request configuration.
     @available(iOS 13, tvOS 13, macOS 10.15, *)
     public func validatePublisher(for request: SRVSubscriptionValidationRequest) -> AnyPublisher<SRVSubscriptionValidationResponse, SRVError> {
-        Future { [weak self] promise in
-             self?.validate(request, handler: promise)
-         }.eraseToAnyPublisher()
+        Deferred {
+            Future { [weak self] promise in
+                self?.validate(request, handler: promise)
+            }
+        }.eraseToAnyPublisher()
      }
-
+    
+    #if os(iOS) || os(tvOS)
+    /// Validate app store subscription (async/await)
+    ///
+    /// - parameter request: The request configuration.
+    /// - returns: The SRVSubscriptionValidationResponse if no error thrown.
+    @available(iOS 15, tvOS 15, *)
+    public func validate(_ request: SRVSubscriptionValidationRequest) async throws -> SRVSubscriptionValidationResponse {
+        try await withCheckedThrowingContinuation { [weak self] continuation in
+            guard let self = self else { return }
+            self.validate(request) { result in
+                switch result {
+                case .success(let response):
+                    continuation.resume(returning: response)
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
+    #endif
+    
     /// Validate app store subscription
     ///
     /// - parameter request: The request configuration.

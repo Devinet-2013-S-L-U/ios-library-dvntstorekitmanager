@@ -1,10 +1,20 @@
-# Swifty Receipt Validator
-
 [![Swift 5.0](https://img.shields.io/badge/swift-5.0-ED523F.svg?style=flat)](https://swift.org/download/)
 [![Platform](https://img.shields.io/cocoapods/p/SwiftyReceiptValidator.svg?style=flat)]()
+[![SPM supported](https://img.shields.io/badge/SPM-supported-DE5C43.svg?style=flat)](https://swift.org/package-manager)
 [![CocoaPods Compatible](https://img.shields.io/cocoapods/v/SwiftyReceiptValidator.svg)](https://img.shields.io/cocoapods/v/SwiftyReceiptValidator.svg)
 
-A swift helper to handle app store receipt validation.
+# SwiftyReceiptValidator
+
+A Swift library to handle App Store receipt validation.
+
+- [Before you go live](#before-you-go-live)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Testing](#testing)
+- [StoreKit Alert Controllers](#storeKit-alert-controllers)
+- [Final Note](#final-note)
+- [License](#license)
 
 ## Before you go live
 
@@ -14,7 +24,7 @@ Please test this properly, including production mode which will use apples produ
 
 ## Requirements
 
-- iOS 11.4+
+- iOS 12.0+
 - Swift 5.0+
 
 ## Installation
@@ -43,11 +53,11 @@ pod 'SwiftyReceiptValidator'
 
 ### Manually 
 
-Altenatively you can drag the `Sources` folder and its containing files into your project.
+Alternatively you can drag the `Sources` folder and its containing files into your project.
 
 ## Usage
 
-### Add import (if using cocoaPods or SwiftPackageManager)
+### Add import (if using CocoaPods or SwiftPackageManager)
 
 - Add the import statement to your swift file(s) when you installed via SwiftPackageManager or CocoaPods
 
@@ -84,7 +94,7 @@ Your own webserver would than send the received response to apples servers for v
 - `https://buy.itunes.apple.com/verifyReceipt`
 - `https://sandbox.itunes.apple.com/verifyReceipt`
 
-and handle the response
+and handle the response and then send it back to the iOS app for final validation.
 
 - Standard Configuration (Not Recommended)
 
@@ -106,7 +116,6 @@ class SomeClass {
 
 ```swift
 extension SomeClass: SKPaymentTransactionObserver {
-
     func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         transactions.forEach { transaction in
             switch transaction.transactionState {
@@ -156,11 +165,22 @@ Note: There is also `Combine` support for this method if you are targeting iOS 1
 let cancellable = receiptValidator
     .validatePublisher(for: validationRequest)
     .map { response in
-        // handle response
+        print(response)
     }
     .mapError { error in
-        // handle error
+        print(error)
     }
+```
+
+Note: There is also `async/await` support for this method if you are targeting iOS 15 and above.
+
+```swift
+do {
+    let response = try await receiptValidator.validate(validationRequest)
+    print(response)
+} catch {
+    print(error)
+}
 ```
 
 ### Validate Subscriptions
@@ -187,7 +207,7 @@ receiptValidator.validate(validationRequest) { result in
         if response.validSubscriptionReceipts.isEmpty {
            // disable subscription features etc
         } else {
-           // Validate subscription receipts are sorted by latest expiry date
+           // Valid subscription receipts are sorted by latest expiry date
            // enable subscription features etc
         }
         
@@ -212,21 +232,32 @@ Setting `refreshLocalReceiptIfNeeded` to `true` will create a `SKReceiptRefreshR
 
 I would recommend to always set this flag to `false` for the following reasons.
 1. Creating a `SKReceiptRefreshRequest` will always show an iTunes password prompt which might not be wanted in your apps flow.
-2. When you call this at app launch you can handle the return `SRVError.noReceiptFoundInBundle` error discretly.
+2. When you call this at app launch you can handle the returned `SRVError.noReceiptFoundInBundle` error discretly.
 3. Once a user made an in app purchase there should always be a receipt in your apps bundle.
-4. Users re-installing your app which have an existing subscription should use the restore functionality in your app which is a requirement when using in app purchases (https://developer.apple.com/documentation/storekit/skpaymentqueue/1506123-restorecompletedtransactions).
+4. Users re-installing your app which have an existing subscription should use the restore functionality in your app which is a requirement when using in app purchases. This will add the receipt(s) in your apps bundle and then subscriptions can be validated. (https://developer.apple.com/documentation/storekit/skpaymentqueue/1506123-restorecompletedtransactions).
 
-Note: There is also `Combine` support for this method if you are targeting iOS 13 and above
+Note: There is also `Combine` support for this method if you are targeting iOS 13 and above.
 
 ```swift
 let cancellable = receiptValidator
     .validatePublisher(for: validationRequest)
     .map { response in
-        // handle response
+        print(response)
     }
     .mapError { error in
-        // handle error
+        print(error)
     }
+```
+
+Note: There is also `async/await` support for this method if you are targeting iOS 15 and above.
+
+```swift
+do {
+    let response = try await receiptValidator.validate(validationRequest)
+    print(response)
+} catch {
+    print(error)
+}
 ```
 
 ### Check auto-renew status
@@ -242,9 +273,9 @@ receiptValidator.validate(validationRequest) { result in
     
         let isAutoRenewOn: Bool
         if let pendingRenewalInfo = response.receiptResponse.pendingRenewalInfo, !pendingRenewalInfo.isEmpty {
-            isAutoRenewOn = pendingRenewalInfo.first { $0.autoRenewStatus == .on } != nil
+            isAutoRenewOn = pendingRenewalInfo.contains(where: { $0.autoRenewStatus == .on })
         } else {
-            isAutoRenewOn = response.validSubscriptionReceipts.first { $0.autoRenewStatus == .on } != nil
+            isAutoRenewOn = response.validSubscriptionReceipts.contains(where: { $0.autoRenewStatus == .on })
         }
     
     case .failure(let error):
@@ -272,14 +303,14 @@ receiptValidator.validate(validationRequest) { result in
 }
 ```
 
-## Unit Tests
+## Testing
 
-In order to unit tests your in app purchase class it is recommended to always inject the type protocol into your class instead of the concret implementation
+In order to test your in app purchase class it is recommended to always inject the type protocol into your class instead of the concret implementation
 
 - Not Recommended
 ```swift
 class SomeClass {
-    let receiptValidator: SwiftyReceiptValidator
+    private let receiptValidator: SwiftyReceiptValidator
     init(receiptValidator: SwiftyReceiptValidator) { ... }
 }
 ```
@@ -287,7 +318,7 @@ class SomeClass {
 - Recommended
 ```swift
 class SomeClass {
-    let receiptValidator: SwiftyReceiptValidatorType
+    private let receiptValidator: SwiftyReceiptValidatorType
     init(receiptValidator: SwiftyReceiptValidatorType) { ... }
 }
 ```
@@ -295,10 +326,12 @@ class SomeClass {
 - UnitTest example
 ```swift
 class MockReceiptValidator { }
-extension MockReceiptValidator: SwiftyReceiptValidatorType { ... }
+extension MockReceiptValidator: SwiftyReceiptValidatorType { 
+    // implement SwiftyReceiptValidatorType protocol methods and return mocks/fake data (see Mocking Models below)
+ }
 
 class SomeClassTests {
-    func test() {
+    func testSomething() {
         let sut = SomeClass(receiptValidator: MockReceiptValidator())
     }
 }
@@ -319,3 +352,7 @@ When you get to the purchase code and to the `.purchased` switch statement, Stor
 ## Final Note
 
 As per apples guidlines you should always first connect to apples production servers and than fall back on apples sandbox servers if needed. So keep this in mind when testing in sandbox mode, validation may take a bit longer due to this.
+
+## License
+
+SwiftyReceiptValidator is released under the MIT license. [See LICENSE](https://github.com/crashoverride777/swifty-receipt-validator/blob/master/LICENSE) for details.

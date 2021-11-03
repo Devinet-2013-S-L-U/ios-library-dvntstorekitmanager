@@ -1,0 +1,43 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "DVNTAlertManager",
+        "repositoryURL": "https://bitbucket.org/Devinet_Team/ios-library-dvntalertmanager",
+        "state": {
+          "branch": null,
+          "revision": "2b9be8f18203e5eb48f28a3ef65e825fdf632212",
+          "version": "1.2.4"
+        }
+      },
+      {
+        "package": "DVNTStringExtension",
+        "repositoryURL": "https://bitbucket.org/Devinet_Team/ios-library-dvntstringextension",
+        "state": {
+          "branch": null,
+          "revision": "0a74c37dd174d81c8895c83541eb312a1d40bea9",
+          "version": "1.0.6"
+        }
+      },
+      {
+        "package": "DVNTUIWindowExtension",
+        "repositoryURL": "https://bitbucket.org/Devinet_Team/ios-library-dvntuiwindowextension",
+        "state": {
+          "branch": null,
+          "revision": "a2933470841da01402b182f40bc58a6f668f8a3f",
+          "version": "1.0.6"
+        }
+      },
+      {
+        "package": "SwiftyReceiptValidator",
+        "repositoryURL": "https://github.com/crashoverride777/swifty-receipt-validator.git",
+        "state": {
+          "branch": null,
+          "revision": "bfb00ad3a88164130877a2c18e4e6b3d04dc3c02",
+          "version": "6.4.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
