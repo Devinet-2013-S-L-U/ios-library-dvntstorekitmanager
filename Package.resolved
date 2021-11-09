@@ -6,8 +6,8 @@
         "repositoryURL": "https://bitbucket.org/Devinet_Team/ios-library-dvntalertmanager",
         "state": {
           "branch": null,
-          "revision": "f170132e49b5ef3e959e61c0ca5a8d30d3b1d199",
-          "version": "1.2.5"
+          "revision": "6c7683df9ae1c41914d2f3ae732a4eafd28af922",
+          "version": "1.2.9"
         }
       },
       {
@@ -15,8 +15,8 @@
         "repositoryURL": "https://bitbucket.org/Devinet_Team/ios-library-dvntstringextension",
         "state": {
           "branch": null,
-          "revision": "0a74c37dd174d81c8895c83541eb312a1d40bea9",
-          "version": "1.0.6"
+          "revision": "42f373a66e49d2c45d9f5c1e3c50e54eba744865",
+          "version": "1.1.2"
         }
       },
       {

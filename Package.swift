@@ -1,4 +1,4 @@
-// swift-tools-version:5.1
+// swift-tools-version:5.3
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -16,12 +16,16 @@ let package = Package(
             targets: ["DVNTStoreKitManager"]),
     ],
     dependencies: [
-        .package(url: "https://bitbucket.org/Devinet_Team/ios-library-dvntalertmanager", from: "1.2.5"),
+        .package(url: "https://bitbucket.org/Devinet_Team/ios-library-dvntalertmanager", from: "1.2.9"),
         .package(url: "https://github.com/crashoverride777/swifty-receipt-validator.git", from: "6.4.0")
     ],
     targets: [
         .target(
             name: "DVNTStoreKitManager",
-            dependencies: ["DVNTAlertManager", "SwiftyReceiptValidator"])
+            dependencies: [
+                .productItem(name: "DVNTAlertManager", package: "ios-library-dvntalertmanager", condition: .none),
+                .productItem(name: "SwiftyReceiptValidator", package: "swifty-receipt-validator", condition: .none)
+            ]
+        ),
     ]
 )
