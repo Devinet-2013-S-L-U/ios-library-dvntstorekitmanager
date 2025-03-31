@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
     
     s.name             = 'DVNTStoreKitManager'
-    s.version          = '1.2.6'
+    s.version          = '1.2.7'
     s.summary          = 'An amazing StoreKit wrapper.'
     s.description      = 'A wrapper to use StokeKit easily.'
     s.homepage         = 'https://www.devinet.es'

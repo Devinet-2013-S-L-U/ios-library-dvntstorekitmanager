@@ -172,7 +172,7 @@ public class DVNTStoreKitManager: NSObject
     private final func validatePurchase(queue: SKPaymentQueue, transaction: SKPaymentTransaction, productId: String, sharedSecret: String?, success: @escaping () -> Void, failure: @escaping (Error?) -> Void)
     {
         print("💰 ⚠️ DVNTStoreKitManager: Validating purchase...")
-        let validationRequest = SRVPurchaseValidationRequest(productId: productId, sharedSecret: self.secret)
+        let validationRequest = SRVPurchaseValidationRequest(productIdentifier: productId, sharedSecret: self.secret)
         self.receiptValidator.validate(validationRequest) { result in
             switch result {
             case .success(_):
@@ -199,11 +199,15 @@ public class DVNTStoreKitManager: NSObject
         }
     }
     
-    public final func validateSubscriptions(productId: String? = nil)
-    {
+    public final func validateSubscriptions(productId: String? = nil) {
         print("💰 ⚠️ DVNTStoreKitManager: Verifying subscriptions...")
-        let validationRequest = SRVSubscriptionValidationRequest( sharedSecret: self.secret, refreshLocalReceiptIfNeeded: false, excludeOldTransactions: false, now: Date())
-        self.receiptValidator.validate(validationRequest) { result in
+        let validationRequest = SRVSubscriptionValidationRequest(
+            sharedSecret: self.secret,
+            refreshLocalReceiptIfNeeded: false,
+            excludeOldTransactions: false,
+            now: Date()
+        )
+        self.receiptValidator.validate(validationRequest) { (result: Result<SRVSubscriptionValidationResponse, Error>) in
             switch result {
             case .success(let response):
                 for receipt in response.validSubscriptionReceipts {
@@ -218,13 +222,13 @@ public class DVNTStoreKitManager: NSObject
                 }
                 print("💰 ✅ DVNTStoreKitManager: The validation of the subscriptions did finish successfully")
             case .failure(let error):
-                switch error {
-                case .noReceiptFoundInBundle:
-                    print("💰 ✅ DVNTStoreKitManager: The validation of the subscriptions did finish because no receipts were found")
-                    break
-                default:
-                    print("💰 ⛔️ DVNTStoreKitManager: The validation of the subscriptions did finish with error \(error.localizedDescription)")
-                
+                if let error = error as? SRVError {
+                    switch error {
+                    case .noReceiptFoundInBundle:
+                        print("💰 ✅ DVNTStoreKitManager: The validation of the subscriptions did finish because no receipts were found")
+                    default:
+                        print("💰 ⛔️ DVNTStoreKitManager: The validation of the subscriptions did finish with error \(error.localizedDescription)")
+                    }
                 }
             }
             
