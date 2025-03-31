@@ -16,8 +16,8 @@ let package = Package(
             targets: ["DVNTStoreKitManager"]),
     ],
     dependencies: [
-        .package(url: "https://bitbucket.org/Devinet_Team/ios-library-dvntalertmanager", from: "1.2.9"),
-        .package(url: "https://github.com/crashoverride777/swifty-receipt-validator.git", from: "6.4.0")
+        .package(url: "https://github.com/Devinet-2013-S-L-U/ios-library-dvntalertmanager.git", from: "1.3.4"),
+        .package(url: "https://github.com/crashoverride777/swifty-receipt-validator.git", from: "7.0.0")
     ],
     targets: [
         .target(
